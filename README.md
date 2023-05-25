@@ -19,4 +19,4 @@ These are the technologies we used to create our application:
 
 
 # Getting started
-The application is hosted publically and available at *insert url*.
+The application is hosted publically and available at *insert url*. 
