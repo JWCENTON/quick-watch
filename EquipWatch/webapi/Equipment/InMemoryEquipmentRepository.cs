@@ -2,6 +2,20 @@
 
 public class InMemoryEquipmentRepository : IRepository<Models.Equipment>
 {
+
+    private HashSet<Models.Equipment> _equipment;
+
+    private static int _equipmentCounter = 0;
+
+    public InMemoryEquipmentRepository()
+    {
+        SeedEquipment();
+    }
+    private void SeedEquipment()
+    {
+        throw new NotImplementedException();
+    }
+
     public List<Models.Equipment> GetAll()
     {
         throw new NotImplementedException();
