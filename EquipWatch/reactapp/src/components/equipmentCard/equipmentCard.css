@@ -1,0 +1,8 @@
+.cardColumn {
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+}
