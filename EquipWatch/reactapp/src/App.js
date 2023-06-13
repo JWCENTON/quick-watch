@@ -9,15 +9,14 @@ import IndexEmployeeView from './components/Main/IndexWithEmployeeView';
 
 export default function App() {
     return (
-        <div>Hello</div>
+        <div>Hello
             <Router>
             <Navigation />
             <Sidebar />
             <Routes>
                 <Route path='/' element={<HomePage />} />
             </Routes>
-        </Router>
+            </Router>
+        </div>
     );
 };
-
-export default App;
