@@ -13,7 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\assets\" />
-    <Folder Include="src\components\" />
+    <Folder Include="src\components\equipmentCard\" />
     <Folder Include="src\pages\" />
   </ItemGroup>
 </Project>
