@@ -1,6 +1,6 @@
-﻿namespace webapi.Equipment;
+﻿namespace webapi.Equipment.Services;
 
 public class EquipmentService : IEquipmentService
 {
-    
+
 }

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Equipment\Models\" />
+    <Folder Include="Equipment\Models\API\" />
   </ItemGroup>
 
 </Project>
