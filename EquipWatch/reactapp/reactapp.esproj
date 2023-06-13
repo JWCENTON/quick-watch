@@ -14,11 +14,7 @@
   <ItemGroup>
     <Folder Include="src\assets\" />
     <Folder Include="src\components\equipmentCard\" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptConfiguration Remove="src\components\NewFolder\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="src\components\NewFolder\**" />
+    <Folder Include="src\components\companyCard\" />
+    <Folder Include="src\pages\" />
   </ItemGroup>
 </Project>
