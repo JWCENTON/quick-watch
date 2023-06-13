@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaSearch } from 'react-icons/fa';
-import "./Seatch.css";
+import "./Search.css";
 
 function SearchBox() {
     return (
