@@ -1,12 +1,12 @@
 .navbar {
     background-color: #112D4E;
-    padding: 0 30px; /* Increase side padding */
+    padding: 0 30px;
 }
 
 .navbar-brand {
     color: #F9F7F7;
     margin-right: auto;
-    margin-left: 60px; /* Increase left margin */
+    margin-left: 60px;
 }
 
 .nav-link {

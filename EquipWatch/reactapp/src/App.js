@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navigation from './components/navigation/Navigation';
 import Sidebar from './components/sidebar/Sidebar';
 import IndexCompanyView from './components/mainPage/IndexWithCompanyView';
