@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
-import IndexCompanyView from "./components/Main/IndexWithCompanyView";
-import IndexEmployeeView from './components/Main/IndexWithEmployeeView';
+import IndexCompanyView from "./components/mainPage/IndexWithCompanyView";
+import IndexEmployeeView from './components/mainPage/IndexWithEmployeeView';
 
 export default function App() {
     return (
@@ -19,4 +19,4 @@ export default function App() {
             </Router>
         </div>
     );
-};
+}
