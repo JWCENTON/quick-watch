@@ -6,21 +6,6 @@ import CompanyCard from './components/companyCard/CompanyCard';
 
 export default function App() {
     return (
-        //<div>Hello</div>
-        <>
-            <CompanyCard name="TestName" address="Warsaw" createdAt="12.07.2022"/>
-            <br/>
-            <CompanyCard name="TestName" address="Warsaw" createdAt="13.07.2022" />
-            <br />
-            <CompanyCard name="TestName" address="Warsaw" createdAt="14.07.2022" />
-            <br />
-            <CompanyCard name="TestName" address="Warsaw" createdAt="15.07.2022" />
-            <br />
-            <IndexCompanyView />
-            <br />
-            <br />
-            <IndexEmployeeView />
-        </>
-
+        <div>Hello</div>
     );
 }
