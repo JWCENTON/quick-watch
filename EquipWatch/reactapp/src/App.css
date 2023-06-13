@@ -1,1 +1,21 @@
+/* Base styles for mobile */
+.navbar {
+    /* Styles for mobile navbar */
+}
 
+.sidebar {
+    /* Initially hide the sidebar on mobile */
+    display: none;
+}
+
+/* Add desktop styles as the viewport gets larger */
+@media screen and (min-width: 768px) {
+    .navbar {
+        /* Modify navbar styles for desktop */
+    }
+
+    .sidebar {
+        /* Display the sidebar on desktop */
+        display: block;
+    }
+}
