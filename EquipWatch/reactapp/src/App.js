@@ -1,22 +1,19 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navigation from './components/Navigation';
-import Sidebar from './components/Sidebar';
-import HomePage from './pages/HomePage';
-import IndexCompanyView from "./components/mainPage/IndexWithCompanyView";
+import Navigation from './components/navigation/Navigation';
+import Sidebar from './components/sidebar/Sidebar';
 import IndexEmployeeView from './components/mainPage/IndexWithEmployeeView';
+import './App.css';
 
 export default function App() {
     return (
-        <div>Hello
-            <Router>
+        <div className="app-container">
             <Navigation />
-            <Sidebar />
-            <Routes>
-                <Route path='/' element={<HomePage />} />
-            </Routes>
-            </Router>
+            <div className="main-container">
+                <Sidebar />
+                <IndexEmployeeView />
+            </div>
         </div>
     );
 }

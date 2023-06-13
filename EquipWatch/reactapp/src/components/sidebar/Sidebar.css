@@ -1,0 +1,26 @@
+.sidebar {
+    background-color: #3F72AF;
+    padding: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 15px;
+}
+
+.sidebar .btn-outline-primary {
+    color: #F9F7F7;
+    border-color: #112D4E; /* Change border color to match navbar */
+    background-color: #112D4E; /* Change background color to match navbar */
+    width: 100%;
+    padding: 10px;
+}
+
+.sidebar .btn-outline-primary:hover {
+    background-color: #F9F7F7;
+    color: #3F72AF;
+}

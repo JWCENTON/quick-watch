@@ -1,21 +1,30 @@
-/* Base styles for mobile */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-container {
+    display: flex;
+    flex-grow: 1;
+    overflow: auto;
+}
+
 .navbar {
-    /* Styles for mobile navbar */
+    flex-shrink: 0; /* Prevents the navbar from shrinking */
 }
 
 .sidebar {
-    /* Initially hide the sidebar on mobile */
-    display: none;
+    flex: 0 0 250px; /* Keeps the sidebar at a consistent 250px wide */
+    overflow: auto; /* Allows sidebar to scroll when content overflows */
 }
 
-/* Add desktop styles as the viewport gets larger */
-@media screen and (min-width: 768px) {
-    .navbar {
-        /* Modify navbar styles for desktop */
+@media screen and (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
     }
 
     .sidebar {
-        /* Display the sidebar on desktop */
-        display: block;
+        flex: 0 0 auto; /* Allows the sidebar to shrink on small screens */
     }
 }
