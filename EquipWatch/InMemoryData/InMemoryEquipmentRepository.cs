@@ -1,9 +1,11 @@
-﻿namespace webapi.Equipment.Repository;
+﻿using DAL.Equipment;
+
+namespace webapi.Equipment.Repository;
 
 public class InMemoryEquipmentRepository : IEquipmentRepository
 {
 
-    private HashSet<Models.Equipment> _equipment;
+    private HashSet<Domain.Equipment.Equipment> _equipment;
 
     private static int _equipmentCounter = 0;
 
@@ -16,22 +18,22 @@ public class InMemoryEquipmentRepository : IEquipmentRepository
         throw new NotImplementedException();
     }
 
-    public List<Models.Equipment> GetAll()
+    public List<Domain.Equipment.Equipment> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public Models.Equipment Get(int id)
+    public Domain.Equipment.Equipment Get(int id)
     {
         throw new NotImplementedException();
     }
 
-    public void Create(Models.Equipment entity)
+    public void Create(Domain.Equipment.Equipment entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(Models.Equipment entity)
+    public void Update(Domain.Equipment.Equipment entity)
     {
         throw new NotImplementedException();
     }

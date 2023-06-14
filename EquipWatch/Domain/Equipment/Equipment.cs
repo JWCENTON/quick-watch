@@ -1,4 +1,4 @@
-﻿namespace webapi.Equipment.Models;
+﻿namespace Domain.Equipment;
 
 public class Equipment
 {

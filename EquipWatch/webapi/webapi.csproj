@@ -12,9 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Company\Models\" />
-    <Folder Include="Employee\Models\" />
-    <Folder Include="Equipment\Models\DTO\" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
 </Project>
