@@ -10,4 +10,9 @@ public class Equipment
     //public Company.Models.Company Company { get; set; }
     public bool IsCheckedOut { get; set; }
     //public Employee.Models.Employee? CheckedOutBy { get; set; }
+
+    public Equipment()
+    {
+        Guid.NewGuid();
+    }
 }
