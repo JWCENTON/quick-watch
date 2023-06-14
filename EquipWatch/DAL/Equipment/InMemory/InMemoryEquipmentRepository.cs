@@ -1,6 +1,6 @@
 ﻿using DAL.Equipment;
 
-namespace webapi.Equipment.Repository;
+namespace DAL.Equipment.InMemory;
 
 public class InMemoryEquipmentRepository : IEquipmentRepository
 {
