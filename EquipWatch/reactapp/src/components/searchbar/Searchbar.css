@@ -1,0 +1,32 @@
+.dropdown-toggle {
+    color: #F9F7F7;
+    border-color: #112D4E;
+    background-color: #112D4E;
+    margin-right: 5px;
+}
+
+.dropdown-toggle:hover {
+    background-color: #F9F7F7;
+    color: #3F72AF;
+}
+
+.dropdown-item {
+    color: #3F72AF;
+}
+
+.dropdown-item:hover {
+    background-color: #3F72AF;
+    color: #F9F7F7;
+}
+
+.form-control {
+    color: #F9F7F7;
+    background-color: #112D4E;
+    border-color: #112D4E;
+}
+
+.input-group-text {
+    color: #F9F7F7;
+    background-color: #112D4E;
+    border-color: #112D4E;
+}
