@@ -2,14 +2,14 @@
 
 namespace DAL.Equipment.InMemory;
 
-public class InMemoryEquipmentRepository : IEquipmentRepository
+public class InMemoryEquipmentDao : IEquipmentDao
 {
 
     private HashSet<Domain.Equipment.Equipment> _equipment;
 
     private static int _equipmentCounter = 0;
 
-    public InMemoryEquipmentRepository()
+    public InMemoryEquipmentDao()
     {
         SeedEquipment();
     }

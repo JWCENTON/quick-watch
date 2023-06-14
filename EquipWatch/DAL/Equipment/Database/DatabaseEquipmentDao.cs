@@ -1,6 +1,6 @@
 ﻿namespace DAL.Equipment.Database;
 
-public class DatabaseEquipmentRepository : IEquipmentRepository
+public class DatabaseEquipmentDao : IEquipmentDao
 {
     public List<Domain.Equipment.Equipment> GetAll()
     {

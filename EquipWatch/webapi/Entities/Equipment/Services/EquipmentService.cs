@@ -8,15 +8,15 @@ namespace webapi.Equipment.Services;
 public class EquipmentService : IEquipmentService
 {
 
-    private IEquipmentRepository _repository { get; set; }
+    private IEquipmentDao Dao { get; set; }
 
     public EquipmentService()
     {
-        _repository = new DatabaseEquipmentRepository();
+        Dao = new DatabaseEquipmentDao();
     }
 
     public Domain.Equipment.Equipment GetEquipment(string equipmentId)
     {
-        return _repository.Get();
+        return Dao.Get();
     }
 }

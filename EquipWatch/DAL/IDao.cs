@@ -1,6 +1,6 @@
 ﻿namespace webapi;
 
-public interface IRepository<T>
+public interface IDao<T>
 {
     List<T> GetAll();
 
