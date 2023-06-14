@@ -1,6 +1,6 @@
-﻿namespace webapi.Equipment;
+﻿namespace webapi.Equipment.Repository;
 
-public class InMemoryEquipmentRepository : IRepository<Models.Equipment>
+public class InMemoryEquipmentRepository : IEquipmentRepository
 {
 
     private HashSet<Models.Equipment> _equipment;

@@ -14,7 +14,7 @@
   <ItemGroup>
     <Folder Include="Company\Models\" />
     <Folder Include="Employee\Models\" />
-    <Folder Include="Equipment\Models\API\" />
+    <Folder Include="Equipment\Models\DTO\" />
   </ItemGroup>
 
 </Project>
