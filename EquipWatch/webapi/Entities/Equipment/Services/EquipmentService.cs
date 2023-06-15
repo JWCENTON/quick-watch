@@ -1,5 +1,6 @@
 ﻿using DAL.Equipment;
 using DAL.Equipment.Database;
+using DAL.Equipment.InMemory;
 using webapi.Models.Equipment.Services;
 
 namespace webapi.Equipment.Services;
@@ -9,9 +10,9 @@ public class EquipmentService : IEquipmentService
 
     private IEquipmentDao Dao { get; set; }
 
-    public EquipmentService()
+    public EquipmentService(IEquipmentDao equipmentDao)
     {
-        Dao = new DatabaseEquipmentDao();
+        Dao = equipmentDao;
     }
 
     public Domain.Equipment.Equipment GetEquipment(Guid equipmentId)
@@ -21,6 +22,6 @@ public class EquipmentService : IEquipmentService
 
     public List<Domain.Equipment.Equipment> GetAllEquipment()
     {
-        throw new NotImplementedException();
+        return Dao.GetAll();
     }
 }

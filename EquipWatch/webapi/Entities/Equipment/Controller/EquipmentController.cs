@@ -21,5 +21,11 @@ namespace webapi.Models.Equipment.Controller
         {
             return _equipmentService.GetEquipment(id);
         }
+
+        [HttpGet, Route("/all")]
+        public List<Domain.Equipment.Equipment> GetAll()
+        {
+            return _equipmentService.GetAllEquipment();
+        }
     }
 }

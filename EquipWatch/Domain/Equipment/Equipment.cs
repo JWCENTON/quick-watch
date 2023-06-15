@@ -11,8 +11,13 @@ public class Equipment
     public bool IsCheckedOut { get; set; }
     //public Employee.Models.Employee? CheckedOutBy { get; set; }
 
-    public Equipment()
+    public Equipment(Guid id, string serialNumber, string category, string location, int condition, bool isCheckedOut)
     {
-        Guid.NewGuid();
+        Id = id;
+        SerialNumber = serialNumber;
+        Category = category;
+        Location = location;
+        Condition = condition;
+        IsCheckedOut = isCheckedOut;
     }
 }
