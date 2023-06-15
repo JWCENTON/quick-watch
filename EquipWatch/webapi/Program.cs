@@ -3,8 +3,16 @@ using DAL.Equipment.Database;
 using DAL.Equipment.InMemory;
 using webapi.Equipment.Services;
 using webapi.Models.Equipment.Services;
+using Microsoft.EntityFrameworkCore;
+using DAL;
+using webapi.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");
+
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DatabaseContext>();
 
 // Add services to the container.
 

@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Equipment\DTO\" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.7" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.7" />
+	  <Folder Include="Equipment\DTO\" />
   </ItemGroup>
 
 </Project>
