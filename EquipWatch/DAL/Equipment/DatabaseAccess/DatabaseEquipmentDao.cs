@@ -1,4 +1,4 @@
-﻿namespace DAL.Equipment.Database;
+﻿namespace DAL.Equipment.DatabaseAccess;
 
 public class DatabaseEquipmentDao : IEquipmentDao
 {

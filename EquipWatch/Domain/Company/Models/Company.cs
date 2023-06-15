@@ -1,6 +1,6 @@
-﻿namespace webapi.Company.Models;
+﻿namespace Domain.Company.Models;
 
 public class Company
 {
-    
+
 }
