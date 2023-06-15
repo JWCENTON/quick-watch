@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Company\" />
+    <Folder Include="Company\DatabaseAccess\" />
+    <Folder Include="Company\InMemoryAccess\" />
     <Folder Include="User\" />
   </ItemGroup>
 

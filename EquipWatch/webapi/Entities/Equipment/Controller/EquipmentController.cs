@@ -16,13 +16,13 @@ namespace webapi.Entities.Equipment.Controller
             _equipmentService = equipmentService;
         }
 
-        [HttpGet, Route("/{Id}")]
+        [HttpGet("{Id}")]
         public Domain.Equipment.Equipment Get(Guid id)
         {
             return _equipmentService.GetEquipment(id);
         }
 
-        [HttpGet, Route("/all")]
+        [HttpGet("All")]
         public List<Domain.Equipment.Equipment> GetAll()
         {
             return _equipmentService.GetAllEquipment();
