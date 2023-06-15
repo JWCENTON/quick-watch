@@ -1,14 +1,26 @@
 ﻿namespace webapi.Models
 {
-    public class CreateEquipmentDto
+    public record CreateEquipmentDto
     {
+        public string SerialNumber { get; init; }
     }
 
-    public class UpdateEquipmentDto : CreateEquipmentDto
+    public record UpdateEquipmentDto : CreateEquipmentDto
     {
+        public Guid Id { get; set; }
+        public string Location { get; set; }
+        public int Condition { get; set; }
+        //public Company.Models.Company Company { get; set; }
+        public bool IsCheckedOut { get; set; } = false;
     }
 
-    public class EquipmentDto : CreateEquipmentDto
+    public record EquipmentDto : CreateEquipmentDto
     {
+        public string Category { get; set; }
+        public string Location { get; set; }
+        public int Condition { get; set; }
+        //public Company.Models.Company Company { get; set; }
+        public bool IsCheckedOut { get; set; } = false;
+        //public Employee.Models.Employee? CheckedOutBy { get; set; }
     }
 }

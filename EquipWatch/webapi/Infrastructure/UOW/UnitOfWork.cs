@@ -1,4 +1,5 @@
 ﻿using DAL;
+using DAL.SQLData;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using webapi.Infrastructure.Repositories.Equipment;

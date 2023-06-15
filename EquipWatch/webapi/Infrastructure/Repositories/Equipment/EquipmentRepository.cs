@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DAL;
+using DAL.SQLData;
 using Microsoft.EntityFrameworkCore;
 
 namespace webapi.Infrastructure.Repositories.Equipment
