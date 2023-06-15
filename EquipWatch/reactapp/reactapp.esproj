@@ -15,6 +15,7 @@
     <Folder Include="src\assets\" />
     <Folder Include="src\components\equipmentCard\" />
     <Folder Include="src\components\companyCard\" />
-    <Folder Include="src\pages\" />
+    <Folder Include="src\pages\CompanyMain\" />
+    <Folder Include="src\pages\EmployeeMain\" />
   </ItemGroup>
 </Project>

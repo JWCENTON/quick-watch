@@ -1,20 +1,19 @@
 import React from 'react';
+import EmployeeMainPage from './pages/EmployeeMain/EmployeeMain';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navigation from './components/navigation/Navigation';
-import Sidebar from './components/sidebar/Sidebar';
-import IndexCompanyView from './components/mainPage/IndexWithCompanyView';
-import IndexEmployeeView from './components/mainPage/IndexWithEmployeeView';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import CompanyMainPage from './pages/CompanyMain/CompanyMain';
 import './App.css';
-import CompanyCard from './components/companyCard/CompanyCard';
 
-export default function App() {
+function App() {
     return (
-        <div className="app-container">
-            <Navigation />
-            <div className="main-container">
-                <Sidebar />
-                <IndexEmployeeView />
-            </div>
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<EmployeeMainPage />} />
+                <Route path="/company" element={<CompanyMainPage />} />
+            </Routes>
+        </Router>
     );
 }
+
+export default App;

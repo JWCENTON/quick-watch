@@ -5,12 +5,17 @@ import './Navigation.css';
 
 const Navigation = () => {
     return (
-        <Navbar bg="#112D4E" variant="dark">
+        <Navbar bg="#112D4E" variant="dark" expand="lg">
             <Navbar.Brand href="/">Home</Navbar.Brand>
-            <Searchbar />
-            <Nav className="ml-auto">
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Nav className="ml-auto logout-link">
                 <Nav.Link href="/">Logout</Nav.Link>
             </Nav>
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Searchbar />
+                
+            </Navbar.Collapse>
+            
         </Navbar>
     );
 };
