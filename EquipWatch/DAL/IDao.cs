@@ -1,4 +1,4 @@
-﻿namespace webapi;
+﻿namespace DAL;
 
 public interface IDao<T>
 {

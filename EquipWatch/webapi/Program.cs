@@ -1,11 +1,10 @@
 using DAL.Equipment;
-using DAL.Equipment.Database;
-using DAL.Equipment.InMemory;
-using webapi.Equipment.Services;
-using webapi.Models.Equipment.Services;
 using Microsoft.EntityFrameworkCore;
 using DAL;
-using webapi.Areas.Identity.Data;
+using Domain.User.Models;
+using webapi.Entities.Equipment.Services;
+using DAL.Equipment.InMemoryAccess;
+using DAL.Equipment.DatabaseAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");

@@ -1,9 +1,6 @@
 ﻿using DAL.Equipment;
-using DAL.Equipment.Database;
-using DAL.Equipment.InMemory;
-using webapi.Models.Equipment.Services;
 
-namespace webapi.Equipment.Services;
+namespace webapi.Entities.Equipment.Services;
 
 public class EquipmentService : IEquipmentService
 {

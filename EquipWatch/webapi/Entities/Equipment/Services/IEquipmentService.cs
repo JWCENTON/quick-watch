@@ -1,4 +1,4 @@
-﻿namespace webapi.Models.Equipment.Services;
+﻿namespace webapi.Entities.Equipment.Services;
 
 public interface IEquipmentService
 {

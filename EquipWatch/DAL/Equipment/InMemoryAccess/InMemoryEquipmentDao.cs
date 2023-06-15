@@ -1,6 +1,4 @@
-﻿using DAL.Equipment;
-
-namespace DAL.Equipment.InMemory;
+﻿namespace DAL.Equipment.InMemoryAccess;
 
 public class InMemoryEquipmentDao : IEquipmentDao
 {

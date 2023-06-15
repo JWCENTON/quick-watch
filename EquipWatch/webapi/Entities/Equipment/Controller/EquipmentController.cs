@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Models.Equipment.Services;
+using webapi.Entities.Equipment.Services;
 
-namespace webapi.Models.Equipment.Controller
+namespace webapi.Entities.Equipment.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
