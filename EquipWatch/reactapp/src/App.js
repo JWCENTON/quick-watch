@@ -1,8 +1,8 @@
 import React from 'react';
-import EmployeeMainPage from './pages/EmployeeMain/EmployeeMain';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import CompanyMainPage from './pages/CompanyMain/CompanyMain';
+import CompanyMainPage from './pages/companyMain/CompanyMain';
+import EmployeeMainPage from './pages/employeeMain/EmployeeMain';
 import './App.css';
 
 function App() {
