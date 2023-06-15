@@ -1,4 +1,5 @@
 using DAL.Equipment;
+using DAL.Equipment.Database;
 using DAL.Equipment.InMemory;
 using webapi.Equipment.Services;
 using webapi.Models.Equipment.Services;
@@ -12,7 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IEquipmentDao, InMemoryEquipmentDao>();
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSingleton<IEquipmentDao, InMemoryEquipmentDao>();
+}
+else
+{
+    builder.Services.AddSingleton<IEquipmentDao, DatabaseEquipmentDao>();
+}
 builder.Services.AddTransient<IEquipmentService, EquipmentService>();
 
 var app = builder.Build();
