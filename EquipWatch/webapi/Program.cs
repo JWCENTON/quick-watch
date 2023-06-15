@@ -21,6 +21,7 @@ else
 {
     builder.Services.AddSingleton<IEquipmentDao, DatabaseEquipmentDao>();
 }
+
 builder.Services.AddTransient<IEquipmentService, EquipmentService>();
 
 var app = builder.Build();
