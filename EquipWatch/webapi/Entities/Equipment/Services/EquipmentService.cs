@@ -10,13 +10,18 @@ public class EquipmentService : IEquipmentService
 
     private IEquipmentDao Dao { get; set; }
 
-    public EquipmentService()
+    public EquipmentService(IEquipmentDao equipmentDao)
     {
-        Dao = new DatabaseEquipmentDao();
+        Dao = equipmentDao;
     }
 
-    public Domain.Equipment.Equipment GetEquipment(string equipmentId)
+    public Domain.Equipment.Equipment GetEquipment(Guid equipmentId)
     {
-        return Dao.Get();
+        return Dao.Get(equipmentId);
+    }
+
+    public List<Domain.Equipment.Equipment> GetAllEquipment()
+    {
+        return Dao.GetAll();
     }
 }

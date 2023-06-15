@@ -7,15 +7,17 @@ public class InMemoryEquipmentDao : IEquipmentDao
 
     private HashSet<Domain.Equipment.Equipment> _equipment;
 
-    private static int _equipmentCounter = 0;
-
     public InMemoryEquipmentDao()
     {
+        _equipment = new HashSet<Domain.Equipment.Equipment>();
         SeedEquipment();
     }
     private void SeedEquipment()
     {
-        Create(new Domain.Equipment.Equipment());
+        Create(new Domain.Equipment.Equipment(Guid.NewGuid(), "123", "Fog machine", "my house", 4, false));
+        Create(new Domain.Equipment.Equipment(Guid.NewGuid(), "133", "Fog machine", "my house", 3, false));
+        Create(new Domain.Equipment.Equipment(Guid.NewGuid(), "14235", "Fog machine", "my house", 5, true));
+        Create(new Domain.Equipment.Equipment(Guid.NewGuid(), "11234", "Fog machine", "my house", 1, false));
     }
 
     public List<Domain.Equipment.Equipment> GetAll()
@@ -31,7 +33,6 @@ public class InMemoryEquipmentDao : IEquipmentDao
     public void Create(Domain.Equipment.Equipment entity)
     {
         _equipment.Add(entity);
-        _equipmentCounter++;
     }
 
     public void Update(Domain.Equipment.Equipment entity)
