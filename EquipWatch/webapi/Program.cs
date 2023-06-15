@@ -1,10 +1,13 @@
 using DAL.Equipment;
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using DAL.Company;
+using DAL.Company.InMemoryAccess;
 using Domain.User.Models;
 using webapi.Entities.Equipment.Services;
 using DAL.Equipment.InMemoryAccess;
 using DAL.Equipment.DatabaseAccess;
+using webapi.Entities.Company.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");
@@ -23,6 +26,7 @@ builder.Services.AddSwaggerGen();
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddSingleton<IEquipmentDao, InMemoryEquipmentDao>();
+    builder.Services.AddSingleton<ICompanyDao, InMemoryCompanyDao>();
 }
 else
 {
@@ -30,6 +34,7 @@ else
 }
 
 builder.Services.AddTransient<IEquipmentService, EquipmentService>();
+builder.Services.AddTransient<ICompanyService, CompanyService>();
 
 var app = builder.Build();
 
