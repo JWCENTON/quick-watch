@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.83-alpha">
+﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.83-alpha">
   <PropertyGroup>
     <StartupCommand>set BROWSER=none&amp;&amp;npm start</StartupCommand>
     <JavaScriptTestRoot>src\</JavaScriptTestRoot>
@@ -15,6 +15,7 @@
     <Folder Include="src\assets\" />
     <Folder Include="src\components\equipmentCard\" />
     <Folder Include="src\components\companyCard\" />
-    <Folder Include="src\pages\" />
+    <Folder Include="src\pages\companyMain\" />
+    <Folder Include="src\pages\employeeMain\" />
   </ItemGroup>
 </Project>

@@ -14,8 +14,8 @@
 
 .sidebar .btn-outline-primary {
     color: #F9F7F7;
-    border-color: #112D4E; /* Change border color to match navbar */
-    background-color: #112D4E; /* Change background color to match navbar */
+    border-color: #112D4E;
+    background-color: #112D4E;
     width: 100%;
     padding: 10px;
 }

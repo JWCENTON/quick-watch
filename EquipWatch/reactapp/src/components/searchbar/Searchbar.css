@@ -1,0 +1,47 @@
+.search-bar .form-control {
+    background-color: #ffffff;
+    color: #112D4E;
+}
+
+.search-bar .btn-outline-primary {
+    color: #F9F7F7;
+    border-color: #112D4E;
+    background-color: #112D4E;
+}
+
+.search-bar .btn-outline-primary:hover {
+    color: #112D4E;
+    background-color: #F9F7F7;
+    border-color: #112D4E;
+}
+
+.search-bar .category-dropdown {
+    width: 150px;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap;*/
+}
+
+.category-dropdown {
+    background-color: #3F72AF;
+    border-color: #112D4E;
+    color: #F9F7F7;
+}
+
+.category-dropdown:hover,
+.category-dropdown:focus,
+.category-dropdown:active {
+    background-color: #DBE2EF;
+    border-color: #112D4E;
+    color: #112D4E;
+}
+
+.dropdown-wrapper {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    left: 0;
+    top: 100%;
+}
