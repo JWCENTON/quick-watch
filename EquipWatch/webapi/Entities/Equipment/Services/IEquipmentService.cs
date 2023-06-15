@@ -2,5 +2,7 @@
 
 public interface IEquipmentService
 {
-    public Domain.Equipment.Equipment GetEquipment(string equipmentId);
+    public Domain.Equipment.Equipment GetEquipment(Guid equipmentId);
+    public List<Domain.Equipment.Equipment> GetAllEquipment();
+
 }
