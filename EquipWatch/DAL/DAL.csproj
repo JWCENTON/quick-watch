@@ -8,11 +8,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\webapi\webapi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Equipment\Database\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.7" />
   </ItemGroup>
 
 </Project>

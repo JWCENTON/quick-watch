@@ -1,6 +1,23 @@
+using DAL.SQLData;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using webapi.Infrastructure.uow;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//builder.Services.AddDbContext<EquipmentDbContext>(options =>
+//{
+//    options.UseSqlServer(Configuration.GetConnectionString("test"));
+//});
+
+// UnitOfWork
+//builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+// Automapper
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

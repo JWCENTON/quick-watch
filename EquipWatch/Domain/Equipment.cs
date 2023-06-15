@@ -1,4 +1,4 @@
-﻿namespace Domain.Equipment;
+﻿namespace Domain;
 
 public class Equipment
 {
