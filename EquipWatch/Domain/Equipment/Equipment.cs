@@ -1,6 +1,4 @@
-﻿using Domain.User;
-
-namespace Domain.Equipment;
+﻿namespace Domain.Equipment;
 
 public class Equipment
 {
