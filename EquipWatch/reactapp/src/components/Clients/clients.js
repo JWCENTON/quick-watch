@@ -1,12 +1,16 @@
 import React from 'react';
+import './Client.css';
+import SearchBox from '../SearchBox/SearchBox';
 
-function Clients() {
+function ReactComponent() {
     return (
-        <div className="background-color wrapper">
-            <a href="/" >My clients</a>
-            <a href="/" >All clients</a>
+        <div>
+            <a href="/" >My clients</a> | <a href="/" >All clients</a>
+            <div>
+                <SearchBox />
+            </div>
         </div>
     );
 }
 
-export default Clients;
+export default ReactComponent;
