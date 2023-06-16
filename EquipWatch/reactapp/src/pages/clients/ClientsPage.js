@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from '../../components/navigation/Navigation';
 import Sidebar from '../../components/sidebar/Sidebar';
-import Clients from '../../components/clients/Clients';
+import Clients from '../../components/clients/clients';
 
 const ClientsPage = () => {
     return (
