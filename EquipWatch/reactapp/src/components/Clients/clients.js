@@ -1,13 +1,13 @@
 import React from 'react';
 import './Client.css';
-import SearchBox from '../SearchBox/SearchBox';
+import Searchbar from '../searchbar/Searchbar';
 
 function ReactComponent() {
     return (
         <div>
             <a href="/" >My clients</a> | <a href="/" >All clients</a>
             <div>
-                <SearchBox />
+                <Searchbar />
             </div>
         </div>
     );
