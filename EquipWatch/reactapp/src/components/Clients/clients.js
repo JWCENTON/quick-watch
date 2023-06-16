@@ -1,16 +1,12 @@
 import React from 'react';
 import './Client.css';
-import Searchbar from '../searchbar/Searchbar';
 
-function ReactComponent() {
+function Client() {
     return (
         <div>
-            <a href="/" >My clients</a> | <a href="/" >All clients</a>
-            <div>
-                <Searchbar />
-            </div>
+            <a className="myAndAllSwitch" href="/" >My clients</a> | <a className="myAndAllSwitch" href="/" >All clients</a>
         </div>
     );
 }
 
-export default ReactComponent;
+export default Client;
