@@ -19,7 +19,7 @@ a:hover {
 }
 
 h3 {
-    color: #3F72AF;
+    color: #112D4E;
 }
 
 .background-color {
@@ -29,4 +29,27 @@ h3 {
 .wrapper {
     display: inline-block;
     transition: background-color 0.3s ease;
+}
+
+.background-color {
+    background-color: #DBE2EF;
+    padding: 20px;
+    width: 100%;
+}
+
+h3 {
+    color: #112D4E;
+}
+
+a {
+    color: #3F72AF;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 5px;
+    background-color: #F9F7F7;
+}
+
+a:hover {
+    background-color: #3F72AF;
+    color: #F9F7F7;
 }

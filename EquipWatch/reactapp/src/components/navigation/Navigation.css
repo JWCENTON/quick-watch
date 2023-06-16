@@ -1,0 +1,32 @@
+.navbar {
+    background-color: #112D4E;
+    padding: 0 30px;
+}
+
+.navbar-brand {
+    color: #F9F7F7;
+    margin-right: auto;
+    margin-left: 60px;
+    background: none; /* Remove background */
+    border: none; /* Remove border */
+}
+
+
+.navbar-brand:hover {
+    background: none;
+}
+
+@media screen and (max-width: 768px) {
+    .logout-link {
+        order: 0; /* Reset order for mobile view */
+    }
+}
+
+.nav-link {
+    color: #F9F7F7;
+    margin-left: auto;
+}
+
+.logout-link {
+    order: 2; /* Make sure Logout is always the last item */
+}

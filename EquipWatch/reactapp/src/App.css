@@ -1,1 +1,30 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
 
+.main-container {
+    display: flex;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.navbar {
+    flex-shrink: 0;
+}
+
+.sidebar {
+    flex: 0 0 250px; 
+    overflow: auto; 
+}
+
+@media screen and (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        flex: 0 0 auto;
+    }
+}
