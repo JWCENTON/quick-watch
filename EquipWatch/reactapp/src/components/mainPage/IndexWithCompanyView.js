@@ -1,13 +1,14 @@
 import "./Index.css";
+import { Link } from 'react-router-dom';
 
 function IndexCompanyView() {
     return (
         <div className="background-color wrapper">
-            <a href="/" >ADD EMPLOYEE</a>
-            <a href="/" >ADD EQUIPMENT</a>
-            <a href="/" >ADD ROLE</a>
-            <a href="/" >ADD COMISSION</a>
-            <a href="/" >ADD WAREHOUSE</a>
+            <Link to="/" >ADD EMPLOYEE</Link>
+            <Link to="/" >ADD EQUIPMENT</Link>
+            <Link to="/" >ADD ROLE</Link>
+            <Link to="/" >ADD COMISSION</Link>
+            <Link to="/" >ADD WAREHOUSE</Link>
         </div>
     );
 }
