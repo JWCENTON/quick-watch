@@ -17,6 +17,5 @@
     <Folder Include="src\components\companyCard\" />
     <Folder Include="src\pages\companyMain\" />
     <Folder Include="src\pages\employeeMain\" />
-    <Folder Include="src\pages\clients\" />
   </ItemGroup>
 </Project>
