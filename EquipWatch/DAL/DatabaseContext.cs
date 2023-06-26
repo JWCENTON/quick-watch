@@ -1,12 +1,16 @@
-﻿using Domain.User.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
+using Domain.Company.Models;
 using Microsoft.EntityFrameworkCore;
+using Domain.User.Models;
+using Domain.Equipment.Models;
 
 namespace DAL;
 
-public class DatabaseContext : IdentityDbContext<User>
+public class DatabaseContext : DbContext
 {
+    public DbSet<User> Users { get; set; }
+    public DbSet<Equipment> Equipment { get; set; }
+    public DbSet<Company> Company { get; set; }
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
     {

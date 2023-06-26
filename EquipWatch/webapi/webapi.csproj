@@ -32,9 +32,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\Company\Controller\" />
-    <Folder Include="Entities\Company\Services\" />
-  </ItemGroup>
-
 </Project>
