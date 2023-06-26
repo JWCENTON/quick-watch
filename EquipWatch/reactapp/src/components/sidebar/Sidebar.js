@@ -7,9 +7,9 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <ul>
-                {/*<li>*/}
-                {/*    <Button variant="outline-primary">Companies</Button>*/}
-                {/*</li>*/}
+                <li>
+                    <Button as={Link} to="/companies" variant="outline-primary">Companies</Button>
+                </li>
                 <li>
                     <Button as={Link} to="/company" variant="outline-primary">Company Overview</Button>
                 </li>
@@ -31,9 +31,9 @@ const Sidebar = () => {
                 {/*<li>*/}
                 {/*    <Button variant="outline-primary">Warehouses</Button>*/}
                 {/*</li>*/}
-                {/*<li>*/}
-                {/*    <Button variant="outline-primary">Personal Info</Button>*/}
-                {/*</li>*/}
+                <li>
+                    <Button as={Link} to="/personalInfo" variant="outline-primary">Personal Info</Button>
+                </li>
             </ul>
         </div>
     );
