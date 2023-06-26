@@ -1,6 +1,7 @@
 ﻿using Domain.Client.Models;
 using Domain.Company.Models;
 using Microsoft.AspNetCore.Mvc;
+using webapi.Entities.ClientApi.Services;
 using webapi.Entities.CompanyApi.Services;
 
 namespace webapi.Entities.ClientApi.Controller;

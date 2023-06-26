@@ -8,6 +8,7 @@ using webapi.Entities.EquipmentApi.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using webapi;
+using webapi.Entities.ClientApi.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IEquipmentService, EquipmentService>();
 builder.Services.AddTransient<ICompanyService, CompanyService>();
+builder.Services.AddTransient<IclientService, ClientService>();
 
 var app = builder.Build();
 

@@ -3,7 +3,7 @@ using Domain.Client.Models;
 using Microsoft.EntityFrameworkCore;
 using webapi.Entities.BaseServices;
 
-namespace webapi.Entities.ClientApi;
+namespace webapi.Entities.ClientApi.Services;
 
 public class ClientService : IclientService
 {
