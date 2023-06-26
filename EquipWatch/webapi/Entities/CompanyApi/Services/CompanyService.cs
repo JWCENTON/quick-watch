@@ -11,6 +11,7 @@ public class CompanyService : ICompanyService
     public CompanyService(DatabaseContext context)
     {
         _context = context;
+        DatabaseContext.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<Company> GetCompany(Guid id)
