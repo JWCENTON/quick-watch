@@ -52,3 +52,19 @@ a:hover {
     background-color: #3F72AF;
     color: #F9F7F7;
 }
+
+.info-button {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3F72AF;
+    color: #F9F7F7;
+    cursor: pointer;
+}
+
+.info-button:hover {
+    background-color: #F9F7F7;
+    color: #3F72AF;
+    border: 1px solid #3F72AF;
+}
