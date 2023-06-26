@@ -1,5 +1,7 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import { Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './ClientCard.css';
 
 function ClientCard({ name, address, phone, recentCommission }) {
@@ -20,7 +22,7 @@ function ClientCard({ name, address, phone, recentCommission }) {
                 </div>
                 <div className='cardColumn'>
                     <Card.Title className='card-title'>Most Recent Comission</Card.Title>
-                    <Card.Text><a>{recentCommission}</a></Card.Text>
+                    <Card.Text><Button as={Link} to="/commission">{recentCommission}</Button></Card.Text>
                 </div>
             </Card>
         </>

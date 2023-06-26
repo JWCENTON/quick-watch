@@ -17,7 +17,7 @@ function Client() {
 }
 
 function GetClientData() {
-    let clients = [{ "Name": "Oskar", "ContactAddress": "123 random road", "Phone": "Phone", "RecentCommission": "hello" }];
+    let clients = [{ "Name": "Oskar", "ContactAddress": "123 random road", "Phone": "Phone", "RecentCommission": "job at 123 random road" }];
     return clients;
 }
 
