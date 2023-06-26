@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import './ClientCard.css';
 
-function ClientCard({ name, address, phone }) {
+function ClientCard({ name, address, phone, recentCommission }) {
     return (
         <>
             <Card className="card">
@@ -20,7 +20,7 @@ function ClientCard({ name, address, phone }) {
                 </div>
                 <div className='cardColumn'>
                     <Card.Title className='card-title'>Most Recent Comission</Card.Title>
-                    <Card.Text>{phone}</Card.Text>
+                    <Card.Text><a>{recentCommission}</a></Card.Text>
                 </div>
             </Card>
         </>
