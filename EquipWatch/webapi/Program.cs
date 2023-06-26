@@ -1,18 +1,20 @@
-using DAL.Equipment;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using DAL;
-using DAL.Company;
-using DAL.Company.InMemoryAccess;
 using Domain.User.Models;
-using webapi.Entities.Equipment.Services;
-using DAL.Equipment.InMemoryAccess;
-using DAL.Equipment.DatabaseAccess;
-using webapi.Entities.Company.Services;
+using webapi.Entities.CompanyApi.Services;
+using webapi.Entities.EquipmentApi.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using webapi;
+using webapi.Entities.ClientApi.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");
 
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseInMemoryDatabase(connectionString));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DatabaseContext>();
 
@@ -23,18 +25,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddSingleton<IEquipmentDao, InMemoryEquipmentDao>();
-    builder.Services.AddSingleton<ICompanyDao, InMemoryCompanyDao>();
-}
-else
-{
-    builder.Services.AddSingleton<IEquipmentDao, DatabaseEquipmentDao>();
-}
 
 builder.Services.AddTransient<IEquipmentService, EquipmentService>();
 builder.Services.AddTransient<ICompanyService, CompanyService>();
+builder.Services.AddTransient<IclientService, ClientService>();
 
 var app = builder.Build();
 
@@ -55,3 +49,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
