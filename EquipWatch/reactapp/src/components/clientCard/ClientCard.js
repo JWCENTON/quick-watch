@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import './ClientCard.css';
 
-function EquipmentCard({ name, address, phone }) {
+function ClientCard({ name, address, phone }) {
     return (
         <>
             <Card className="card">
@@ -27,4 +27,4 @@ function EquipmentCard({ name, address, phone }) {
     );
 }
 
-export default EquipmentCard;
+export default ClientCard;
