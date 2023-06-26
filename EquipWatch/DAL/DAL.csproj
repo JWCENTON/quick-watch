@@ -7,9 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CompanyData\**" />
+    <Compile Remove="User\**" />
+    <EmbeddedResource Remove="CompanyData\**" />
+    <EmbeddedResource Remove="User\**" />
+    <None Remove="CompanyData\**" />
+    <None Remove="User\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="IdentityModel" Version="6.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.7">
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.8">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.8">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -17,12 +32,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Company\DatabaseAccess\" />
-    <Folder Include="Company\InMemoryAccess\" />
-    <Folder Include="User\" />
   </ItemGroup>
 
 </Project>

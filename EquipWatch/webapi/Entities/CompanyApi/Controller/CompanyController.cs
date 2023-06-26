@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Company.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Entities.Company.Services;
+using webapi.Entities.CompanyApi.Services;
 
-namespace webapi.Entities.Company.Controller
+namespace webapi.Entities.CompanyApi.Controller
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Route("api/[controller]")]
     public class CompanyController : ControllerBase
     {
 
@@ -17,9 +17,9 @@ namespace webapi.Entities.Company.Controller
         }
 
         [HttpGet("{id}")]
-        public Domain.Company.Models.Company GetCompany(Guid id)
+        public async Task<Company> GetCompany(Guid id)
         {
-            return _companyService.GetCompany(id);
+            return await _companyService.GetCompany(id);
         }
 
     }
