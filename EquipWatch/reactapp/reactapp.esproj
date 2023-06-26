@@ -13,8 +13,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\assets\" />
-    <Folder Include="src\components\equipmentCard\" />
     <Folder Include="src\components\companyCard\" />
+    <Folder Include="src\components\cardList\" />
+    <Folder Include="src\pages\cardList\" />
     <Folder Include="src\pages\companyMain\" />
     <Folder Include="src\pages\employeeMain\" />
   </ItemGroup>

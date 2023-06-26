@@ -16,12 +16,12 @@ const Sidebar = () => {
                 <li>
                     <Button as={Link} to="/" variant="outline-primary">Employee Overview</Button>
                 </li>
-                {/*<li>*/}
-                {/*    <Button variant="outline-primary">Commissions</Button>*/}
-                {/*</li>*/}
-                {/*<li>*/}
-                {/*    <Button variant="outline-primary">Equipment</Button>*/}
-                {/*</li>*/}
+                <li>
+                    <Button as={Link} to="/commissions" variant="outline-primary">Commissions</Button>
+                </li>
+                <li>
+                    <Button as={Link} to="/equipment" variant="outline-primary">Equipment</Button>
+                </li>
                 <li>
                     <Button as={Link} to="/clients" variant="outline-primary">Clients</Button>
                 </li>

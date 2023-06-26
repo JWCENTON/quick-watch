@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import './equipmentCard.css';
+import './EquipmentCard.css';
 
 function EquipmentCard({ id, name, status, location }) {
     return (
