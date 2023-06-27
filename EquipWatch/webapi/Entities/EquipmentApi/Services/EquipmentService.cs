@@ -12,28 +12,9 @@ public class EquipmentService : IEquipmentService
     public EquipmentService(DatabaseContext context)
     {
         _context = context;
-        if (!_context.Equipment.Any())
-        {
-            SeedEquipment();
-        }
+        DatabaseContext.IfDbEmptyAddNewItems(context);
     }
-    private async void SeedEquipment()
-    {
-        //Guid.NewGuid(), "123", "Fog machine", "my house", 4, false
-        //await Create(new Equipment()
-        //{
-        //    Id = Guid.NewGuid(),
-        //    SerialNumber = "123", 
-        //    Category = "Fog machine", 
-        //    Location = "my house", 
-        //    Condition = 4, 
-        //    IsCheckedOut = false
-        //});
-        await Create(new Equipment(Guid.NewGuid(), "133", "Fog machine", "my house", 3, false));
-        await Create(new Equipment(Guid.NewGuid(), "14235", "Fog machine", "my house", 5, true));
-        await Create(new Equipment(Guid.NewGuid(), "11234", "Fog machine", "my house", 1, false));
-    }
-
+    
     public async Task<List<Equipment>> GetAll()
     {
         return await _context.Equipment.ToListAsync();

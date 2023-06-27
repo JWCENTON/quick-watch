@@ -5,10 +5,10 @@ function IndexEmployeeView() {
     return (
         <div className="background-color wrapper">
             <h3>EQUIPMENT :</h3>
-            <Link to="/" >CHECK OUT</Link>
-            <Link to="/" >CHECK IN</Link>
-            <Link to="/" >RESERVE</Link>
-            <Link to="/" >CHANGE COMISSION</Link>            
+            <Link to="/check-out" >CHECK OUT</Link>
+            <Link to="/check-in" >CHECK IN</Link>
+            <Link to="/reserve" >RESERVE</Link>
+            <Link to="/change-comission" >CHANGE COMISSION</Link>            
         </div>
     );
 }
