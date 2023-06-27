@@ -10,7 +10,13 @@ function Client() {
         <div className="clientSection">
             <a className="myAndAllSwitch" href="/" >My clients</a> | <a className="myAndAllSwitch" href="/" >All clients</a>
             <div className="clientContainer">
-                {clients != null ? <p>Loading...</p> : clients.map((client) => (<ClientCard name={client.Name} address={client.ContactAddress} phone={client.Phone} recentCommission={client.RecentCommission}></ClientCard>))}
+                {
+                    clients != null
+                        ?
+                    <p>Loading...</p>
+                        :
+                    clients.map((client) => (<ClientCard name={client.Name} address={client.ContactAddress} phone={client.Phone} recentCommission={client.RecentCommission}></ClientCard>))
+                }
             </div>
         </div>
     );
