@@ -17,7 +17,7 @@ function Client() {
 }
 
 async function GetClientData() {
-    const response = await fetch('client');
+    const response = await fetch('https://localhost:7007/api/client');
     console.log(response);
     const data = await response.json();
     console.log(data);
