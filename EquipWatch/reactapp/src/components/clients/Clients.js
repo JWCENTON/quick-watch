@@ -10,15 +10,18 @@ function Client() {
         <div className="clientSection">
             <a className="myAndAllSwitch" href="/" >My clients</a> | <a className="myAndAllSwitch" href="/" >All clients</a>
             <div className="clientContainer">
-                {clients.map((client) => (<ClientCard name={client.Name} address={client.ContactAddress} phone={client.Phone} recentCommission={client.RecentCommission}></ClientCard>))}
+                {clients != null ? <p>Loading...</p> : clients.map((client) => (<ClientCard name={client.Name} address={client.ContactAddress} phone={client.Phone} recentCommission={client.RecentCommission}></ClientCard>))}
             </div>
         </div>
     );
 }
 
-function GetClientData() {
-    let clients = [{ "Name": "Oskar", "ContactAddress": "123 random road", "Phone": "Phone", "RecentCommission": "job at 123 random road" }];
-    return clients;
+async function GetClientData() {
+    const response = await fetch('client');
+    console.log(response);
+    const data = await response.json();
+    console.log(data);
+    return data;
 }
 
 export default Client; 
