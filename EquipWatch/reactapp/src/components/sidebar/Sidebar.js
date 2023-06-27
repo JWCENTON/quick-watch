@@ -32,7 +32,7 @@ const Sidebar = () => {
                 {/*    <Button variant="outline-primary">Warehouses</Button>*/}
                 {/*</li>*/}
                 <li>
-                    <Button as={Link} to="/personalInfo" variant="outline-primary">Personal Info</Button>
+                    <Button as={Link} to="/personal-info" variant="outline-primary">Personal Info</Button>
                 </li>
             </ul>
         </div>
