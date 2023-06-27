@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 function IndexCompanyView() {
     return (
         <div className="background-color wrapper">
-            <Link to="/" >ADD EMPLOYEE</Link>
-            <Link to="/" >ADD EQUIPMENT</Link>
-            <Link to="/" >ADD ROLE</Link>
-            <Link to="/" >ADD COMISSION</Link>
-            <Link to="/" >ADD WAREHOUSE</Link>
+            <Link to="/add-employee" >ADD EMPLOYEE</Link>
+            <Link to="/add-equipment" >ADD EQUIPMENT</Link>
+            <Link to="/add-role" >ADD ROLE</Link>
+            <Link to="/add-comission" >ADD COMISSION</Link>
+            <Link to="/add-warehouse" >ADD WAREHOUSE</Link>
         </div>
     );
 }
