@@ -1,6 +1,6 @@
 ﻿namespace Domain.Invite.DTO;
 
-public class CheckOutDTO
+public class UpdateInviteDTO
 {
     public Company.Models.Company Company { get; set; }
     public User.Models.User User { get; set; }

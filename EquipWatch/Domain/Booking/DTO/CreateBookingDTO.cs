@@ -1,6 +1,6 @@
 ﻿namespace Domain.Booking.DTO;
 
-public class BookingDTO
+public class CreateBookingDTO
 {
     public Company.Models.Company Company { get; set; }
     public Client.Models.Client Client { get; set; }

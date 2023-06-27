@@ -9,13 +9,12 @@
   <ItemGroup>
 	  <Folder Include="BookedEquipment\Models\" />
 	  <Folder Include="Booking\Models\Booking\" />
-	  <Folder Include="Booking\DTO\" />
 	  <Folder Include="CheckIn\Models\" />
 	  <Folder Include="CheckOut\Models\" />
+	  <Folder Include="Employ\DTO\" />
 	  <Folder Include="Invite\Models\" />
 	  <Folder Include="WorksOn\Models\" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.7" />
-	  <Folder Include="Equipment\DTO\" />
   </ItemGroup>
 
 </Project>

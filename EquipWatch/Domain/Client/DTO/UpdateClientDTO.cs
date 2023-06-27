@@ -1,6 +1,6 @@
 ﻿namespace Domain.Client.DTO;
 
-public class ClientDto
+public class UpdateClientDTO
 {
     public Company.Models.Company Company { get; set; }
     public string FirstName { get; set; }
