@@ -12,34 +12,36 @@ function CardList() {
     let itemType;
     let CardComponent;
 
+    // eslint-disable-next-line default-case
+    switch (location.pathname) {
+        case '/equipment':
+            itemType = 'equipment';
+            CardComponent = EquipmentCard;
+            break;
+        case '/commissions':
+            itemType = 'commissions';
+            CardComponent = CommissionCard;
+            break;
+        case '/clients':
+            itemType = 'clients';
+            CardComponent = ClientCard;
+            break;
+        case '/companies':
+            itemType = 'companies';
+            CardComponent = CompanyCard;
+            break;
+    }
+
     useEffect(() => {
-        // eslint-disable-next-line default-case
-        switch (location.pathname) {
-            case '/equipment':
-                itemType = 'equipment';
-                CardComponent = EquipmentCard;
-                break;
-            case '/commissions':
-                itemType = 'commissions';
-                CardComponent = CommissionCard;
-                break;
-            case '/clients':
-                itemType = 'clients';
-                CardComponent = ClientCard;
-                GetClientData();
-                break;
-            case '/companies':
-                itemType = 'companies';
-                CardComponent = CompanyCard;
-                break;
+        GetClientData();
         }
-    }, []);
+    , []);
 
     return (
         <div className="cardSection">
             <a className="myAndAllSwitch" href="/" >My {itemType}</a> | <a className="myAndAllSwitch" href="/" >All {itemType}</a>
             <div className="cardsContainer">
-                {cards == null ? <p>Loading...</p> : cards.map((client, index) => (<ClientCard key={index} name={client.Name} address={client.ContactAddress} phone={client.Phone} recentCommission={client.RecentCommission}></ClientCard>))}         
+                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<CardComponent key={index} name={card.firstName} address={card.contactAddress} phone={card.phoneNumber} recentCommission={card.RecentCommission}></CardComponent>))}         
             </div>
         </div>
     );
