@@ -1,18 +1,18 @@
 import React from 'react';
 import Navigation from '../../components/navigation/Navigation';
 import Sidebar from '../../components/sidebar/Sidebar';
-import Clients from '../../components/clients/Clients';
+import PersonalInfo from '../../components/personalInfo/PersonalInfo';
 
-const ClientsPage = () => {
+const PersonalInfoPage = () => {
     return (
         <div className="app-container">
             <Navigation />
             <div className="main-container">
                 <Sidebar />
-                <Clients />
+                <PersonalInfo />
             </div>
         </div>
     );
 };
 
-export default ClientsPage;
+export default PersonalInfoPage;

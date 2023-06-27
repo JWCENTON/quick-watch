@@ -15,3 +15,15 @@ module.exports = function (app) {
 
     app.use(appProxy);
 };
+
+module.exports = function (app) {
+    const appProxy = createProxyMiddleware("client", {
+        target: 'https://localhost:7007/api/client',
+        secure: false,
+        headers: {
+            Connection: 'Keep-Alive'
+        }
+    });
+
+    app.use(appProxy);
+};
