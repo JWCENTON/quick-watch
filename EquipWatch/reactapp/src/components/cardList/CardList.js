@@ -33,9 +33,19 @@ function CardList() {
     }
 
     useEffect(() => {
-        GetClientData();
+        // eslint-disable-next-line default-case
+        switch (location.pathname) {
+            case '/equipment':
+                break;
+            case '/commissions':
+                break;
+            case '/clients':
+                GetClientData();
+                break;
+            case '/companies':
+                break;
         }
-    , []);
+    }, []);
 
     return (
         <div className="cardSection">
@@ -48,9 +58,7 @@ function CardList() {
 
     async function GetClientData() {
         const response = await fetch('https://localhost:7007/api/client');
-        console.log(response);
         const data = await response.json();
-        console.log(data);
         setCards(data);
     }
 }
