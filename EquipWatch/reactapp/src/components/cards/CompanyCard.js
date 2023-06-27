@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import './CompanyCard.css';
+import './Card.css';
 
-function EquipmentCard({ name, address, createdAt }) {
+function CompanyCard({ name, address, createdAt }) {
     return (
         <>
             <Card className="card">
@@ -23,4 +23,4 @@ function EquipmentCard({ name, address, createdAt }) {
     );
 }
 
-export default EquipmentCard;
+export default CompanyCard;
