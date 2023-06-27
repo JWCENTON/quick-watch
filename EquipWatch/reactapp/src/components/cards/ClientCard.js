@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import { Card } from 'react-bootstrap';
 import './Card.css';
 import { Link } from 'react-router-dom';
-import './ClientCard.css';
 
 function ClientCard({ name, address, phone, recentCommission }) {
     return (

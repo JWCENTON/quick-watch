@@ -31,7 +31,7 @@ function CardList() {
     }
 
     return (
-        <div>
+        <div className="cardSection">
             <a className="myAndAllSwitch" href="/" >My {itemType}</a> | <a className="myAndAllSwitch" href="/" >All {itemType}</a>
             <div className="cardsContainer">
                 <CardComponent id="123" name="Placeholder Name" address="Placeholder Address" clientName="Placeholder Client Name" status="Placeholder Status" location="Placeholder Location" phone="Placeholder Phone" createdAt="Placeholder Date" recentCommission="Placeholder Commission" />
