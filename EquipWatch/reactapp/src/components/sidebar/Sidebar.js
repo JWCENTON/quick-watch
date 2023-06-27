@@ -14,7 +14,7 @@ const Sidebar = () => {
                     <Button as={Link} to="/company" variant="outline-primary">Company Overview</Button>
                 </li>
                 <li>
-                    <Button as={Link} to="/" variant="outline-primary">Employee Overview</Button>
+                    <Button as={Link} to="/employee" variant="outline-primary">Employee Overview</Button>
                 </li>
                 <li>
                     <Button as={Link} to="/commissions" variant="outline-primary">Commissions</Button>

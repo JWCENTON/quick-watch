@@ -5,13 +5,15 @@ import CompanyMainPage from './pages/CompanyMain/CompanyMain';
 import EmployeeMainPage from './pages/EmployeeMain/EmployeeMain';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import CardList from './pages/cardList/CardListPage';
+import Login from './pages/login/Login';
 import './App.css';
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<EmployeeMainPage />} />
+                <Route path="/" element={<Login />} />
+                <Route path="/employee" element={<EmployeeMainPage />} />
                 <Route path="/company" element={<CompanyMainPage />} />
                 <Route path="/companies" element={<CardList />} />
                 <Route path="/clients" element={<CardList />} />
