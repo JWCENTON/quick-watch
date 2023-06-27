@@ -5,9 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import './index.css';
 import ErrorPage from './pages/error/error-page';
-import CompanyMainPage from './pages/CompanyMain/CompanyMain';
+import CompanyMainPage from './pages/companyMain/CompanyMain';
 import CardList from './pages/cardList/CardListPage';
-import EmployeeMainPage from './pages/EmployeeMain/EmployeeMain';
+import EmployeeMainPage from './pages/employeeMain/EmployeeMain';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 
 const router = createBrowserRouter([
