@@ -31,19 +31,43 @@ public class DatabaseContext : DbContext
     {
         if (!context.Equipment.Any())
         {
-            // var test = new Equipment()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    SerialNumber = "123", 
-            //    Category = "Fog machine", 
-            //    Location = "my house", 
-            //    Condition = 4, 
-            //    IsCheckedOut = false
-            //});
-            var equipment1 = new Equipment(Guid.NewGuid(), "123", "Fog machine", "my house", 4, false);
-             var equipment2 = new Equipment(Guid.NewGuid(), "133", "Fog machine", "my house", 3, false);
-             var equipment3 = new Equipment(Guid.NewGuid(), "14235", "Fog machine", "my house", 5, true);
-             var equipment4 = new Equipment(Guid.NewGuid(), "11234", "Fog machine", "my house", 1, false);
+            var equipment1 = new Equipment
+            {
+                Id = Guid.NewGuid(),
+                SerialNumber = "123",
+                Category = "Fog machine",
+                Location = "my house",
+                Condition = 4,
+                IsCheckedOut = false
+            };
+            var equipment2 = new Equipment
+            {
+                Id = Guid.NewGuid(),
+                SerialNumber = "133",
+                Category = "Fog machine",
+                Location = "my house",
+                Condition = 3,
+                IsCheckedOut = false
+            };
+            var equipment3 = new Equipment
+            {
+                Id = Guid.NewGuid(),
+                SerialNumber = "14235",
+                Category = "Fog machine",
+                Location = "my house",
+                Condition = 5,
+                IsCheckedOut = true
+            };
+            var equipment4 = new Equipment
+            {
+                Id = Guid.NewGuid(),
+                SerialNumber = "11234",
+                Category = "Fog machine",
+                Location = "my house",
+                Condition = 1,
+                IsCheckedOut = false
+            };
+
             context.Equipment.Add(equipment1);
             context.Equipment.Add(equipment2);
             context.Equipment.Add(equipment3);
@@ -62,13 +86,13 @@ public class DatabaseContext : DbContext
             context.Users.Add(User1);
             context.Users.Add(User2);
 
-            var Company1 = new Company()
+            var Company1 = new Company
             {
                 Id = new Guid(),
                 Name = "something",
                 Owner = User1
             };
-            var Company2 = new Company()
+            var Company2 = new Company
             {
                 Id = new Guid(),
                 Name = "someasdasdthing",
@@ -78,7 +102,7 @@ public class DatabaseContext : DbContext
             context.Company.Add(Company2);
 
 
-            var Client1 = new Client()
+            var Client1 = new Client
             {
                 Company = Company1,
                 Email = "some@some.com",
@@ -87,7 +111,7 @@ public class DatabaseContext : DbContext
                 LastName = "some",
                 PhoneNumber = "+43234232423"
             };
-            var Client2 = new Client()
+            var Client2 = new Client
             {
                 Company = Company2,
                 Email = "some@somasdasde.com",
