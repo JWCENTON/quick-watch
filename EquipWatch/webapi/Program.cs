@@ -1,15 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using DAL;
 using Domain.User.Models;
-using webapi.Entities.CompanyApi.Services;
-using webapi.Entities.EquipmentApi.Services;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Serilog;
-using webapi;
-using webapi.Entities.ClientApi.Services;
+using webapi.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,10 +34,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-builder.Services.AddTransient<IEquipmentService, EquipmentService>();
-builder.Services.AddTransient<ICompanyService, CompanyService>();
-builder.Services.AddTransient<IclientService, ClientService>();
+// Service Collection
+builder.Services.AddMyDependencyGroup();
 
 builder.Services.AddCors(options =>
 {
