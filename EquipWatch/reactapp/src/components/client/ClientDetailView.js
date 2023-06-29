@@ -1,23 +1,16 @@
-import React from 'react';
-import CommissionCard from '../cards/CommissionCard';
-
-function ClientDetailView({ firstName, lastName, phoneNumber, email, contactAddress, commissions }) {
+export default function ClientDetailView({ detailsData }) {
     return (
         <div>
-            <h2>Client Details</h2>
-            <p>First Name: {firstName}</p>
-            <p>Last Name: {lastName}</p>
-            <p>Phone Number: {phoneNumber}</p>
-            <p>Email: {email}</p>
-            <p>Contact Address: {contactAddress}</p>
-            <h3>Assigned Commissions</h3>
-            {commissions.map((commission, index) => (
-                <CommissionCard key={index} {...commission} />
-            ))}
-            <button>Edit</button>
-            <button>Remove</button>
+            {detailsData === null ? (
+                <p>Loading...</p>
+            ) : (
+                <div>
+                        <h1>{detailsData.firstName} {detailsData.lastName}</h1>
+                        <p>{detailsData.contactAddress}</p>
+                        <p>{detailsData.phoneNumber}</p>
+                        <p>{detailsData.email}</p>
+                </div>
+            )}
         </div>
     );
-}
-
-export default ClientDetailView;
+};
