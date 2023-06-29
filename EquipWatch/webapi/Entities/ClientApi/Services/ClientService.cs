@@ -5,7 +5,7 @@ using webapi.Entities.BaseServices;
 
 namespace webapi.Entities.ClientApi.Services;
 
-public class ClientService : IclientService
+public class ClientService : IClientService
 {
     private readonly DatabaseContext _context;
 
