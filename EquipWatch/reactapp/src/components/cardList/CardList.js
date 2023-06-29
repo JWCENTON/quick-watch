@@ -1,6 +1,6 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import Card from '../cards/Card';
+import UniversalCard from '../card/Card';
 import './CardList.css';
 
 function CardList() {
@@ -46,7 +46,7 @@ function CardList() {
         <div className="cardSection">
             <a className="myAndAllSwitch" href="/" >My {itemType}</a> | <a className="myAndAllSwitch" href="/" >All {itemType}</a>
             <div className="cardsContainer">
-                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<Card key={index} data={card}></Card>))}         
+                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<UniversalCard key={index} data={card} dataType={itemType}></UniversalCard>))}
             </div>
         </div>
     );
