@@ -40,7 +40,7 @@ function CardList() {
                 GetCompanyData();
                 break;
         }
-    }, []);
+    }, [location]);
 
     return (
         <div className="cardSection">
