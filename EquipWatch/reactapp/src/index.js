@@ -6,7 +6,9 @@ import App from './App';
 import './index.css';
 import ErrorPage from './pages/error/error-page';
 import CompanyMainPage from './pages/companyMain/CompanyMain';
-import ClientsPage from './pages/clients/ClientsPage';
+import CardList from './pages/cardList/CardListPage';
+import EmployeeMainPage from './pages/employeeMain/EmployeeMain';
+import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 
 const router = createBrowserRouter([
     {
@@ -14,8 +16,13 @@ const router = createBrowserRouter([
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
+            { path: "employee", element: <EmployeeMainPage /> },
             { path: "company", element: <CompanyMainPage /> },
-            { path: "clients", element: <ClientsPage /> }
+            { path: "clients", element: <CardList /> },
+            { path: "companies", element: <CardList /> },
+            { path: "equipment", element: <CardList /> },
+            { path: "commissions", element: <CardList /> },
+            { path: "personal-info", element: <PersonalInfoPage /> },
         ],
     }
 ]);

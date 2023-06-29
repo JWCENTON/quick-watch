@@ -17,6 +17,7 @@
     <Folder Include="src\pages\cardList\" />
     <Folder Include="src\pages\companyMain\" />
     <Folder Include="src\pages\employeeMain\" />
+    <Folder Include="src\pages\login\" />
     <Folder Include="src\pages\personalInfo\" />
   </ItemGroup>
 </Project>

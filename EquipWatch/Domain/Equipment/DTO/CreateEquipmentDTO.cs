@@ -1,8 +1,7 @@
-﻿namespace Domain.Equipment.Models;
+﻿namespace Domain.Equipment.DTO;
 
-public class Equipment
+public class CreateEquipmentDTO
 {
-    public Guid Id { get; set; }
     public string SerialNumber { get; set; }
     public string Category { get; set; }
     public string Location { get; set; }
@@ -10,4 +9,6 @@ public class Equipment
     public Company.Models.Company Company { get; set; }
     public bool IsCheckedOut { get; set; }
     public User.Models.User? CheckedOutBy { get; set; }
+
+    
 }
