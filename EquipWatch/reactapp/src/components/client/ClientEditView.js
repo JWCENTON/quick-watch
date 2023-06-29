@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CommissionCard from '../commissionCard/CommissionCard';
+import CommissionCard from '../cards/CommissionCard';
 
 function ClientEditView({ firstName, lastName, phoneNumber, email, contactAddress, commissions }) {
     const [newFirstName, setNewFirstName] = useState(firstName);

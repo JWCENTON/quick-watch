@@ -1,5 +1,5 @@
 import React from 'react';
-import CommissionCard from '../commissionCard/CommissionCard';
+import CommissionCard from '../cards/CommissionCard';
 
 function ClientDetailView({ firstName, lastName, phoneNumber, email, contactAddress, commissions }) {
     return (

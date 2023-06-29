@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navigation from '../../components/navigation/Navigation';
 import Sidebar from '../../components/sidebar/Sidebar';
-import EquipmentEditView from '../../components/equipment/EquipmentEditView';
+import EmployeeEditView from '../../components/employee/EmployeeEditView';
 
-const EquipmentEdit = () => {
+const EmployeeEdit = () => {
     const { id } = useParams();
-    const [equipmentData, setEquipmentData] = useState(null);
+    const [employeeData, setEmployeeData] = useState(null);
 
     useEffect(() => {
-        const fetchEquipmentData = async () => {
-            const data = await fetch(`/api/equipment/${id}`);
-            setEquipmentData(data);
+        const fetchEmployeeData = async () => {
+            const data = await fetch(`/api/employees/${id}`);
+            setEmployeeData(data);
         };
 
-        fetchEquipmentData();
+        fetchEmployeeData();
     }, [id]);
 
-    if (!equipmentData) {
+    if (!employeeData) {
         return <div>Loading...</div>;
     }
 
@@ -26,10 +26,10 @@ const EquipmentEdit = () => {
             <Navigation />
             <div className="main-container">
                 <Sidebar />
-                <EquipmentEditView equipmentData={equipmentData} />
+                <EmployeeEditView employeeData={employeeData} />
             </div>
         </div>
     );
 };
 
-export default EquipmentEdit;
+export default EmployeeEdit;

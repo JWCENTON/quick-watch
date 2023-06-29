@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navigation from '../../components/navigation/Navigation';
 import Sidebar from '../../components/sidebar/Sidebar';
-import EquipmentEditView from '../../components/equipment/EquipmentEditView';
+import CompanyEditView from '../../components/company/CompanyEditView';
 
-const EquipmentEdit = () => {
+const CompanyEdit = () => {
     const { id } = useParams();
-    const [equipmentData, setEquipmentData] = useState(null);
+    const [companyData, setCompanyData] = useState(null);
 
     useEffect(() => {
-        const fetchEquipmentData = async () => {
-            const data = await fetch(`/api/equipment/${id}`);
-            setEquipmentData(data);
+        const fetchCompanyData = async () => {
+            const data = await fetch(`/api/companies/${id}`);
+            setCompanyData(data);
         };
 
-        fetchEquipmentData();
+        fetchCompanyData();
     }, [id]);
 
-    if (!equipmentData) {
+    if (!companyData) {
         return <div>Loading...</div>;
     }
 
@@ -26,10 +26,10 @@ const EquipmentEdit = () => {
             <Navigation />
             <div className="main-container">
                 <Sidebar />
-                <EquipmentEditView equipmentData={equipmentData} />
+                <CompanyEditView companyData={companyData} />
             </div>
         </div>
     );
 };
 
-export default EquipmentEdit;
+export default CompanyEdit;
