@@ -51,7 +51,7 @@ function CardList() {
         <div className="cardSection">
             <a className="myAndAllSwitch" href="/" >My {itemType}</a> | <a className="myAndAllSwitch" href="/" >All {itemType}</a>
             <div className="cardsContainer">
-                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<CardComponent key={index} name={card.firstName} address={card.contactAddress} phone={card.phoneNumber} recentCommission={card.RecentCommission}></CardComponent>))}         
+                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<CardComponent key={index} id={card.id} firstName={card.firstName} lastName={card.lastName} address={card.contactAddress} phone={card.phoneNumber} recentCommission={card.RecentCommission}></CardComponent>))}
             </div>
         </div>
     );

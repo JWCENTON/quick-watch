@@ -1,4 +1,4 @@
-export default function CommissionDetailView({ detailsData }) {
+export default function CompanyDetailView({ detailsData }) {
     return (
         <div>
             {detailsData === null ? (
