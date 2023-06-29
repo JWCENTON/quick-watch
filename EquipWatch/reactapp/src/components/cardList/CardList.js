@@ -11,25 +11,20 @@ function CardList() {
     const [cards, setCards] = useState(null);
     const location = useLocation();
     let itemType;
-    let CardComponent;
 
     // eslint-disable-next-line default-case
     switch (location.pathname) {
         case '/equipment':
             itemType = 'equipment';
-            CardComponent = EquipmentCard;
             break;
         case '/commissions':
             itemType = 'commissions';
-            CardComponent = CommissionCard;
             break;
         case '/clients':
             itemType = 'clients';
-            CardComponent = ClientCard;
             break;
         case '/companies':
             itemType = 'companies';
-            CardComponent = CompanyCard;
             break;
     }
 
