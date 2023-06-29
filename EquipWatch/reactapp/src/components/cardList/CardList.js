@@ -4,6 +4,7 @@ import EquipmentCard from '../cards/EquipmentCard';
 import CompanyCard from '../cards/CompanyCard';
 import ClientCard from '../cards/ClientCard';
 import CommissionCard from '../cards/CommissionCard';
+import Card from '../cards/Card';
 import './CardList.css';
 
 function CardList() {
@@ -51,7 +52,7 @@ function CardList() {
         <div className="cardSection">
             <a className="myAndAllSwitch" href="/" >My {itemType}</a> | <a className="myAndAllSwitch" href="/" >All {itemType}</a>
             <div className="cardsContainer">
-                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<CardComponent key={index} name={card.firstName} address={card.contactAddress} phone={card.phoneNumber} recentCommission={card.RecentCommission}></CardComponent>))}         
+                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<Card key={index} data={card}></Card>))}         
             </div>
         </div>
     );
