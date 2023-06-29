@@ -4,6 +4,7 @@ using DAL;
 using Domain.User.Models;
 using Serilog;
 using webapi.Extensions;
+using webapi.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +61,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+//configure exception handling middleware
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 app.UseCors("default");
 
 app.UseHttpsRedirection();
@@ -67,6 +71,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 try
 {

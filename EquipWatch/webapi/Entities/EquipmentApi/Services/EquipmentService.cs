@@ -22,7 +22,8 @@ public class EquipmentService : IEquipmentService
 
     public async Task<Equipment> Get(Guid id)
     {
-        return await _context.Equipment.FirstAsync(e => e.Id == id);
+        var equipment = await _context.Equipment.FirstOrDefaultAsync(e => e.Id == id);
+        return equipment ?? throw new KeyNotFoundException("Equipment with provided Id was not found");
     }
 
     public async Task Create(Equipment entity)
