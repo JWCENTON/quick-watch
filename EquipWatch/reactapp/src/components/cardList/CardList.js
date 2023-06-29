@@ -1,9 +1,5 @@
 import React, { useState , useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
-import EquipmentCard from '../cards/EquipmentCard';
-import CompanyCard from '../cards/CompanyCard';
-import ClientCard from '../cards/ClientCard';
-import CommissionCard from '../cards/CommissionCard';
 import Card from '../cards/Card';
 import './CardList.css';
 
