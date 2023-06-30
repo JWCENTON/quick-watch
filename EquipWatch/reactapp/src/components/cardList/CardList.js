@@ -30,24 +30,26 @@ function CardList() {
     }
 
     useEffect(() => {
+        let url;
         // eslint-disable-next-line default-case
-        switch (displayedCategory) {
-            case 'equipment':
-                GetEquipmentData();
+        switch (location.pathname) {
+            case '/equipment':
+                url = 'https://localhost:7007/api/equipment';
                 break;
-            case 'commissions':
-                GetCommissionData();
+            case '/commissions':
+                url = 'https://localhost:7007/api/commission';
                 break;
-            case 'clients':
-                GetClientData();
+            case '/clients':
+                url = 'https://localhost:7007/api/client';
                 break;
-            case 'companies':
-                GetCompanyData();
+            case '/companies':
+                url = 'https://localhost:7007/api/company';
                 break;
             case 'employees':
-                GetEmployeesData();
+                url = 'https://localhost:7007/api/employee';
                 break;
         }
+        GetData(url);
     }, [location]);
 
     return (
@@ -59,32 +61,8 @@ function CardList() {
         </div>
     );
 
-    async function GetClientData() {
-        const response = await fetch('https://localhost:7007/api/client');
-        const data = await response.json();
-        setCards(data);
-    }
-
-    async function GetCompanyData() {
-        const response = await fetch('https://localhost:7007/api/company');
-        const data = await response.json();
-        setCards(data);
-    }
-
-    async function GetCommissionData() {
-        const response = await fetch('https://localhost:7007/api/commission');
-        const data = await response.json();
-        setCards(data);
-    }
-
-    async function GetEquipmentData() {
-        const response = await fetch('https://localhost:7007/api/equipment');
-        const data = await response.json();
-        setCards(data);
-    }
-
-    async function GetEmployeesData() {
-        const response = await fetch('https://localhost:7007/api/employee');
+    async function GetData(url) {
+        const response = await fetch(url);
         const data = await response.json();
         setCards(data);
     }
