@@ -1,6 +1,6 @@
 ﻿using Domain.Invite;
 
-namespace DTO.Invite;
+namespace DTO.InviteDTOs;
 
 public class FullInviteDTO
 {

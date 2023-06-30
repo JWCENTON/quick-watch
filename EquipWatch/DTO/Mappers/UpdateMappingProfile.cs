@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using Domain.Employ.Models;
-using DTO.CheckIn;
-using DTO.CheckOut;
-using DTO.Client;
-using DTO.Commission;
-using DTO.Company;
-using DTO.Employ;
-using DTO.Equipment;
-using DTO.Invite;
-using DTO.User;
+using DTO.CheckInDTOs;
+using DTO.CheckOutDTOs;
+using DTO.ClientDTOs;
+using DTO.CommissionDTOs;
+using DTO.CompanyDTOs;
+using DTO.EmployDTOs;
+using DTO.EquipmentDTOs;
+using DTO.InviteDTOs;
+using DTO.UserDTOs;
 
 namespace DTO.Mappers;
 

@@ -1,4 +1,4 @@
-﻿namespace DTO.Commission;
+﻿namespace DTO.CommissionDTOs;
 
 public class FullCommissionDTO
 {

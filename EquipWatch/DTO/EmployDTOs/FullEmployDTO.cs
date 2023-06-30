@@ -1,6 +1,6 @@
 ﻿using Domain.Employ;
 
-namespace DTO.Employ;
+namespace DTO.EmployDTOs;
 
 public class FullEmployDTO
 {

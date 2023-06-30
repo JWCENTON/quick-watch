@@ -1,4 +1,4 @@
-﻿namespace DTO.Equipment;
+﻿namespace DTO.EquipmentDTOs;
 
 public class FullEquipmentDTO
 {

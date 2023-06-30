@@ -1,4 +1,4 @@
-﻿namespace DTO.CheckOut;
+﻿namespace DTO.CheckOutDTOs;
 
 public class FullCheckOutDTO
 {

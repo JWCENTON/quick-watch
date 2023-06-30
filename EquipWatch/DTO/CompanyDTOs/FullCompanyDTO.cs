@@ -1,4 +1,4 @@
-﻿namespace DTO.Company;
+﻿namespace DTO.CompanyDTOs;
 
 public class FullCompanyDTO
 {

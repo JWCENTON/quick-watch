@@ -1,4 +1,4 @@
-﻿namespace DTO.CheckIn;
+﻿namespace DTO.CheckInDTOs;
 
 public class FullCheckInDTO
 {

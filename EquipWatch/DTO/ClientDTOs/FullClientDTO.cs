@@ -1,4 +1,4 @@
-﻿namespace DTO.Client;
+﻿namespace DTO.ClientDTOs;
 
 public class FullClientDTO
 {
