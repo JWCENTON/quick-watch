@@ -1,6 +1,6 @@
-﻿namespace Domain.CommissionedEquipment.Models;
+﻿namespace Domain.BookedEquipment.Models;
 
-public class CommissionedEquipment
+public class BookedEquipment
 {
     public Equipment.Models.Equipment Equipment { get; set; }
     public Commission.Models.Commission.Commission Booking { get; set; }
