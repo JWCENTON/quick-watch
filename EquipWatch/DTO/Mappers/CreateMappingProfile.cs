@@ -12,7 +12,7 @@ using DTO.UserDTOs;
 
 namespace DTO.Mappers;
 
-public class CreateMappingProfile
+public class CreateMappingProfile : Profile
 {
     public CreateMappingProfile()
     {

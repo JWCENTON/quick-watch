@@ -12,7 +12,7 @@ using DTO.UserDTOs;
 
 namespace DTO.Mappers;
 
-public class FullMappingProfile
+public class FullMappingProfile : Profile
 {
     public FullMappingProfile()
     {

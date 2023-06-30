@@ -12,10 +12,11 @@ using DTO.UserDTOs;
 
 namespace DTO.Mappers;
 
-public class UpdateMappingProfile
+public class UpdateMappingProfile : Profile
 {
     public UpdateMappingProfile()
     {
+
         var configuration = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Domain.Equipment.Models.Equipment, UpdateEquipmentDTO>()
