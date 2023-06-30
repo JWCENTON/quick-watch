@@ -1,6 +1,6 @@
-﻿namespace webapi.Entities.BaseServices;
+﻿namespace DAL.Repositories;
 
-public interface IBaseService<T>
+public interface IBaseRepository<T>
 {
     Task<List<T>> GetAll();
 
