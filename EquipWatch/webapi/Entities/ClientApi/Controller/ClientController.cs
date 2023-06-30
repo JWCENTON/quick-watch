@@ -23,4 +23,10 @@ public class ClientController : ControllerBase
         return await _unitOfWork.Clients.GetAll();
     }
 
+    [HttpGet("{id}")]
+    public async Task<Client> GetClient(Guid id)
+    {
+        return await _clientService.Get(id);
+    }
+
 }
