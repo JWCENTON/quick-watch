@@ -22,7 +22,7 @@ public class ClientService : IclientService
 
     public async Task<Client> Get(Guid id)
     {
-        throw new NotImplementedException();
+        return await _context.Client.FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task Create(Client entity)
