@@ -15,28 +15,28 @@ public class EquipmentRepository : IEquipmentRepository
         DatabaseContext.IfDbEmptyAddNewItems(context);
     }
 
-    public async Task<List<Domain.Equipment.Models.Equipment>> GetAll()
+    public async Task<List<Domain.Equipment.Models.Equipment>> GetAllAsync()
     {
         return await _context.Equipment.ToListAsync();
     }
 
-    public async Task<Domain.Equipment.Models.Equipment> Get(Guid id)
+    public async Task<Domain.Equipment.Models.Equipment> GetAsync(Guid id)
     {
         return await _context.Equipment.FirstAsync(e => e.Id == id);
     }
 
-    public async Task Create(Domain.Equipment.Models.Equipment entity)
+    public async Task CreateAsync(Domain.Equipment.Models.Equipment entity)
     {
         await _context.Equipment.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
-    public async Task Update(Domain.Equipment.Models.Equipment entity)
+    public async Task UpdateAsync(Domain.Equipment.Models.Equipment entity)
     {
         throw new NotImplementedException();
     }
 
-    public async Task Remove(Guid id)
+    public async Task RemoveAsync(Guid id)
     {
         throw new NotImplementedException();
     }

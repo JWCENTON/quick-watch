@@ -10,37 +10,32 @@ public class CompanyRepository : ICompanyRepository
         DatabaseContext.IfDbEmptyAddNewItems(context);
     }
 
-    public async Task<Domain.Company.Models.Company> GetCompany(Guid id)
+    public async Task<Domain.Company.Models.Company> GetCompanyAsync(Guid id)
     {
         return await _context.Company.FindAsync(id);
     }
 
-    public void SeedData()
+    public async Task<List<Domain.Company.Models.Company>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<List<Domain.Company.Models.Company>> GetAll()
+    public async Task<Domain.Company.Models.Company> GetAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Domain.Company.Models.Company> Get(Guid id)
+    public async Task CreateAsync(Domain.Company.Models.Company entity)
     {
         throw new NotImplementedException();
     }
 
-    public Task Create(Domain.Company.Models.Company entity)
+    public async Task UpdateAsync(Domain.Company.Models.Company entity)
     {
         throw new NotImplementedException();
     }
 
-    public Task Update(Domain.Company.Models.Company entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task Remove(Guid id)
+    public async Task RemoveAsync(Guid id)
     {
         throw new NotImplementedException();
     }
