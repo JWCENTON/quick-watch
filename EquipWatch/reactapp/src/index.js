@@ -9,6 +9,8 @@ import CompanyMainPage from './pages/companyMain/CompanyMain';
 import CardList from './pages/cardList/CardListPage';
 import EmployeeMainPage from './pages/employeeMain/EmployeeMain';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
+import DetailView from './pages/detailView/DetailView';
+import EditView from './pages/editView/EditView';
 
 const router = createBrowserRouter([
     {
@@ -23,6 +25,8 @@ const router = createBrowserRouter([
             { path: "equipment", element: <CardList /> },
             { path: "commissions", element: <CardList /> },
             { path: "personal-info", element: <PersonalInfoPage /> },
+            { path: ":dataType/:id", element: <DetailView /> },
+            { path: ":dataType/:id/edit", element: <EditView /> }
         ],
     }
 ]);

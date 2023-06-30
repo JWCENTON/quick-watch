@@ -7,18 +7,18 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <ul>
-                <li>
-                    <Button as={Link} to="/companies" variant="outline-primary">Companies</Button>
-                </li>
+                {/*<li>*/}
+                {/*    <Button as={Link} to="/companies" variant="outline-primary">Companies</Button>*/}
+                {/*</li>*/}
                 <li>
                     <Button as={Link} to="/company" variant="outline-primary">Company Overview</Button>
                 </li>
                 <li>
                     <Button as={Link} to="/employee" variant="outline-primary">Employee Overview</Button>
                 </li>
-                <li>
-                    <Button as={Link} to="/commissions" variant="outline-primary">Commissions</Button>
-                </li>
+                {/*<li>*/}
+                {/*    <Button as={Link} to="/commissions" variant="outline-primary">Commissions</Button>*/}
+                {/*</li>*/}
                 <li>
                     <Button as={Link} to="/equipment" variant="outline-primary">Equipment</Button>
                 </li>

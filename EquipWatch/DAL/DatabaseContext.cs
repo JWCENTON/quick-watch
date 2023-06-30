@@ -109,7 +109,8 @@ public class DatabaseContext : DbContext
                 FirstName = "someone",
                 Id = new Guid(),
                 LastName = "some",
-                PhoneNumber = "+43234232423"
+                PhoneNumber = "+43234232423",
+                ContactAddress = "ABBA"
             };
             var Client2 = new Client
             {
@@ -118,7 +119,8 @@ public class DatabaseContext : DbContext
                 FirstName = "soasdasmeone",
                 Id = new Guid(),
                 LastName = "soasdasdme",
-                PhoneNumber = "+43234344232423"
+                PhoneNumber = "+43234344232423",
+                ContactAddress = "BABA"
             };
             context.Client.Add(Client1);
             context.Client.Add(Client2);

@@ -2,7 +2,7 @@
 
 namespace webapi.Entities.ClientApi.Services;
 
-public interface IclientService : IBaseService<Domain.Client.Models.Client>
+public interface IClientService : IBaseService<Domain.Client.Models.Client>
 {
 
 }
