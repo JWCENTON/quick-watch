@@ -3,5 +3,5 @@
 public class BookedEquipment
 {
     public Equipment.Models.Equipment Equipment { get; set; }
-    public Booking.Models.Booking.Booking Booking { get; set; }
+    public Commission.Models.Commission.Commission Booking { get; set; }
 }

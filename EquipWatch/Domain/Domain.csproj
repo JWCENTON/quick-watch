@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <Folder Include="BookedEquipment\Models\" />
-	  <Folder Include="Booking\Models\Booking\" />
 	  <Folder Include="CheckIn\Models\" />
 	  <Folder Include="CheckOut\Models\" />
 	  <Folder Include="Employ\DTO\" />
