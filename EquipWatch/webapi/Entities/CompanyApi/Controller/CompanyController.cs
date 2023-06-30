@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Entities.CompanyApi.Services;
+using webapi.uow;
 
 namespace webapi.Entities.CompanyApi.Controller
 {
@@ -9,17 +10,17 @@ namespace webapi.Entities.CompanyApi.Controller
     public class CompanyController : ControllerBase
     {
 
-        private readonly ICompanyService _companyService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CompanyController(ICompanyService companyService)
+        public CompanyController(IUnitOfWork unitOfWork)
         {
-            _companyService = companyService;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("{id}")]
         public async Task<Company> GetCompany(Guid id)
         {
-            return await _companyService.GetCompany(id);
+            return await _unitOfWork.Companies.GetCompany(id);
         }
 
     }
