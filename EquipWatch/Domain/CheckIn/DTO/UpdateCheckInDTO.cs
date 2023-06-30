@@ -1,4 +1,4 @@
-﻿namespace Domain.CheckInDTO.DTO;
+﻿namespace Domain.CheckIn.DTO;
 
 public class UpdateCheckInDTO
 {
