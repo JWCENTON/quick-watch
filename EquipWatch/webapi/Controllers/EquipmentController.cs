@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
-using webapi.Entities.EquipmentApi.Services;
 using webapi.uow;
 
-namespace webapi.Entities.EquipmentApi.Controller;
+namespace webapi.Controllers;
 
 [ApiController, Route("api/[controller]")]
 public class EquipmentController : ControllerBase

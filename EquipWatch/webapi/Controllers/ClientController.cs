@@ -1,11 +1,8 @@
 ﻿using Domain.Client.Models;
-using Domain.Company.Models;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Entities.ClientApi.Services;
-using webapi.Entities.CompanyApi.Services;
 using webapi.uow;
 
-namespace webapi.Entities.ClientApi.Controller;
+namespace webapi.Controllers;
 
 
 [ApiController, Route("api/[controller]")]

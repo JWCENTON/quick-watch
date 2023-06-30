@@ -1,45 +1,41 @@
-﻿using DAL;
-using Domain.Company.Models;
+﻿namespace DAL.Repositories.Company;
 
-
-namespace webapi.Entities.CompanyApi.Services;
-
-public class CompanyService : ICompanyService
+public class CompanyRepository : ICompanyRepository
 {
     private readonly DatabaseContext _context;
 
-    public CompanyService(DatabaseContext context)
+    public CompanyRepository(DatabaseContext context)
     {
         _context = context;
         DatabaseContext.IfDbEmptyAddNewItems(context);
     }
 
-    public async Task<Company> GetCompany(Guid id)
+    public async Task<Domain.Company.Models.Company> GetCompany(Guid id)
     {
         return await _context.Company.FindAsync(id);
     }
-    
+
     public void SeedData()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<List<Company>> GetAll()
+    public async Task<List<Domain.Company.Models.Company>> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public Task<Company> Get(Guid id)
+    public Task<Domain.Company.Models.Company> Get(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task Create(Company entity)
+    public Task Create(Domain.Company.Models.Company entity)
     {
         throw new NotImplementedException();
     }
 
-    public Task Update(Company entity)
+    public Task Update(Domain.Company.Models.Company entity)
     {
         throw new NotImplementedException();
     }
