@@ -1,6 +1,7 @@
 ﻿using DAL.Repositories.Client;
 using DAL.Repositories.Company;
 using DAL.Repositories.Equipment;
+using DTO.Mappers;
 using DTO.OldMappers;
 using webapi.uow;
 
@@ -16,9 +17,15 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<IEquipmentRepository, EquipmentRepository>();
         services.AddTransient<ICompanyRepository, CompanyRepository>();
         services.AddTransient<IClientRepository, ClientRepository>();
-        services.AddAutoMapper(typeof(CreateMappingProfile));
-        services.AddAutoMapper(typeof(UpdateMappingProfile));
-        services.AddAutoMapper(typeof(FullMappingProfile));
+        services.AddAutoMapper(typeof(EquipmentMappingProfile));
+        services.AddAutoMapper(typeof(CheckInMappingProfile));
+        services.AddAutoMapper(typeof(CheckOutMappingProfile));
+        services.AddAutoMapper(typeof(ClientMappingProfile));
+        services.AddAutoMapper(typeof(CommissionMappingProfile));
+        services.AddAutoMapper(typeof(CompanyMappingProfile));
+        services.AddAutoMapper(typeof(EmployMappingProfile));
+        services.AddAutoMapper(typeof(InviteMappingProfile));
+        services.AddAutoMapper(typeof(UserMappingProfile));
         return services;
     }
 }
