@@ -16,13 +16,13 @@ public class EquipmentController : ControllerBase
     [HttpGet]
     public async Task<List<Equipment>> GetAll()
     {
-        return await _unitOfWork.Equipments.GetAll();
+        return await _unitOfWork.Equipments.GetAllAsync();
     }
 
     [HttpGet("{id}")]
     public async Task<Equipment> Get(Guid id)
     {
-        return await _unitOfWork.Equipments.Get(id);
+        return await _unitOfWork.Equipments.GetAsync(id);
     }
 
 }
