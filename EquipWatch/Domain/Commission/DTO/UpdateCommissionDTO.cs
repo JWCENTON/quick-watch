@@ -1,6 +1,6 @@
-﻿namespace Domain.Booking.DTO;
+﻿namespace Domain.Commission.DTO;
 
-public class UpdateBookingDTO
+public class UpdateCommissionDTO
 {
     public Client.Models.Client Client { get; set; }
     public string Location { get; set; }

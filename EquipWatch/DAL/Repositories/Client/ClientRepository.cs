@@ -1,36 +1,33 @@
-﻿using DAL;
-using Domain.Client.Models;
-using Microsoft.EntityFrameworkCore;
-using webapi.Entities.BaseServices;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace webapi.Entities.ClientApi.Services;
+namespace DAL.Repositories.Client;
 
-public class ClientService : IclientService
+public class ClientRepository : IClientRepository
 {
     private readonly DatabaseContext _context;
 
-    public ClientService(DatabaseContext context)
+    public ClientRepository(DatabaseContext context)
     {
         _context = context;
         DatabaseContext.IfDbEmptyAddNewItems(context);
     }
 
-    public async Task<List<Client>> GetAll()
+    public async Task<List<Domain.Client.Models.Client>> GetAll()
     {
         return await _context.Client.ToListAsync();
     }
 
-    public async Task<Client> Get(Guid id)
+    public async Task<Domain.Client.Models.Client> Get(Guid id)
     {
         return await _context.Client.FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async Task Create(Client entity)
+    public async Task Create(Domain.Client.Models.Client entity)
     {
         throw new NotImplementedException();
     }
 
-    public async Task Update(Client entity)
+    public async Task Update(Domain.Client.Models.Client entity)
     {
         throw new NotImplementedException();
     }

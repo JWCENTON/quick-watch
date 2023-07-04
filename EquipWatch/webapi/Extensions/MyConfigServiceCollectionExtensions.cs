@@ -1,6 +1,7 @@
-﻿using webapi.Entities.ClientApi.Services;
-using webapi.Entities.CompanyApi.Services;
-using webapi.Entities.EquipmentApi.Services;
+﻿using DAL.Repositories.Client;
+using DAL.Repositories.Company;
+using DAL.Repositories.Equipment;
+using webapi.uow;
 
 namespace webapi.Extensions;
 
@@ -9,9 +10,10 @@ public static class MyConfigServiceCollectionExtensions
     public static IServiceCollection AddMyDependencyGroup(
         this IServiceCollection services)
     {
-        services.AddTransient<IEquipmentService, EquipmentService>();
-        services.AddTransient<ICompanyService, CompanyService>();
-        services.AddTransient<IclientService, ClientService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<IEquipmentRepository, EquipmentRepository>();
+        services.AddTransient<ICompanyRepository, CompanyRepository>();
+        services.AddTransient<IClientRepository, ClientRepository>();
 
         return services;
     }
