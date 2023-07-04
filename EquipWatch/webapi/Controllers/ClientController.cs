@@ -17,13 +17,13 @@ public class ClientController : ControllerBase
     [HttpGet]
     public async Task<List<Client>> GetAllClient()
     {
-        return await _unitOfWork.Clients.GetAll();
+        return await _unitOfWork.Clients.GetAllAsync();
     }
 
     [HttpGet("{id}")]
     public async Task<Client> GetClient(Guid id)
     {
-        return await _unitOfWork.Clients.Get(id);
+        return await _unitOfWork.Clients.GetAsync(id);
     }
 
 }
