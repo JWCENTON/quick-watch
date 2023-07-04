@@ -12,27 +12,27 @@ public class ClientRepository : IClientRepository
         DatabaseContext.IfDbEmptyAddNewItems(context);
     }
 
-    public async Task<List<Domain.Client.Models.Client>> GetAll()
+    public async Task<List<Domain.Client.Models.Client>> GetAllAsync()
     {
         return await _context.Client.ToListAsync();
     }
 
-    public async Task<Domain.Client.Models.Client> Get(Guid id)
+    public async Task<Domain.Client.Models.Client> GetAsync(Guid id)
     {
         return await _context.Client.FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async Task Create(Domain.Client.Models.Client entity)
+    public async Task CreateAsync(Domain.Client.Models.Client entity)
     {
         throw new NotImplementedException();
     }
 
-    public async Task Update(Domain.Client.Models.Client entity)
+    public async Task UpdateAsync(Domain.Client.Models.Client entity)
     {
         throw new NotImplementedException();
     }
 
-    public async Task Remove(Guid id)
+    public async Task RemoveAsync(Guid id)
     {
         throw new NotImplementedException();
     }

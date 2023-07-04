@@ -18,7 +18,7 @@ namespace webapi.Controllers
         [HttpGet("{id}")]
         public async Task<Company> GetCompany(Guid id)
         {
-            return await _unitOfWork.Companies.GetCompany(id);
+            return await _unitOfWork.Companies.GetCompanyAsync(id);
         }
 
     }

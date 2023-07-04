@@ -2,13 +2,13 @@
 
 public interface IBaseRepository<T>
 {
-    Task<List<T>> GetAll();
+    Task<List<T>> GetAllAsync();
 
-    Task<T> Get(Guid id);
+    Task<T> GetAsync(Guid id);
 
-    Task Create(T entity);
+    Task CreateAsync(T entity);
 
-    Task Update(T entity);
+    Task UpdateAsync(T entity);
 
-    Task Remove(Guid id);
+    Task RemoveAsync(Guid id);
 }
