@@ -1,8 +1,10 @@
-﻿namespace DTO.ClientDTOs;
+﻿using DTO.CompanyDTOs;
 
-public class CreateClientDTO
+namespace DTO.ClientDTOs;
+
+public record CreateClientDTO
 {
-    public Domain.Company.Models.Company Company { get; set; }
+    public FullCompanyDTO Company { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

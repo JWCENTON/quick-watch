@@ -1,12 +1,14 @@
 ﻿using Domain.Invite;
+using DTO.CompanyDTOs;
+using DTO.UserDTOs;
 
 namespace DTO.InviteDTOs;
 
-public class FullInviteDTO
+public record FullInviteDTO
 {
     public Guid Id { get; set; }
-    public Domain.Company.Models.Company Company { get; set; }
-    public Domain.User.Models.User User { get; set; }
+    public FullCompanyDTO Company { get; set; }
+    public FullUserDTO User { get; set; }
     public Status Status { get; set; }
     public DateTime CreatedAt { get; set; }
 }

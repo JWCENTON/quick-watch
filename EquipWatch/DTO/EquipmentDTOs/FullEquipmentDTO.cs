@@ -1,13 +1,16 @@
-﻿namespace DTO.EquipmentDTOs;
+﻿using DTO.CompanyDTOs;
+using DTO.UserDTOs;
 
-public class FullEquipmentDTO
+namespace DTO.EquipmentDTOs;
+
+public record FullEquipmentDTO
 {
     public Guid Id { get; set; }
     public string SerialNumber { get; set; }
     public string Category { get; set; }
     public string Location { get; set; }
     public int Condition { get; set; }
-    public Domain.Company.Models.Company Company { get; set; }
+    public FullCompanyDTO Company { get; set; }
     public bool IsCheckedOut { get; set; }
-    public Domain.User.Models.User? CheckedOutBy { get; set; }
+    public FullUserDTO? CheckedOutBy { get; set; }
 }

@@ -1,13 +1,16 @@
-﻿namespace DTO.EquipmentDTOs;
+﻿using DTO.CompanyDTOs;
+using DTO.UserDTOs;
 
-public class UpdateEquipmentDTO
+namespace DTO.EquipmentDTOs;
+
+public record UpdateEquipmentDTO
 {
     public string Category { get; set; }
     public string Location { get; set; }
     public int Condition { get; set; }
-    public Domain.Company.Models.Company Company { get; set; }
+    public FullCompanyDTO Company { get; set; }
     public bool IsCheckedOut { get; set; }
-    public Domain.User.Models.User? CheckedOutBy { get; set; }
+    public FullUserDTO? CheckedOutBy { get; set; }
 
 
 }

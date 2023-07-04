@@ -1,7 +1,9 @@
-﻿namespace DTO.CompanyDTOs;
+﻿using DTO.UserDTOs;
 
-public class CreateCompanyDTO
+namespace DTO.CompanyDTOs;
+
+public record CreateCompanyDTO
 {
     public string Name { get; set; }
-    public Domain.User.Models.User Owner { get; set; }
+    public FullUserDTO Owner { get; set; }
 }

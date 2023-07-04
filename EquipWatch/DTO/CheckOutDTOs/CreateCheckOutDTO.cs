@@ -1,8 +1,11 @@
-﻿namespace DTO.CheckOutDTOs;
+﻿using DTO.EquipmentDTOs;
+using DTO.UserDTOs;
 
-public class CreateCheckOutDTO
+namespace DTO.CheckOutDTOs;
+
+public record CreateCheckOutDTO
 {
-    public Domain.Equipment.Models.Equipment Equipment { get; set; }
-    public Domain.User.Models.User User { get; set; }
+    public FullEquipmentDTO Equipment { get; set; }
+    public FullUserDTO User { get; set; }
     public DateTime Time { get; set; }
 }

@@ -2,8 +2,8 @@
 
 namespace DTO.CheckInDTOs;
 
-public class UpdateCheckInDTO
+public record UpdateCheckInDTO
 {
-    public CreateUserDTO User { get; set; }
+    public FullUserDTO User { get; set; }
     public DateTime Time { get; set; }
 }

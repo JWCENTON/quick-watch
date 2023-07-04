@@ -1,7 +1,9 @@
-﻿namespace DTO.CheckOutDTOs;
+﻿using DTO.UserDTOs;
 
-public class UpdateCheckOutDTO
+namespace DTO.CheckOutDTOs;
+
+public record UpdateCheckOutDTO
 {
-    public Domain.User.Models.User User { get; set; }
+    public FullUserDTO User { get; set; }
     public DateTime Time { get; set; }
 }

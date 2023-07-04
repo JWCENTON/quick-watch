@@ -1,4 +1,7 @@
-﻿namespace DTO.EquipmentDTOs;
+﻿using DTO.CompanyDTOs;
+using DTO.UserDTOs;
+
+namespace DTO.EquipmentDTOs;
 
 public record CreateEquipmentDTO
 {
@@ -6,9 +9,9 @@ public record CreateEquipmentDTO
     public string Category { get; init; }
     public string Location { get; init; }
     public int Condition { get; init; }
-    public Domain.Company.Models.Company Company { get; init; }
+    public FullCompanyDTO Company { get; init; }
     public bool IsCheckedOut { get; init; }
-    public Domain.User.Models.User? CheckedOutBy { get; init; }
+    public FullUserDTO? CheckedOutBy { get; init; }
 
 
 }

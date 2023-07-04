@@ -1,10 +1,12 @@
 ﻿using Domain.Employ;
+using DTO.CompanyDTOs;
+using DTO.UserDTOs;
 
 namespace DTO.EmployDTOs;
 
-public class CreateEmployDTO
+public record CreateEmployDTO
 {
-    public Domain.Company.Models.Company Company { get; set; }
-    public Domain.User.Models.User User { get; set; }
+    public FullCompanyDTO Company { get; set; }
+    public FullUserDTO User { get; set; }
     public Role Role { get; set; }
 }

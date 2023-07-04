@@ -1,8 +1,10 @@
-﻿namespace DTO.CompanyDTOs;
+﻿using DTO.UserDTOs;
 
-public class FullCompanyDTO
+namespace DTO.CompanyDTOs;
+
+public record FullCompanyDTO
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public Domain.User.Models.User Owner { get; set; }
+    public FullUserDTO Owner { get; set; }
 }

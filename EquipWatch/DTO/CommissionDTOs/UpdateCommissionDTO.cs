@@ -1,8 +1,10 @@
-﻿namespace DTO.CommissionDTOs;
+﻿using DTO.ClientDTOs;
 
-public class UpdateCommissionDTO
+namespace DTO.CommissionDTOs;
+
+public record UpdateCommissionDTO
 {
-    public Domain.Client.Models.Client Client { get; set; }
+    public FullClientDTO Client { get; set; }
     public string Location { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
