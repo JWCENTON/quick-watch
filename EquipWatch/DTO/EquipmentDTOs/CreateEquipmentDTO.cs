@@ -9,9 +9,5 @@ public record CreateEquipmentDTO
     public string Category { get; init; }
     public string Location { get; init; }
     public int Condition { get; init; }
-    public FullCompanyDTO Company { get; init; }
-    public bool IsCheckedOut { get; init; }
-    public FullUserDTO? CheckedOutBy { get; init; }
-
-
+    public PartialCompanyDTO Company { get; init; }
 }

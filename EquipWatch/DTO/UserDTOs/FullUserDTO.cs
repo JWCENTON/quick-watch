@@ -1,7 +1,8 @@
 ﻿namespace DTO.UserDTOs;
 
-public record FullUserDTO
+public record FullUserDTO 
 {
+    public string Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
 }

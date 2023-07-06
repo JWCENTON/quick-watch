@@ -1,7 +1,9 @@
-﻿using DAL.Repositories.Client;
+﻿using System.Reflection;
+using DAL.Repositories.Client;
 using DAL.Repositories.Company;
 using DAL.Repositories.Equipment;
 using DTO.Mappers;
+using DTO.Validators;
 using webapi.uow;
 
 
@@ -16,6 +18,9 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<IEquipmentRepository, EquipmentRepository>();
         services.AddTransient<ICompanyRepository, CompanyRepository>();
         services.AddTransient<IClientRepository, ClientRepository>();
+        services.AddScoped<EquipmentDTOValidator>();
+
+        //both works
         services.AddAutoMapper(typeof(EquipmentMappingProfile));
         services.AddAutoMapper(typeof(CheckInMappingProfile));
         services.AddAutoMapper(typeof(CheckOutMappingProfile));
@@ -24,7 +29,7 @@ public static class MyConfigServiceCollectionExtensions
         services.AddAutoMapper(typeof(CompanyMappingProfile));
         services.AddAutoMapper(typeof(EmployMappingProfile));
         services.AddAutoMapper(typeof(InviteMappingProfile));
-        services.AddAutoMapper(typeof(UserMappingProfile));
+        //services.AddAutoMapper(Assembly.Load("DTO"));
         return services;
     }
 }

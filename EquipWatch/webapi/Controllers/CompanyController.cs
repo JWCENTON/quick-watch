@@ -20,6 +20,11 @@ namespace webapi.Controllers
         {
             return await _unitOfWork.Companies.GetCompanyAsync(id);
         }
+        [HttpGet]
+        public async Task<List<Company>> GetAllCompanies()
+        {
+            return await _unitOfWork.Companies.GetAllAsync();
+        }
 
     }
 }

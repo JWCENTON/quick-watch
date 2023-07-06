@@ -1,4 +1,6 @@
-﻿namespace DAL.Repositories.Company;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace DAL.Repositories.Company;
 
 public class CompanyRepository : ICompanyRepository
 {
@@ -12,12 +14,13 @@ public class CompanyRepository : ICompanyRepository
 
     public async Task<Domain.Company.Models.Company> GetCompanyAsync(Guid id)
     {
-        return await _context.Company.FindAsync(id);
+        var company = await _context.Company.Include(company => company.Owner).FirstOrDefaultAsync(company => company.Id == id);
+        return company ?? throw new KeyNotFoundException("Company With given Id was not found");
     }
 
     public async Task<List<Domain.Company.Models.Company>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Company.Include(company => company.Owner).ToListAsync();
     }
 
     public async Task<Domain.Company.Models.Company> GetAsync(Guid id)
