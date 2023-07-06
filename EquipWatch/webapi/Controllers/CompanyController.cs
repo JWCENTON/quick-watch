@@ -1,4 +1,9 @@
-﻿using Domain.Company.Models;
+﻿using AutoMapper;
+using Domain.Company.Models;
+using Domain.Equipment.Models;
+using DTO.CompanyDTOs;
+using DTO.EquipmentDTOs;
+using DTO.Validators;
 using Microsoft.AspNetCore.Mvc;
 using webapi.uow;
 
@@ -9,10 +14,14 @@ namespace webapi.Controllers
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly CompanyDTOValidator _validator;
 
-        public CompanyController(IUnitOfWork unitOfWork)
+        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper, CompanyDTOValidator validator)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _validator = validator;
         }
 
         [HttpGet("{id}")]
@@ -27,5 +36,17 @@ namespace webapi.Controllers
             return await _unitOfWork.Companies.GetAllAsync();
         }
 
+        [HttpPost]
+        public async Task<Company> CreateCompany([FromBody] CreateCompanyDTO companyDto)
+        {
+            //var user = 
+            _validator.CreateCompanyDTOValidate(companyDto);
+            var company = _mapper.Map<Company>(companyDto);
+            //company.Owner = user;
+            company.Id = Guid.NewGuid();
+
+            await _unitOfWork.Companies.CreateAsync(company);
+            return company;
+        }
     }
 }

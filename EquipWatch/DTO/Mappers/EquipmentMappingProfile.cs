@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Domain.Employ.Models;
 using DTO.CheckInDTOs;
 using DTO.CheckOutDTOs;
 using DTO.ClientDTOs;

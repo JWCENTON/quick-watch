@@ -4,6 +4,6 @@ namespace DTO.CheckOutDTOs;
 
 public record UpdateCheckOutDTO
 {
-    public FullUserDTO User { get; set; }
+    public PartialUserDTO User { get; set; }
     public DateTime Time { get; set; }
 }

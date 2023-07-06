@@ -33,7 +33,7 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<Equipment> Add([FromBody] CreateEquipmentDTO equipmentDto)
+    public async Task<Equipment> CreateEquipment([FromBody] CreateEquipmentDTO equipmentDto)
     {
         var company = await _unitOfWork.Companies.GetAsync(equipmentDto.Company.Id);
 

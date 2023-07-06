@@ -19,6 +19,7 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<ICompanyRepository, CompanyRepository>();
         services.AddTransient<IClientRepository, ClientRepository>();
         services.AddScoped<EquipmentDTOValidator>();
+        services.AddScoped<CompanyDTOValidator>();
 
         //both works
         services.AddAutoMapper(typeof(EquipmentMappingProfile));

@@ -4,7 +4,7 @@ namespace DTO.ClientDTOs;
 
 public record CreateClientDTO
 {
-    public FullCompanyDTO Company { get; set; }
+    public PartialCompanyDTO Company { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

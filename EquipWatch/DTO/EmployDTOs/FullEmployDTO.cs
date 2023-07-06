@@ -1,4 +1,4 @@
-﻿using Domain.Employ;
+﻿using Domain.Employee;
 using DTO.CompanyDTOs;
 using DTO.UserDTOs;
 
