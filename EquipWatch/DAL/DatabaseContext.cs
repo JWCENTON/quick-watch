@@ -1,6 +1,7 @@
 ﻿
 using Domain.Client.Models;
 using Domain.Company.Models;
+using Domain.Employee.Models;
 using Microsoft.EntityFrameworkCore;
 using Domain.User.Models;
 using Domain.Equipment.Models;
@@ -13,6 +14,7 @@ public class DatabaseContext : DbContext
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Company> Company { get; set; }
     public DbSet<Client> Client { get; set; }
+    public DbSet<Employee> Employees { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
