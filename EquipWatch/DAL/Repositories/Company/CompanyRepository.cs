@@ -12,12 +12,6 @@ public class CompanyRepository : ICompanyRepository
         DatabaseContext.IfDbEmptyAddNewItems(context);
     }
 
-    public async Task<Domain.Company.Models.Company> GetCompanyAsync(Guid id)
-    {
-        var company = await _context.Company.Include(company => company.Owner).FirstOrDefaultAsync(company => company.Id == id);
-        return company ?? throw new KeyNotFoundException("Company With given Id was not found");
-    }
-
     public async Task<List<Domain.Company.Models.Company>> GetAllAsync()
     {
         return await _context.Company.Include(company => company.Owner).ToListAsync();
@@ -25,7 +19,8 @@ public class CompanyRepository : ICompanyRepository
 
     public async Task<Domain.Company.Models.Company> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var company = await _context.Company.Include(company => company.Owner).FirstOrDefaultAsync(company => company.Id == id);
+        return company ?? throw new KeyNotFoundException("Company With given Id was not found");
     }
 
     public async Task CreateAsync(Domain.Company.Models.Company entity)

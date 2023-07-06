@@ -13,16 +13,9 @@ public class EquipmentDTOValidator
 
     public void CreateEquipmentDTOValidate(CreateEquipmentDTO createEquipment)
     {
-        //if (createEquipment.IsCheckedOut)
-        //{
-        //    //get user from userRepository and check if its exist
-        //}
-        // other if statements like the one bellow
         if (createEquipment.SerialNumber.Length != 10)
         {
             
         }
-
-
     }
 }

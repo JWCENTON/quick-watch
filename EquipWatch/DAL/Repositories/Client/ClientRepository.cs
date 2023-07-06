@@ -14,12 +14,13 @@ public class ClientRepository : IClientRepository
 
     public async Task<List<Domain.Client.Models.Client>> GetAllAsync()
     {
-        return await _context.Client.ToListAsync();
+        return await _context.Client.Include(client => client.Company).ToListAsync();
     }
 
     public async Task<Domain.Client.Models.Client> GetAsync(Guid id)
     {
-        return await _context.Client.FirstOrDefaultAsync(c => c.Id == id);
+        var client = await _context.Client.Include(client => client.Company).FirstOrDefaultAsync(c => c.Id == id);
+        return client ?? throw new KeyNotFoundException("Client With given Id was not found");
     }
 
     public async Task CreateAsync(Domain.Client.Models.Client entity)

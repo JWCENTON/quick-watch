@@ -31,10 +31,11 @@ public class EquipmentController : ControllerBase
     {
         return await _unitOfWork.Equipments.GetAsync(id);
     }
+
     [HttpPost]
     public async Task<Equipment> Add([FromBody] CreateEquipmentDTO equipmentDto)
     {
-        var company = await _unitOfWork.Companies.GetCompanyAsync(equipmentDto.Company.Id);
+        var company = await _unitOfWork.Companies.GetAsync(equipmentDto.Company.Id);
 
         _validator.CreateEquipmentDTOValidate(equipmentDto);
         var equipment = _mapper.Map<Equipment>(equipmentDto);
