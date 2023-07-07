@@ -12,7 +12,7 @@ namespace webapi.uow
         private IClientRepository _clientService;
         private ICompanyRepository _companyService;
         private IEquipmentRepository _equipmentService;
-        private IEmployeeRepository _EmployeeService;
+        private IEmployeeRepository _employeeService;
 
 
         public UnitOfWork(DatabaseContext context)
@@ -26,7 +26,7 @@ namespace webapi.uow
 
         public IEquipmentRepository Equipments => _equipmentService ??= new EquipmentRepository(_context);
 
-        public IEmployeeRepository Employees => _EmployeeService ??= new EmployeeRepository(_context);
+        public IEmployeeRepository Employees => _employeeService ??= new EmployeeRepository(_context);
         public void SaveChanges()
         {
             _context.SaveChanges();

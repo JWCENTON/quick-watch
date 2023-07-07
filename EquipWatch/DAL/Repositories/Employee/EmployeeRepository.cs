@@ -23,12 +23,12 @@ public class EmployeeRepository : IEmployeeRepository
         return employee ?? throw new KeyNotFoundException("Employee with given Id was not found");
     }
 
-    public async Task CreateAsync(Domain.Client.Models.Client entity)
+    public async Task CreateAsync(Domain.Employee.Models.Employee entity)
     {
         throw new NotImplementedException();
     }
 
-    public async Task UpdateAsync(Domain.Client.Models.Client entity)
+    public async Task UpdateAsync(Domain.Employee.Models.Employee entity)
     {
         throw new NotImplementedException();
     }
