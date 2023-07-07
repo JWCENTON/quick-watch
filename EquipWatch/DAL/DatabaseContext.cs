@@ -68,10 +68,6 @@ public class DatabaseContext : DbContext
                 IsCheckedOut = false
             };
 
-            context.Equipment.Add(equipment1);
-            context.Equipment.Add(equipment2);
-            context.Equipment.Add(equipment3);
-            context.Equipment.Add(equipment4);
 
             var User1 = new User()
             {
@@ -124,6 +120,14 @@ public class DatabaseContext : DbContext
             };
             context.Client.Add(Client1);
             context.Client.Add(Client2);
+            equipment1.Company = Company1;
+            equipment2.Company = Company2;
+            equipment3.Company = Company2;
+            equipment4.Company = Company1;
+            context.Equipment.Add(equipment1);
+            context.Equipment.Add(equipment2);
+            context.Equipment.Add(equipment3);
+            context.Equipment.Add(equipment4);
 
             context.SaveChanges();
         }

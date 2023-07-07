@@ -17,12 +17,13 @@ public class EquipmentRepository : IEquipmentRepository
 
     public async Task<List<Domain.Equipment.Models.Equipment>> GetAllAsync()
     {
-        return await _context.Equipment.ToListAsync();
+        return await _context.Equipment.Include(equipment => equipment.Company).ToListAsync();
     }
 
     public async Task<Domain.Equipment.Models.Equipment> GetAsync(Guid id)
     {
-        return await _context.Equipment.FirstAsync(e => e.Id == id);
+        var equipment = await _context.Equipment.Include(equipment => equipment.Company).FirstOrDefaultAsync(e => e.Id == id);
+        return equipment ?? throw new KeyNotFoundException("Equipment With given Id was not found");
     }
 
     public async Task CreateAsync(Domain.Equipment.Models.Equipment entity)
