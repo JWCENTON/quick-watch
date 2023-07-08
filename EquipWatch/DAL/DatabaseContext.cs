@@ -1,20 +1,32 @@
 ﻿
+using Domain.BookedEquipment.Models;
+using Domain.CheckIn.Models;
+using Domain.CheckOut.Models;
 using Domain.Client.Models;
+using Domain.Commission.Models.Commission;
 using Domain.Company.Models;
 using Domain.Employee.Models;
 using Microsoft.EntityFrameworkCore;
 using Domain.User.Models;
 using Domain.Equipment.Models;
+using Domain.Invite.Models;
+using Domain.WorksOn.Models;
 
 namespace DAL;
 
 public class DatabaseContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Equipment> Equipment { get; set; }
-    public DbSet<Company> Company { get; set; }
+    public DbSet<BookedEquipment> BookedEquipments { get; set; }
+    public DbSet<CheckIn> CheckIns { get; set; }
+    public DbSet<CheckOut> CheckOuts { get; set; }
     public DbSet<Client> Client { get; set; }
+    public DbSet<Commission> Commissions { get; set; }
+    public DbSet<Company> Company { get; set; }
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<Equipment> Equipment { get; set; }
+    public DbSet<User> Users { get; set; } // to be removed when identity implemented
+    public DbSet<Invite> Invites { get; set; }
+    public DbSet<WorksOn> WorksOn { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)

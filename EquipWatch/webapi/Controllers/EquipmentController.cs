@@ -33,6 +33,8 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<Equipment> CreateEquipment([FromBody] CreateEquipmentDTO equipmentDto)
     {
         var company = await _unitOfWork.Companies.GetAsync(equipmentDto.Company.Id);

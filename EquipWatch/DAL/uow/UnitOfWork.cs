@@ -1,18 +1,26 @@
 ﻿using DAL;
+using DAL.Repositories.CheckIn;
+using DAL.Repositories.CheckOut;
 using DAL.Repositories.Client;
+using DAL.Repositories.Commission;
 using DAL.Repositories.Company;
 using DAL.Repositories.Employee;
 using DAL.Repositories.Equipment;
+using DAL.Repositories.Invite;
 
 namespace webapi.uow
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
+        private ICheckInRepository _checkInService;
+        private ICheckOutRepository _checkOutService;
         private IClientRepository _clientService;
+        private ICommissionRepository _commissionService;
         private ICompanyRepository _companyService;
-        private IEquipmentRepository _equipmentService;
         private IEmployeeRepository _employeeService;
+        private IEquipmentRepository _equipmentService;
+        private IInviteRepository _inviteService;
 
 
         public UnitOfWork(DatabaseContext context)
@@ -20,13 +28,22 @@ namespace webapi.uow
             _context = context;
         }
 
+        public ICheckInRepository CheckIns => _checkInService ??= new CheckInRepository(_context);
+
+        public ICheckOutRepository CheckOuts => _checkOutService ??= new CheckOutRepository(_context);
+
         public IClientRepository Clients => _clientService ??= new ClientRepository(_context);
+
+        public ICommissionRepository Commissions => _commissionService ??= new CommissionRepository(_context);
 
         public ICompanyRepository Companies => _companyService ??= new CompanyRepository(_context);
 
+        public IEmployeeRepository Employees => _employeeService ??= new EmployeeRepository(_context);
+
         public IEquipmentRepository Equipments => _equipmentService ??= new EquipmentRepository(_context);
 
-        public IEmployeeRepository Employees => _employeeService ??= new EmployeeRepository(_context);
+        public IInviteRepository Invites => _inviteService ??= new InviteRepository(_context);
+
         public void SaveChanges()
         {
             _context.SaveChanges();

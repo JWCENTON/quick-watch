@@ -9,16 +9,16 @@ public class CheckInMappingProfile : Profile
     {
         CreateMap<Domain.CheckIn.Models.CheckIn, CreateCheckInDTO>()
             .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.Employee))
             .ReverseMap();
 
         CreateMap<Domain.CheckIn.Models.CheckIn, FullCheckInDTO>()
             .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.Employee))
             .ReverseMap();
 
         CreateMap<Domain.CheckIn.Models.CheckIn, UpdateCheckInDTO>()
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.Employee))
             .ReverseMap();
     }
 }
