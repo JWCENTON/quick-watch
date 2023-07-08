@@ -34,13 +34,17 @@ public class EquipmentRepository : IEquipmentRepository
 
     public async Task UpdateAsync(Domain.Equipment.Models.Equipment entity)
     {
-        throw new NotImplementedException();
+        _context.Equipment.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task RemoveAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var equipment = await _context.Equipment.FindAsync(id);
+        if (equipment != null)
+        {
+            _context.Equipment.Remove(equipment);
+            await _context.SaveChangesAsync();
+        }
     }
-
-
 }
