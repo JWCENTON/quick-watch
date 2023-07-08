@@ -2,7 +2,7 @@
 
 public class WorksOn
 {
-    public Guid Id { get; set; } // or database generated int
+    public Guid Id { get; set; }
     public Commission.Models.Commission.Commission Commission { get; set; }
     public Employee.Models.Employee Employee { get; set; }
 }
