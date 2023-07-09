@@ -1,6 +1,4 @@
-﻿using DAL;
-using Domain.Equipment.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.Equipment;
 
@@ -26,15 +24,15 @@ public class EquipmentRepository : IEquipmentRepository
         return equipment ?? throw new KeyNotFoundException("Equipment With given Id was not found");
     }
 
-    public async Task CreateAsync(Domain.Equipment.Models.Equipment entity)
+    public async Task CreateAsync(Domain.Equipment.Models.Equipment equipment)
     {
-        await _context.Equipment.AddAsync(entity);
+        await _context.Equipment.AddAsync(equipment);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Domain.Equipment.Models.Equipment entity)
+    public async Task UpdateAsync(Domain.Equipment.Models.Equipment equipment)
     {
-        _context.Equipment.Update(entity);
+        _context.Equipment.Update(equipment);
         await _context.SaveChangesAsync();
     }
 

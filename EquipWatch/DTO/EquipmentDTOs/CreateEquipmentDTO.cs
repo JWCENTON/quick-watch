@@ -1,6 +1,4 @@
-﻿using Domain.Company.Models;
-using DTO.CompanyDTOs;
-using DTO.UserDTOs;
+﻿using DTO.CompanyDTOs;
 
 namespace DTO.EquipmentDTOs;
 

@@ -77,5 +77,4 @@ public class EquipmentController : ControllerBase
         await _unitOfWork.Equipments.RemoveAsync(id);
         return NoContent();
     }
-
 }
