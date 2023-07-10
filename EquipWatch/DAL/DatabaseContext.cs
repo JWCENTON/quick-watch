@@ -48,6 +48,21 @@ public class DatabaseContext : DbContext
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
 
+        //builder.Entity<Company>()
+        //    .HasOne(c => c.Owner)
+        //    .WithMany()
+        //    .OnDelete(DeleteBehavior.SetNull);
+
+        //builder.Entity<Employee>()
+        //    .HasOne(e => e.User)
+        //    .WithMany()
+        //    .OnDelete(DeleteBehavior.SetNull);
+
+        //builder.Entity<Invite>()
+        //    .HasOne(i => i.User)
+        //    .WithMany()
+        //    .OnDelete(DeleteBehavior.SetNull);
+
         builder.Entity<BookedEquipment>()
             .HasOne(b => b.Equipment)
             .WithMany()
