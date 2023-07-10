@@ -1,6 +1,6 @@
 ﻿namespace DTO.CompanyDTOs
 {
-    public record PartialCompanyDTO
+    public record CompanyIdDTO
     {
         public Guid Id { get; set; }
     }
