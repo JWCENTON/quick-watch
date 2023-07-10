@@ -1,6 +1,6 @@
 ﻿namespace DTO.UserDTOs;
 
-public record PartialUserDTO
+public record UserIdDTO
 {
     public string Id { get; set; }
 }

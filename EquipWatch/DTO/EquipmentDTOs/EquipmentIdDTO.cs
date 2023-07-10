@@ -1,6 +1,6 @@
 ﻿namespace DTO.EquipmentDTOs;
 
-public record PartialEquipmentDTO
+public record EquipmentIdDTO
 {
     public Guid Id { get; set; }
 }

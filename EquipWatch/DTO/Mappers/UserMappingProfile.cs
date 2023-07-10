@@ -9,7 +9,7 @@ public class UserMappingProfile : Profile
     {
         CreateMap<Domain.User.Models.User, CreateUserDTO>().ReverseMap();
 
-        CreateMap<Domain.User.Models.User, PartialUserDTO>()
+        CreateMap<Domain.User.Models.User, UserIdDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ReverseMap();
 
