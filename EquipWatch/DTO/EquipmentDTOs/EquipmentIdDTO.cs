@@ -4,7 +4,7 @@ using Domain.User.Models;
 
 namespace DTO.EquipmentDTOs;
 
-public record PartialEquipmentDTO
+public record EquipmentIdDTO
 {
     public Guid Id { get; set; }
     public string SerialNumber { get; set; }

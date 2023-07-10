@@ -19,6 +19,6 @@ public class CompanyMappingProfile : Profile
             .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner))
             .ReverseMap();
 
-        CreateMap<Domain.Company.Models.Company, PartialCompanyDTO>().ReverseMap();
+        CreateMap<Domain.Company.Models.Company, CompanyIdDTO>().ReverseMap();
     }
 }

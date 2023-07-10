@@ -27,6 +27,6 @@ public class EquipmentMappingProfile : Profile
             .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
             .ReverseMap();
 
-        CreateMap<Domain.Equipment.Models.Equipment, PartialEquipmentDTO>().ReverseMap();
+        CreateMap<Domain.Equipment.Models.Equipment, EquipmentIdDTO>().ReverseMap();
     }
 }
