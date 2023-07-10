@@ -6,7 +6,7 @@ namespace DTO.EmployDTOs;
 
 public record CreateEmployDTO
 {
-    public PartialCompanyDTO Company { get; set; }
-    public PartialUserDTO User { get; set; }
+    public CompanyIdDTO Company { get; set; }
+    public UserIdDTO User { get; set; }
     public Role Role { get; set; }
 }

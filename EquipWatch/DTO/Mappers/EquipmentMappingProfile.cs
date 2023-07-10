@@ -28,5 +28,7 @@ public class EquipmentMappingProfile : Profile
             .ReverseMap();
 
         CreateMap<Domain.Equipment.Models.Equipment, PartialEquipmentDTO>().ReverseMap();
+
+        CreateMap<Domain.Equipment.Models.Equipment, EquipmentIdDTO>().ReverseMap();
     }
 }

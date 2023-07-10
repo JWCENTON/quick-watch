@@ -233,7 +233,7 @@ public class DatabaseContext : DbContext
             };
             context.Client.Add(Client1);
             context.Client.Add(Client2);
-
+            
             var commission1 = new Commission()
             {
                 Client = Client1,
@@ -315,7 +315,7 @@ public class DatabaseContext : DbContext
             };
             context.Invites.Add(invite1);
             context.Invites.Add(invite2);
-
+            
 
             context.SaveChanges();
         }

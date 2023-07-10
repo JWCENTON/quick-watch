@@ -1,31 +1,33 @@
 ﻿using AutoMapper;
+using Domain.Client.Models;
 using DTO.ClientDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Client.Models;
 using webapi.uow;
 
-namespace webapi.Controllers
+namespace webapi.Controllers;
+
+
+[ApiController, Route("api/[controller]")]
+public class ClientController : ControllerBase
 {
-    [ApiController, Route("api/[controller]")]
-    public class ClientController : ControllerBase
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    public ClientController(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
 
-        public ClientController(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<List<Client>> GetAllClient()
-        {
-            return await _unitOfWork.Clients.GetAllAsync();
-        }
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<List<PartialClientDTO>> GetAllClient()
+    {
+        var data = await _unitOfWork.Clients.GetAllAsync();
+        return data.Select(client => _mapper.Map<PartialClientDTO>(client)).ToList();
+    }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -4,6 +4,8 @@ using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
 using webapi.uow;
 using DTO.Validators;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace webapi.Controllers;
 
@@ -23,9 +25,10 @@ public class EquipmentController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<List<Equipment>> GetAll()
+    public async Task<List<PartialEquipmentDTO>> GetAll()
     {
-        return await _unitOfWork.Equipments.GetAllAsync();
+        var data = await _unitOfWork.Equipments.GetAllAsync();
+        return data.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
     }
 
     [HttpGet("{id}")]
@@ -38,6 +41,8 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

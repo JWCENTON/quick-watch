@@ -2,6 +2,7 @@
 
 public class WorksOn
 {
-    public Commission.Models.Commission.Commission Booking { get; set; }
-    public User.Models.User User { get; set; }
+    public Guid Id { get; set; }
+    public Commission.Models.Commission.Commission Commission { get; set; }
+    public Employee.Models.Employee Employee { get; set; }
 }
