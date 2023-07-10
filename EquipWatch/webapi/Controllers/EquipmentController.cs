@@ -21,9 +21,10 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<Equipment>> GetAll()
+    public async Task<List<PartialEquipmentDTO>> GetAll()
     {
-        return await _unitOfWork.Equipments.GetAllAsync();
+        var data = await _unitOfWork.Equipments.GetAllAsync();
+        return data.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
     }
 
     [HttpGet("{id}")]
