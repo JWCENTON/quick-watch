@@ -1,4 +1,5 @@
-﻿using Domain.Client.Models;
+﻿using AutoMapper;
+using Domain.Client.Models;
 using DTO.ClientDTOs;
 using Microsoft.AspNetCore.Mvc;
 using webapi.uow;
@@ -10,31 +11,18 @@ namespace webapi.Controllers;
 public class ClientController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
-    public ClientController(IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper;
+    public ClientController(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<List<PartialClientDTO>> GetAllClient()
     {
-        //TODO implement mapping
         var data = await _unitOfWork.Clients.GetAllAsync();
-        var returnData = new List<PartialClientDTO>();
-        foreach (var client in data)
-        {
-            returnData.Add(new PartialClientDTO ()
-                {
-                    Id = client.Id,
-                    FirstName = client.FirstName,
-                    LastName = client.LastName,
-                    Email = client.Email,
-                    PhoneNumber = client.PhoneNumber,
-                    ContactAddress = client.ContactAddress,
-                }
-                );
-        }
-        return returnData;
+        return data.Select(client => _mapper.Map<PartialClientDTO>(client)).ToList();
     }
 
     [HttpGet("{id}")]
