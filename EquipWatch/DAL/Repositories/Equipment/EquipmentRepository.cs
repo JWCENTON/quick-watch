@@ -39,7 +39,13 @@ public class EquipmentRepository : IEquipmentRepository
 
     public async Task RemoveAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var equipment = await _context.Equipment.Include(equipment => equipment.Company).FirstOrDefaultAsync(e => e.Id == id);
+        if (equipment == null)
+        {
+            throw new KeyNotFoundException("Equipment With given Id was not found");
+        }
+        _context.Equipment.Remove(equipment);
+        await _context.SaveChangesAsync();
     }
 
 
