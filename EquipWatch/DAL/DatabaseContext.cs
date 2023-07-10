@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DAL;
 
-public class DatabaseContext : IdentityDbContext<User>
+public class DatabaseContext : DbContext
 {
     public DbSet<BookedEquipment> BookedEquipments { get; set; }
     public DbSet<CheckIn> CheckIns { get; set; }
