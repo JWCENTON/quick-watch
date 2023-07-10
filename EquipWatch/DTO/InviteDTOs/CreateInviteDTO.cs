@@ -6,8 +6,8 @@ namespace DTO.InviteDTOs;
 
 public record CreateInviteDTO
 {
-    public PartialCompanyDTO Company { get; set; }
-    public PartialUserDTO User { get; set; }
+    public CompanyIdDTO Company { get; set; }
+    public UserIdDTO User { get; set; }
     public Status Status { get; set; }
     public DateTime CreatedAt { get; set; }
 }

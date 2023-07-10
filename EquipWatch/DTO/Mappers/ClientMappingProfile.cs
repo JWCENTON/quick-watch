@@ -11,7 +11,7 @@ public class ClientMappingProfile : Profile
             .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
             .ReverseMap();
 
-        CreateMap<Domain.Client.Models.Client, PartialClientDTO>()
+        CreateMap<Domain.Client.Models.Client, ClientIdDTO>()
             .ReverseMap();
 
         CreateMap<Domain.Client.Models.Client, FullClientDTO>()

@@ -2,7 +2,7 @@
 
 namespace DTO.ClientDTOs;
 
-public record PartialClientDTO
+public record ClientIdDTO
 {
     public Guid Id { get; set; }
 }
