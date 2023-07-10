@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Reflection.Emit;
 using Domain.Employee;
 using Domain.Invite;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DAL;
 
