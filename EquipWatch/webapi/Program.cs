@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 using webapi.Extensions;
 using webapi.Middleware;
@@ -9,6 +10,7 @@ using webapi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");
+var identityConnectionString = builder.Configuration.GetConnectionString("IdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
 
@@ -26,7 +28,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DatabaseContext>();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DatabaseContext>().AddDefaultTokenProviders();
 
 // Add services to the container.
 
@@ -69,6 +71,7 @@ app.UseCors("default");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 

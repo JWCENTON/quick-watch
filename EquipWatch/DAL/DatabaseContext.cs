@@ -15,10 +15,11 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Reflection.Emit;
 using Domain.Employee;
 using Domain.Invite;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DAL;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext : IdentityDbContext<User>
 {
     public DbSet<BookedEquipment> BookedEquipments { get; set; }
     public DbSet<CheckIn> CheckIns { get; set; }
