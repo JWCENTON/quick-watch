@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230711124432_User-without-password1")]
+    partial class Userwithoutpassword1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("BookedEquipments", (string)null);
+                    b.ToTable("BookedEquipments");
                 });
 
             modelBuilder.Entity("Domain.CheckIn.Models.CheckIn", b =>
@@ -64,7 +67,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("CheckIns", (string)null);
+                    b.ToTable("CheckIns");
                 });
 
             modelBuilder.Entity("Domain.CheckOut.Models.CheckOut", b =>
@@ -88,7 +91,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("CheckOuts", (string)null);
+                    b.ToTable("CheckOuts");
                 });
 
             modelBuilder.Entity("Domain.Client.Models.Client", b =>
@@ -124,7 +127,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Client", (string)null);
+                    b.ToTable("Client");
                 });
 
             modelBuilder.Entity("Domain.Commission.Models.Commission.Commission", b =>
@@ -163,7 +166,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Commissions", (string)null);
+                    b.ToTable("Commissions");
                 });
 
             modelBuilder.Entity("Domain.Company.Models.Company", b =>
@@ -183,7 +186,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Company", (string)null);
+                    b.ToTable("Company");
                 });
 
             modelBuilder.Entity("Domain.Employee.Models.Employee", b =>
@@ -207,7 +210,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("Domain.Equipment.Models.Equipment", b =>
@@ -251,7 +254,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Equipment", (string)null);
+                    b.ToTable("Equipment");
                 });
 
             modelBuilder.Entity("Domain.Invite.Models.Invite", b =>
@@ -278,7 +281,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Invites", (string)null);
+                    b.ToTable("Invites");
                 });
 
             modelBuilder.Entity("Domain.User.Models.User", b =>
@@ -338,7 +341,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Domain.WorksOn.Models.WorksOn", b =>
@@ -359,7 +362,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("WorksOn", (string)null);
+                    b.ToTable("WorksOn");
                 });
 
             modelBuilder.Entity("Domain.BookedEquipment.Models.BookedEquipment", b =>

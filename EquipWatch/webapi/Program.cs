@@ -32,7 +32,17 @@ Log.Logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DatabaseContext>().AddDefaultTokenProviders();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "default", policy =>
+    {
+        policy.WithOrigins("https://localhost:7007")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -54,17 +64,6 @@ builder.Services.AddSwaggerGen();
 
 // Service Collection
 builder.Services.AddMyDependencyGroup();
-
-builder.Services.AddCors(options =>
-{
-    // this defines a CORS policy called "default"
-    options.AddPolicy("default", policy =>
-    {
-        policy.WithOrigins("https://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
 
 var app = builder.Build();
 
