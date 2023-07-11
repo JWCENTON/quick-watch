@@ -8,6 +8,7 @@ import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
 import CardList from './pages/cardList/CardListPage';
 import Login from './pages/login/Login';
+import EquipmentCreateForm from './pages/equipmentCreateForm/EquipmentCreateForm';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/companies" element={<CardList />} />
             <Route path="/clients" element={<CardList />} />
             <Route path="/equipment" element={<CardList />} />
+            <Route path="/equipment/create" element={<EquipmentCreateForm />} />
             <Route path="/commissions" element={<CardList />} />
             <Route path="/personal-info" element={<PersonalInfoPage />} />
             <Route path="/:dataType/:id" element={<DetailView />} />
