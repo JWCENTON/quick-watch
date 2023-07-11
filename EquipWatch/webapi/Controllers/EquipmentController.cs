@@ -4,11 +4,13 @@ using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
 using webapi.uow;
 using DTO.Validators;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace webapi.Controllers;
 
+[Authorize]
 [ApiController, Route("api/[controller]")]
 public class EquipmentController : ControllerBase
 {
