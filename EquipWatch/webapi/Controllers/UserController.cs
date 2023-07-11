@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     {
         var user = new User
         {
-            UserName = model.UserName,
+            UserName = model.Email,
             Email = model.Email,
             FirstName = model.FirstName,
             LastName = model.LastName
