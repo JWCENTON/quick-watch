@@ -1,14 +1,5 @@
 ﻿using AutoMapper;
-using DTO.CheckInDTOs;
-using DTO.CheckOutDTOs;
-using DTO.ClientDTOs;
-using DTO.CommissionDTOs;
-using DTO.CompanyDTOs;
-using DTO.EmployDTOs;
 using DTO.EquipmentDTOs;
-using DTO.InviteDTOs;
-using DTO.UserDTOs;
-
 namespace DTO.Mappers;
 
 public class EquipmentMappingProfile : Profile

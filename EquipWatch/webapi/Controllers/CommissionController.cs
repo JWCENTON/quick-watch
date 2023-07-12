@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using Domain.Company.Models;
+using Domain.Equipment.Models;
 using DTO.CommissionDTOs;
+using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using webapi.uow;
 
 namespace webapi.Controllers
 {
+    //[Authorize]
     [ApiController, Route("api/[controller]")]
     public class CommissionController : ControllerBase
     {
@@ -20,6 +24,9 @@ namespace webapi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<FullCommissionDTO>>> GetAllCommissions()
@@ -31,7 +38,9 @@ namespace webapi.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FullCommissionDTO>> GetCommission(Guid id)
         {
@@ -43,10 +52,16 @@ namespace webapi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FullCommissionDTO>> CreateCommission([FromBody] CreateCommissionDTO commissionDto)
         {
             var commission = _mapper.Map<Domain.Commission.Models.Commission.Commission>(commissionDto);
+            var company = await _unitOfWork.Companies.GetAsync(commissionDto.Company.Id);
+            var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
+            commission.Company = company;
+            commission.Client = client;
             commission.Id = Guid.NewGuid();
 
             await _unitOfWork.Commissions.CreateAsync(commission);
@@ -59,12 +74,16 @@ namespace webapi.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateCommission(Guid id, [FromBody] UpdateCommissionDTO commissionDto)
         {
             var commission = await _unitOfWork.Commissions.GetAsync(id);
+            
             _mapper.Map(commissionDto, commission);
-
+            var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
+            commission.Client = client;
             await _unitOfWork.Commissions.UpdateAsync(commission);
             await _unitOfWork.SaveChangesAsync();
 
@@ -74,8 +93,8 @@ namespace webapi.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteCommission(Guid id)
         {
