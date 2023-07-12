@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DAL.Repositories.Equipment
 {
@@ -22,11 +19,13 @@ namespace DAL.Repositories.Equipment
 
         public async Task<Domain.Equipment.Models.Equipment> GetAsync(Guid id)
         {
-            var equipment = await _context.Equipment.Include(equipment => equipment.Company).FirstOrDefaultAsync(e => e.Id == id);
+            var equipment = await _context.Equipment.Include(equipment => equipment.Company)
+                .FirstOrDefaultAsync(e => e.Id == id);
             if (equipment == null)
             {
                 throw new KeyNotFoundException("Equipment With given Id was not found");
             }
+
             return equipment;
         }
 
@@ -36,6 +35,7 @@ namespace DAL.Repositories.Equipment
             {
                 throw new ArgumentNullException(nameof(equipment));
             }
+
             await _context.Equipment.AddAsync(equipment);
             await _context.SaveChangesAsync();
         }
@@ -46,22 +46,22 @@ namespace DAL.Repositories.Equipment
             {
                 throw new ArgumentNullException(nameof(equipment));
             }
+
             _context.Equipment.Update(equipment);
             await _context.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(Guid id)
         {
-            var equipment = await _context.Equipment.FindAsync(id);
-            if (equipment != null)
+            var equipment = await _context.Equipment.Include(equipment => equipment.Company)
+                .FirstOrDefaultAsync(e => e.Id == id);
+            if (equipment == null)
             {
-                _context.Equipment.Remove(equipment);
-                await _context.SaveChangesAsync();
+                throw new KeyNotFoundException("Equipment With given Id was not found");
             }
-            else
-            {
-                throw new KeyNotFoundException("Equipment with the given Id was not found");
-            }
+
+            _context.Equipment.Remove(equipment);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -83,9 +83,25 @@ public class EquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteEquipment(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         await _unitOfWork.Equipments.RemoveAsync(id);
         return NoContent();
     }
+
+
+
+    //[HttpDelete("{id}")]
+    //public async Task<IActionResult> Delete(Guid id)
+    //{
+    //    try
+    //    {
+    //        await _unitOfWork.Equipments.RemoveAsync(id);
+    //        return Ok();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return BadRequest(ex.Message);
+    //    }
+    //}
 }
