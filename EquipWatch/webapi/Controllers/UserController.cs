@@ -3,6 +3,7 @@ using Domain.User.Models;
 using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using webapi.uow;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -10,11 +11,13 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpPost("register")]
@@ -29,12 +32,13 @@ public class UserController : ControllerBase
             LastName = model.LastName
         };
 
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
 
         if (result.Succeeded)
         {
             // User registration successful
             // Return any necessary response or redirect
+            await _unitOfWork.Users.CreateAsync(user).ConfigureAwait(true);
             return Ok();
         }
         else
