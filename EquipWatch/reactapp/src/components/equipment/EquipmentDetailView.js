@@ -1,5 +1,5 @@
 import React from 'react';
-import UniversalCard from '../card/Card';
+import { useNavigate } from "react-router-dom";
 
 //const [Commissions, setCommissions] = useState(null);
 
@@ -10,6 +10,13 @@ import UniversalCard from '../card/Card';
 //}
 
 export default function EquipmentDetailView({ detailsData }) {
+    const navigate = useNavigate();
+
+    async function DeleteEquipment() {
+        await fetch(`https://localhost:7007/api/equipment/${detailsData.id}`, { method: "DELETE" });
+        navigate("/equipment");
+    }
+
     return (
         <div >
             {detailsData === null ? (
@@ -27,7 +34,7 @@ export default function EquipmentDetailView({ detailsData }) {
                     {/*    {Commissions == null ? <p>Loading...</p> : Commissions.map((card, index) => (<UniversalCard key={index} data={Commissions} dataType={'commission'}></UniversalCard>))}*/}
                     {/*</div>*/}
                     <button>Edit</button>
-                    <button>Remove</button>
+                        <button onClick={ DeleteEquipment }>Remove</button>
                 </div>
             )}
         </div>
