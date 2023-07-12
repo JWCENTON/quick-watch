@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace webapi.Controllers;
 
-[Authorize]
+//[Authorize]
 [ApiController, Route("api/[controller]")]
 public class EquipmentController : ControllerBase
 {

@@ -11,5 +11,7 @@ public class Equipment
     public bool IsCheckedOut { get; set; }
     public Employee.Models.Employee? CheckedOutBy { get; set; }
 
+
+
     //status - available / reserved, in use
 }

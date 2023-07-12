@@ -11,6 +11,8 @@ public class Commission
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set;}
 
-    //public List<Employee.Models.Employee>? Employees { get; set; } // how to save it to DB to contain only ID
+    //public ICollection<BookedEquipment.Models.BookedEquipment> BookedEquipment { get; set; }
+
+    //public List<Employee.Models.Employee>? Employees { get; set; }
     // list of photos of current work
 }

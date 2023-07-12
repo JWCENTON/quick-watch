@@ -6,6 +6,7 @@ using Domain.User.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using webapi.Extensions;
 using webapi.Middleware;
@@ -15,7 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");
 var identityConnectionString = builder.Configuration.GetConnectionString("IdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
+string mySqlConnectionString = "server=localhost;port=3306;database=EquipWatch;uid=root;pwd=martin@o2.pl:P";
+
+
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
 builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(identityConnectionString));
 
 var configuration = new ConfigurationBuilder()
@@ -27,6 +31,7 @@ var configuration = new ConfigurationBuilder()
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
+
 
 // Configure logging
 builder.Logging.ClearProviders();
@@ -49,10 +54,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    // Solves problem with cyclical dependency 
+    .AddNewtonsoftJson(options => {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//    (c =>
+//{
+//    c.SwaggerGeneratorOptions.SwaggerDocs("v1", new OpenApiInfo
+//    {
+//        Title = "jwtToken_Auth_API",
+//        Version = "v1"
+//    });
+//});
 
 // Service Collection
 builder.Services.AddMyDependencyGroup();
