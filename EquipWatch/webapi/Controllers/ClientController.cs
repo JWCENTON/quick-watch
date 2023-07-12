@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Client.Models;
 using webapi.uow;
+using Domain.Company.Models;
 
 namespace webapi.Controllers;
 
@@ -72,6 +73,12 @@ public class ClientController : ControllerBase
     {
         var client = await _unitOfWork.Clients.GetAsync(id);
         _mapper.Map(clientDto, client);
+
+        if (clientDto.Company?.Id != null)
+        {
+            var company = await _unitOfWork.Companies.GetAsync(clientDto.Company.Id);
+            client.Company = company;
+        }
 
         await _unitOfWork.Clients.UpdateAsync(client);
         await _unitOfWork.SaveChangesAsync();

@@ -5,6 +5,7 @@ using DTO.CommissionDTOs;
 using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
 
 namespace webapi.Controllers
@@ -58,10 +59,19 @@ namespace webapi.Controllers
         public async Task<ActionResult<FullCommissionDTO>> CreateCommission([FromBody] CreateCommissionDTO commissionDto)
         {
             var commission = _mapper.Map<Domain.Commission.Models.Commission.Commission>(commissionDto);
-            var company = await _unitOfWork.Companies.GetAsync(commissionDto.Company.Id);
-            var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
-            commission.Company = company;
-            commission.Client = client;
+
+            if (commissionDto.Company?.Id != null)
+            {
+                var company = await _unitOfWork.Companies.GetAsync(commissionDto.Company.Id);
+                commission.Company = company;
+            }
+
+            if (commissionDto.Client?.Id != null)
+            {
+                var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
+                commission.Client = client;
+            }
+
             commission.Id = Guid.NewGuid();
 
             await _unitOfWork.Commissions.CreateAsync(commission);
@@ -80,14 +90,19 @@ namespace webapi.Controllers
         public async Task<IActionResult> UpdateCommission(Guid id, [FromBody] UpdateCommissionDTO commissionDto)
         {
             var commission = await _unitOfWork.Commissions.GetAsync(id);
-            
-            _mapper.Map(commissionDto, commission);
-            var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
-            commission.Client = client;
-            await _unitOfWork.Commissions.UpdateAsync(commission);
-            await _unitOfWork.SaveChangesAsync();
+_mapper.Map(commissionDto, commission);
 
-            return NoContent();
+if (commissionDto.Client?.Id != null)
+{
+    var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
+    commission.Client = client;
+}
+
+await _unitOfWork.Commissions.UpdateAsync(commission);
+await _unitOfWork.SaveChangesAsync();
+
+return NoContent();
+
         }
 
         [HttpDelete("{id}")]
