@@ -90,18 +90,18 @@ namespace webapi.Controllers
         public async Task<IActionResult> UpdateCommission(Guid id, [FromBody] UpdateCommissionDTO commissionDto)
         {
             var commission = await _unitOfWork.Commissions.GetAsync(id);
-_mapper.Map(commissionDto, commission);
+            _mapper.Map(commissionDto, commission);
 
-if (commissionDto.Client?.Id != null)
-{
-    var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
-    commission.Client = client;
-}
+            if (commissionDto.Client?.Id != null)
+            {
+                var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
+                commission.Client = client;
+            }
 
-await _unitOfWork.Commissions.UpdateAsync(commission);
-await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.Commissions.UpdateAsync(commission);
+            await _unitOfWork.SaveChangesAsync();
 
-return NoContent();
+            return NoContent();
 
         }
 
