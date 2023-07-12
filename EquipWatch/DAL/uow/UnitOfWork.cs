@@ -8,6 +8,7 @@ using DAL.Repositories.Company;
 using DAL.Repositories.Employee;
 using DAL.Repositories.Equipment;
 using DAL.Repositories.Invite;
+using DAL.Repositories.User;
 using DAL.Repositories.WorksOn;
 
 namespace webapi.uow
@@ -25,7 +26,7 @@ namespace webapi.uow
         private IEquipmentRepository _equipmentService;
         private IInviteRepository _inviteService;
         private IWorksOnRepository _worksOnService;
-
+        private IUserRepository _userService;
 
         public UnitOfWork(DatabaseContext context)
         {
@@ -51,6 +52,9 @@ namespace webapi.uow
         public IInviteRepository Invites => _inviteService ??= new InviteRepository(_context);
 
         public IWorksOnRepository WorksOn => _worksOnService ??= new WorksOnRepository(_context);
+
+        public IUserRepository Users => _userService ??= new UserRepository(_context);
+
 
         public void SaveChanges()
         {

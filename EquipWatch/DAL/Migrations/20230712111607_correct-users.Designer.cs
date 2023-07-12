@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230712111607_correct-users")]
+    partial class correctusers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,6 +226,9 @@ namespace DAL.Migrations
                     b.Property<Guid?>("CheckedOutById")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CommissionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -243,6 +249,8 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CheckedOutById");
+
+                    b.HasIndex("CommissionId");
 
                     b.HasIndex("CompanyId");
 
@@ -476,6 +484,10 @@ namespace DAL.Migrations
                         .WithMany()
                         .HasForeignKey("CheckedOutById");
 
+                    b.HasOne("Domain.Commission.Models.Commission.Commission", "Commission")
+                        .WithMany()
+                        .HasForeignKey("CommissionId");
+
                     b.HasOne("Domain.Company.Models.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
@@ -483,6 +495,8 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("CheckedOutBy");
+
+                    b.Navigation("Commission");
 
                     b.Navigation("Company");
                 });
