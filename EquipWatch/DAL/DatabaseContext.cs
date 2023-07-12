@@ -131,6 +131,12 @@ public class DatabaseContext : DbContext
             .HasForeignKey<Equipment>("CompanyId")
             .OnDelete(DeleteBehavior.Cascade);
 
+        //builder.Entity<Equipment>()
+        //    .HasOne(e => e.CheckedOutBy)
+        //    .WithOne()
+        //    .HasForeignKey<Equipment>("CheckedOutById")
+        //    .OnDelete(DeleteBehavior.Cascade);
+
         builder.Entity<Employee>()
             .HasOne(e => e.Company)
             .WithOne()
@@ -271,9 +277,9 @@ public class DatabaseContext : DbContext
             context.CheckOuts.Add(checkOut1);
             context.CheckOuts.Add(checkOut2);
 
-            equipment1.CheckedOutBy = employee1;
+            //equipment1.CheckedOutBy = employee1;
             equipment1.IsCheckedOut = true;
-            equipment2.CheckedOutBy = employee2;
+            //equipment2.CheckedOutBy = employee2;
             equipment2.IsCheckedOut = true;
 
             var Client1 = new Client

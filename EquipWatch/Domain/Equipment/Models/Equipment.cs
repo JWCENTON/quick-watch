@@ -9,7 +9,6 @@ public class Equipment
     public int Condition { get; set; } // mb enum
     public Company.Models.Company Company { get; set; }
     public bool IsCheckedOut { get; set; }
-    public Employee.Models.Employee? CheckedOutBy { get; set; }
 
     //status - available / reserved, in use
 }
