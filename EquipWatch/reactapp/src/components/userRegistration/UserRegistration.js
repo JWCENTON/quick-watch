@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 function Registration() {
+    const location = useLocation();
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform registration logic (e.g., send data to the server)
-        // Assuming a successful registration, navigate back to the main page
         navigate('/');
     };
 
@@ -32,20 +32,29 @@ function Registration() {
         });
 
         if (response.ok) {
-            // User registration successful
-            // You can handle the success case here, such as showing a success message or redirecting to a different page
             console.log('Registration successful');
+            const username = `${firstName} ${lastName}`;
+            navigate('/', { state: { registrationSuccess: true, username } });
         } else {
-            // User registration failed
-            // You can handle the error case here, such as displaying the error message to the user
             const errorData = await response.json();
-            console.log('Registration failed:', errorData);
+            const errorMessages = errorData.map((error) => `${error.code}: ${error.description}`);
+            setErrorMessage(['Registration failed:', ...errorMessages]);
         }
     };
 
     return (
         <div>
             <h2>Registration</h2>
+            {errorMessage.length > 0 && (
+                <div className="error-message">
+                    {errorMessage.length > 1 && <p>{errorMessage[0]}</p>}
+                    <ul>
+                        {errorMessage.slice(1).map((message, index) => (
+                            <li key={index}>{message}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
