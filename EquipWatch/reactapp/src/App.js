@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Registration from './components/userRegistration/UserRegistration';
 import CompanyMainPage from './pages/companyMain/CompanyMain';
 import EmployeeMainPage from './pages/employeeMain/EmployeeMain';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
@@ -14,6 +15,7 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Registration />} />
             <Route path="/employee" element={<EmployeeMainPage />} />
             <Route path="/company" element={<CompanyMainPage />} />
             <Route path="/companies" element={<CardList />} />
