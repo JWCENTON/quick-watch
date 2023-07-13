@@ -4,6 +4,8 @@ using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.uow;
+using NuGet.Common;
+using webapi.Services;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,12 +14,14 @@ public class UserController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailService _emailService;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork, IEmailService emailService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _unitOfWork = unitOfWork;
+        _emailService = emailService;
     }
 
     [HttpPost("register")]
@@ -36,6 +40,9 @@ public class UserController : ControllerBase
 
         if (result.Succeeded)
         {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
+            _emailService.SendEmailForConfirmation(user, confirmationLink);
             // User registration successful
             // Return any necessary response or redirect
             await _unitOfWork.Users.CreateAsync(user).ConfigureAwait(true);
@@ -51,7 +58,7 @@ public class UserController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] CreateUserDTO model)
+    public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
     {
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
 

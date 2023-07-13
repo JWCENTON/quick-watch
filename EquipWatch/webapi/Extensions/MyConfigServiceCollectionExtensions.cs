@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Configuration;
+using System.Reflection;
+using DAL;
 using DAL.Repositories.BookedEquipment;
 using DAL.Repositories.CheckIn;
 using DAL.Repositories.CheckOut;
@@ -12,6 +14,7 @@ using DAL.Repositories.User;
 using DAL.Repositories.WorksOn;
 using DTO.Mappers;
 using DTO.Validators;
+using webapi.Services;
 using webapi.uow;
 
 
@@ -37,6 +40,8 @@ public static class MyConfigServiceCollectionExtensions
 
         services.AddScoped<EquipmentDTOValidator>();
         services.AddScoped<CompanyDTOValidator>();
+
+        services.AddTransient<IEmailService, EmailService>();
 
         //both works
         services.AddAutoMapper(typeof(EquipmentMappingProfile));
