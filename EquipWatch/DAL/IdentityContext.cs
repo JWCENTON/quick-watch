@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace DAL
 {

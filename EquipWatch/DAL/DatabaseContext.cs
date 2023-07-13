@@ -31,6 +31,7 @@ public class DatabaseContext : DbContext
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Invite> Invites { get; set; }
     public DbSet<WorksOn> WorksOn { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
@@ -259,8 +260,6 @@ public class DatabaseContext : DbContext
             };
             context.Commissions.Add(commission1);
             context.Commissions.Add(commission2);
-            equipment1.Commission = commission1;
-            equipment2.Commission = commission2;
             equipment1.Company = Company1;
             equipment2.Company = Company2;
             equipment3.Company = Company2;
