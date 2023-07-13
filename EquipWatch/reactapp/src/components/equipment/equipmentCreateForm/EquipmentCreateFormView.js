@@ -11,22 +11,24 @@ export default function EquipmentCreateFormView() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        console.log("Form Submitted");
         let formSerialNumber = event.target.serialNumber.value;
         let formCategory = event.target.category.value;
         let formLocation = event.target.category.value;
-        let formCondition = event.target.rating.value;
+
+        let raw = JSON.stringify({
+            "serialNumber": formSerialNumber,
+            "category": formCategory,
+            "location": formLocation,
+            "condition": rating,
+            "company": {
+                "id": "2d60c065-fae2-4b0b-87c9-08db8134c4aa"
+            }
+        });
 
         const response = await fetch('https://localhost:7007/api/equipment', {
-            method: "POST", body: {
-                "serialNumber": formSerialNumber,
-                "category": formCategory,
-                "location": formLocation,
-                "condition": formCondition,
-                "company": {
-                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-            }
+            method: "POST", 
+            headers: { "Content-Type": "application/json"},
+            body: raw
         });
 
         navigate("/equipment");

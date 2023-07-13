@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
