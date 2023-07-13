@@ -13,5 +13,4 @@ public record FullEquipmentDTO
     public int Condition { get; set; }
     public FullCompanyDTO Company { get; set; }
     public bool IsCheckedOut { get; set; }
-    public FullUserDTO? CheckedOutBy { get; set; }
 }
