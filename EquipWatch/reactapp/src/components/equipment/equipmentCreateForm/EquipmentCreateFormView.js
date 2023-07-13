@@ -7,7 +7,7 @@ import './equipmentCreateForm.css';
 
 export default function EquipmentCreateFormView() {
     const navigate = useNavigate();
-    const [condition, setCondition] = useState(0);
+    const [rating, setRating] = useState(0);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -15,7 +15,7 @@ export default function EquipmentCreateFormView() {
         let formSerialNumber = event.target.serialNumber.value;
         let formCategory = event.target.category.value;
         let formLocation = event.target.category.value;
-        let formCondition = event.target.condition.value;
+        let formCondition = event.target.rating.value;
 
         const response = await fetch('https://localhost:7007/api/equipment', {
             method: "POST", body: {
@@ -26,7 +26,9 @@ export default function EquipmentCreateFormView() {
                 "company": {
                     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
                 }
-            } });
+            }
+        });
+
         navigate("/equipment");
     }
 
@@ -48,11 +50,11 @@ export default function EquipmentCreateFormView() {
                 <label for="rating">Condition: </label>
                 <br/>
                 <Rating
-                    id="condition"
-                    name="condition"
-                    value={condition}
+                    id="rating"
+                    name="rating"
+                    value={rating}
                     onChange={(event, newValue) => {
-                        setCondition(newValue);
+                        setRating(newValue);
                     }}
                 />
                 <br/>
