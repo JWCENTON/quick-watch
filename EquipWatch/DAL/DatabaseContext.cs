@@ -40,45 +40,114 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Commission>()
-            .HasOne(c => c.Company)
-            .WithMany()
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Entity<WorksOn>()
-            .HasOne(w => w.Employee)
-            .WithMany()
-            .OnDelete(DeleteBehavior.Restrict);
-
-        //builder.Entity<Company>()
-        //    .HasOne(c => c.Owner)
-        //    .WithMany()
-        //    .OnDelete(DeleteBehavior.SetNull);
-
-        //builder.Entity<Employee>()
-        //    .HasOne(e => e.User)
-        //    .WithMany()
-        //    .OnDelete(DeleteBehavior.SetNull);
-
-        //builder.Entity<Invite>()
-        //    .HasOne(i => i.User)
-        //    .WithMany()
-        //    .OnDelete(DeleteBehavior.SetNull);
-
         builder.Entity<BookedEquipment>()
             .HasOne(b => b.Equipment)
-            .WithMany()
-            .OnDelete(DeleteBehavior.Restrict);
+            .WithOne()
+            .HasForeignKey<BookedEquipment>("EquipmentId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<BookedEquipment>()
+            .HasOne(b => b.Commission)
+            .WithOne()
+            .HasForeignKey<BookedEquipment>("CommissionId")
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CheckIn>()
             .HasOne(c => c.Equipment)
-            .WithMany()
-            .OnDelete(DeleteBehavior.Restrict);
+            .WithOne()
+            .HasForeignKey<CheckIn>("EquipmentId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<CheckIn>()
+            .HasOne(c => c.Employee)
+            .WithOne()
+            .HasForeignKey<CheckIn>("EmployeeId")
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CheckOut>()
             .HasOne(c => c.Equipment)
-            .WithMany()
-            .OnDelete(DeleteBehavior.Restrict);
+            .WithOne()
+            .HasForeignKey<CheckOut>("EquipmentId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<CheckOut>()
+            .HasOne(c => c.Employee)
+            .WithOne()
+            .HasForeignKey<CheckOut>("EmployeeId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<WorksOn>()
+            .HasOne(w => w.Commission)
+            .WithOne()
+            .HasForeignKey<WorksOn>("CommissionId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<WorksOn>()
+            .HasOne(w => w.Employee)
+            .WithOne()
+            .HasForeignKey<WorksOn>("EmployeeId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Client>()
+            .HasOne(c => c.Company)
+            .WithOne()
+            .HasForeignKey<Client>("CompanyId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Company>()
+            .HasOne(c => c.Owner)
+            .WithOne()
+            .HasForeignKey<Company>("OwnerId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Commission>()
+            .HasOne(c => c.Client)
+            .WithOne()
+            .HasForeignKey<Commission>("ClientId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Commission>()
+            .HasOne(c => c.Company)
+            .WithOne()
+            .HasForeignKey<Commission>("CompanyId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+        builder.Entity<Invite>()
+            .HasOne(i => i.Company)
+            .WithOne()
+            .HasForeignKey<Invite>("CompanyId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Invite>()
+            .HasOne(i => i.User)
+            .WithOne()
+            .HasForeignKey<Invite>("UserId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Equipment>()
+            .HasOne(e => e.Company)
+            .WithOne()
+            .HasForeignKey<Equipment>("CompanyId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        //builder.Entity<Equipment>()
+        //    .HasOne(e => e.CheckedOutBy)
+        //    .WithOne()
+        //    .HasForeignKey<Equipment>("CheckedOutById")
+        //    .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Employee>()
+            .HasOne(e => e.Company)
+            .WithOne()
+            .HasForeignKey<Employee>("CompanyId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Employee>()
+            .HasOne(e => e.User)
+            .WithOne()
+            .HasForeignKey<Employee>("UserId")
+            .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(builder);
         // Customize the ASP.NET Identity model and override the defaults if needed.
@@ -208,9 +277,9 @@ public class DatabaseContext : DbContext
             context.CheckOuts.Add(checkOut1);
             context.CheckOuts.Add(checkOut2);
 
-            equipment1.CheckedOutBy = employee1;
+            //equipment1.CheckedOutBy = employee1;
             equipment1.IsCheckedOut = true;
-            equipment2.CheckedOutBy = employee2;
+            //equipment2.CheckedOutBy = employee2;
             equipment2.IsCheckedOut = true;
 
             var Client1 = new Client
