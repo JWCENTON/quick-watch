@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import './UserRegistration.css';
 
 function Registration() {
-    const location = useLocation();
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,6 +20,8 @@ function Registration() {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         const response = await fetch('https://localhost:7007/api/User/register', {
             method: 'POST',
             headers: {
@@ -36,10 +40,23 @@ function Registration() {
             const username = `${firstName} ${lastName}`;
             navigate('/', { state: { registrationSuccess: true, username } });
         } else {
-            const errorData = await response.json();
-            const errorMessages = errorData.map((error) => `${error.code}: ${error.description}`);
-            setErrorMessage(['Registration failed:', ...errorMessages]);
+            try {
+                const errorData = await response.json();
+                if (Array.isArray(errorData)) {
+                    const errorMessages = errorData.map((error) => `${error.code}: ${error.description}`);
+                    setErrorMessage(['Registration failed:', ...errorMessages]);
+                } else if (errorData.message) {
+                    setErrorMessage(['Registration failed:', errorData.message]);
+                } else {
+                    setErrorMessage(['Registration failed: An error occurred.']);
+                }
+            } catch (error) {
+                console.log('Error parsing error response:', error);
+                setErrorMessage(['Registration failed: An error occurred.']);
+            }
         }
+
+        setLoading(false);
     };
 
     return (
@@ -80,7 +97,7 @@ function Registration() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <Button onClick={handleRegister} type="submit" variant="outline-primary">
+                <Button onClick={handleRegister} type="submit" variant="outline-primary" disabled={isLoading}>
                     Register
                 </Button>
             </form>
