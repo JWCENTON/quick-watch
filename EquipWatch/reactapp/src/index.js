@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import './index.css';
+import Registration from './components/userRegistration/UserRegistration';
 import ErrorPage from './pages/error/error-page';
 import CompanyMainPage from './pages/companyMain/CompanyMain';
 import CardList from './pages/cardList/CardListPage';
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
+            { path: "register", element: <Registration /> },
             { path: "employee", element: <EmployeeMainPage /> },
             { path: "company", element: <CompanyMainPage /> },
             { path: "clients", element: <CardList /> },
