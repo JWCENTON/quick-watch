@@ -60,6 +60,17 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
     {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if (user != null)
+        {
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                // User's email is not confirmed
+                return Unauthorized(new { title = "EmailNotConfirmed" });
+            }
+        }
+
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (result.Succeeded)
