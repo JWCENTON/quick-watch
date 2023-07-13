@@ -75,4 +75,35 @@ public class UserController : ControllerBase
             return Unauthorized();
         }
     }
+
+    [AllowAnonymous]
+    [HttpGet("ConfirmEmail")]
+    public async Task<IActionResult> ConfirmEmail(string userId, string token)
+    {
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+        {
+            // Invalid user ID or token
+            return BadRequest("Invalid user ID or token");
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            // User not found
+            return NotFound("User not found");
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        if (result.Succeeded)
+        {
+            // Email confirmed successfully
+            return Ok("Email confirmed successfully");
+        }
+        else
+        {
+            // Failed to confirm email
+            return BadRequest("Failed to confirm email");
+        }
+    }
+
 }
