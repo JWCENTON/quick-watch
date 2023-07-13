@@ -23,6 +23,7 @@ builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySql
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddUserSecrets<Program>()
     .Build();
 
 builder.Services.Configure<EmailContext>(configuration.GetSection("Email"));
