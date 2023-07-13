@@ -25,16 +25,23 @@ public class CommissionRepository : ICommissionRepository
 
     public async Task CreateAsync(Domain.Commission.Models.Commission.Commission entity)
     {
-        throw new NotImplementedException();
+        await _context.Commissions.AddAsync(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Domain.Commission.Models.Commission.Commission entity)
     {
-        throw new NotImplementedException();
+        _context.Commissions.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task RemoveAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var commission = await _context.Commissions.FindAsync(id);
+        if (commission != null)
+        {
+            _context.Commissions.Remove(commission);
+            await _context.SaveChangesAsync();
+        }
     }
 }
