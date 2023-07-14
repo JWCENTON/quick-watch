@@ -77,7 +77,7 @@ public class UserController : ControllerBase
         {
             // User login successful
             // Return any necessary response or redirect
-            return Ok();
+            return Ok("User has successfully logged in");
         }
         else
         {
@@ -108,7 +108,7 @@ public class UserController : ControllerBase
         if (result.Succeeded)
         {
             // Email confirmed successfully
-            return Ok("Email confirmed successfully");
+            return Redirect("https://localhost:3000/");
         }
         else
         {

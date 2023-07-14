@@ -1,13 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import './Login.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import placeholderImage from '../../images/placeholder.png';
+import { AuthContext } from '../../components/authProvider/AuthContext'
 
 function Login() {
     const location = useLocation();
     const registrationSuccess = location.state?.registrationSuccess;
     const username = location.state?.username;
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,24 +18,12 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        const response = await fetch('https://localhost:7007/api/User/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        });
-
-        if (response.ok) {
-            // User login successful
+        try {
+            await login(email, password);
             navigate('/employee');
-        } else {
-            const errorData = await response.json();
-            if (errorData.title === 'EmailNotConfirmed') {
-                setErrorMessage('Email not confirmed. Please check your email and confirm your account.');
+        } catch (error) {
+            if (error.message === 'EmailNotConfirmed') {
+                setErrorMessage('Email is not confirmed. Please check your email and confirm your account.');
             } else {
                 setErrorMessage('Invalid email or password');
             }
