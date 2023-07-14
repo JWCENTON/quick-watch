@@ -7,9 +7,9 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <ul>
-                {/*<li>*/}
-                {/*    <Button as={Link} to="/companies" variant="outline-primary">Companies</Button>*/}
-                {/*</li>*/}
+                <li>
+                <Button as={Link} to="/companies" variant="outline-primary">Companies</Button>
+                </li>
                 <li>
                     <Button as={Link} to="/company" variant="outline-primary">Company Overview</Button>
                 </li>

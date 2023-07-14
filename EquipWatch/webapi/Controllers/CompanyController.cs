@@ -33,9 +33,10 @@ namespace webapi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Company>> GetAllCompanies()
+        public async Task<List<PartialCompanyDTO>> GetAllCompanies()
         {
-            return await _unitOfWork.Companies.GetAllAsync();
+            var data = await _unitOfWork.Companies.GetAllAsync();
+            return data.Select(company => _mapper.Map<PartialCompanyDTO>(company)).ToList();
         }
 
         [HttpPost]
