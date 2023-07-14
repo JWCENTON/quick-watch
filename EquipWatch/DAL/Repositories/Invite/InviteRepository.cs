@@ -9,7 +9,7 @@ public class InviteRepository : IInviteRepository
     public InviteRepository(DatabaseContext context)
     {
         _context = context;
-        DatabaseContext.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.Invite.Models.Invite>> GetAllAsync()

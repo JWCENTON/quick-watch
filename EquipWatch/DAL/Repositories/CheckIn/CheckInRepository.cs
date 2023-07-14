@@ -9,7 +9,7 @@ public class CheckInRepository : ICheckInRepository
     public CheckInRepository(DatabaseContext context)
     {
         _context = context;
-        DatabaseContext.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.CheckIn.Models.CheckIn>> GetAllAsync()

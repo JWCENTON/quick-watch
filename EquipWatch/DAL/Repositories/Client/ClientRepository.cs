@@ -9,7 +9,7 @@ namespace DAL.Repositories.Client
         public ClientRepository(DatabaseContext context)
         {
             _context = context;
-            DatabaseContext.IfDbEmptyAddNewItems(context);
+            Seed.IfDbEmptyAddNewItems(context);
         }
 
         public async Task<List<Domain.Client.Models.Client>> GetAllAsync()

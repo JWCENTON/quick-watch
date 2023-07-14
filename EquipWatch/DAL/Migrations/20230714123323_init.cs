@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -331,104 +331,87 @@ namespace DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BookedEquipments_CommissionId",
                 table: "BookedEquipments",
-                column: "CommissionId",
-                unique: true);
+                column: "CommissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookedEquipments_EquipmentId",
                 table: "BookedEquipments",
-                column: "EquipmentId",
-                unique: true);
+                column: "EquipmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CheckIns_EmployeeId",
                 table: "CheckIns",
-                column: "EmployeeId",
-                unique: true);
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CheckIns_EquipmentId",
                 table: "CheckIns",
-                column: "EquipmentId",
-                unique: true);
+                column: "EquipmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CheckOuts_EmployeeId",
                 table: "CheckOuts",
-                column: "EmployeeId",
-                unique: true);
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CheckOuts_EquipmentId",
                 table: "CheckOuts",
-                column: "EquipmentId",
-                unique: true);
+                column: "EquipmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Client_CompanyId",
                 table: "Client",
-                column: "CompanyId",
-                unique: true);
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commissions_ClientId",
                 table: "Commissions",
-                column: "ClientId",
-                unique: true);
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commissions_CompanyId",
                 table: "Commissions",
-                column: "CompanyId",
-                unique: true);
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Company_OwnerId",
                 table: "Company",
-                column: "OwnerId",
-                unique: true);
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_CompanyId",
                 table: "Employees",
-                column: "CompanyId",
-                unique: true);
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_UserId",
                 table: "Employees",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Equipment_CompanyId",
                 table: "Equipment",
-                column: "CompanyId",
-                unique: true);
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invites_CompanyId",
                 table: "Invites",
-                column: "CompanyId",
-                unique: true);
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invites_UserId",
                 table: "Invites",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorksOn_CommissionId",
                 table: "WorksOn",
-                column: "CommissionId",
-                unique: true);
+                column: "CommissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorksOn_EmployeeId",
                 table: "WorksOn",
-                column: "EmployeeId",
-                unique: true);
+                column: "EmployeeId");
         }
 
         /// <inheritdoc />

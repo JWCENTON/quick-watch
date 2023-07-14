@@ -43,18 +43,7 @@ public static class MyConfigServiceCollectionExtensions
 
         services.AddTransient<IEmailService, EmailService>();
 
-        //both works
-        services.AddAutoMapper(typeof(EquipmentMappingProfile));
-        services.AddAutoMapper(typeof(CheckInMappingProfile));
-        services.AddAutoMapper(typeof(CheckOutMappingProfile));
-        services.AddAutoMapper(typeof(ClientMappingProfile));
-        services.AddAutoMapper(typeof(CommissionMappingProfile));
-        services.AddAutoMapper(typeof(CompanyMappingProfile));
-        services.AddAutoMapper(typeof(EmployMappingProfile));
-        services.AddAutoMapper(typeof(InviteMappingProfile));
-        services.AddAutoMapper(typeof(UserMappingProfile));
-
-        //services.AddAutoMapper(Assembly.Load("DTO"));
+        services.AddAutoMapper(Assembly.Load("DTO"));
         return services;
     }
 }

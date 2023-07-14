@@ -9,7 +9,7 @@ public class CommissionRepository : ICommissionRepository
     public CommissionRepository(DatabaseContext context)
     {
         _context = context;
-        DatabaseContext.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.Commission.Models.Commission.Commission>> GetAllAsync()
