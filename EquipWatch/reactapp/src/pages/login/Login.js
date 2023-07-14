@@ -1,16 +1,22 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import placeholderImage from '../../images/placeholder.png';
 
 function Login() {
+    const location = useLocation();
+    const registrationSuccess = location.state?.registrationSuccess;
+    const username = location.state?.username;
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const handleRegister = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch('https://localhost:7007/api/User/register', {
+
+        const response = await fetch('https://localhost:7007/api/User/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -22,16 +28,18 @@ function Login() {
         });
 
         if (response.ok) {
-            // User registration successful
-            // You can handle the success case here, such as showing a success message or redirecting to a different page
-            console.log('Registration successful');
+            // User login successful
+            navigate('/employee');
         } else {
-            // User registration failed
-            // You can handle the error case here, such as displaying the error message to the user
             const errorData = await response.json();
-            console.log('Registration failed:', errorData);
+            if (errorData.title === 'EmailNotConfirmed') {
+                setErrorMessage('Email not confirmed. Please check your email and confirm your account.');
+            } else {
+                setErrorMessage('Invalid email or password');
+            }
         }
     };
+
     return (
         <div className="login-page">
             <div className="login-left">
@@ -39,11 +47,13 @@ function Login() {
             </div>
             <div className="login-right">
                 <h2>Welcome to EquipWatch</h2>
-                <form>
+                {registrationSuccess && <p className="success-message">User: {username} has been successfully registered</p>}
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                <form onSubmit={handleLogin}>
                     <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <Button as={Link} to="/employee" variant="outline-primary">Login</Button>
-                    <Button onClick={handleRegister} variant="outline-primary">Register</Button>
+                    <Button type="submit" variant="outline-primary">Login</Button>
+                    <Button as={Link} to="/register" variant="outline-primary">Register</Button>
                 </form>
             </div>
         </div>

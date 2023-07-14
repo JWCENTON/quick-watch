@@ -11,7 +11,5 @@ public record UpdateEquipmentDTO
     public int? Condition { get; set; }
     public CompanyIdDTO? Company { get; set; }
     public bool? IsCheckedOut { get; set; }
-    public UserIdDTO? CheckedOutBy { get; set; }
-
 
 }

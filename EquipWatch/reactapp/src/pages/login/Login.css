@@ -89,3 +89,8 @@
 .background-color {
     background-color: #DBE2EF;
 }
+
+.success-message {
+    color: red;
+    font-weight: bold;
+}
