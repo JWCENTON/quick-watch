@@ -14,6 +14,8 @@
   <ItemGroup>
     <Folder Include="src\assets\" />
     <Folder Include="src\components\cardList\" />
+    <Folder Include="src\components\authProvider\" />
+    <Folder Include="src\components\privateRoute\" />
     <Folder Include="src\components\userRegistration\" />
     <Folder Include="src\pages\cardList\" />
     <Folder Include="src\pages\companyMain\" />

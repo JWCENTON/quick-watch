@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using webapi.Extensions;
 using webapi.Middleware;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");
@@ -23,6 +22,7 @@ builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySql
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddUserSecrets<Program>()
     .Build();
 
 builder.Services.Configure<EmailContext>(configuration.GetSection("Email"));
