@@ -9,8 +9,6 @@ import CardList from './pages/cardList/CardListPage';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
-import CardList from './pages/cardList/CardListPage';
-import Login from './pages/login/Login';
 import EquipmentCreateForm from './pages/equipmentCreateForm/EquipmentCreateForm';
 import Registration from './components/userRegistration/UserRegistration';
 import ErrorPage from './pages/error/error-page';
@@ -41,7 +39,7 @@ function App() {
                 <Route path="/commissions" element={<PrivateRoute />}>
                     <Route path="/commissions" element={<CardList />} />
                 </Route>
-                <Route path="/equipment/create" element={<PrivateRoute />}
+                <Route path="/equipment/create" element={<PrivateRoute />}>
                     <Route path="/equipment/create" element={<EquipmentCreateForm />} />
                 </Route>
                 <Route path="/personal-info" element={<PrivateRoute />}>

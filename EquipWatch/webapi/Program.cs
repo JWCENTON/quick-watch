@@ -11,19 +11,18 @@ using webapi.Extensions;
 using webapi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DatabaseContextConnection") ?? throw new InvalidOperationException("Connection string 'DatabaseContextConnection' not found.");
-var identityConnectionString = builder.Configuration.GetConnectionString("IdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
-var mySqlConnectionString = builder.Configuration.GetConnectionString("MySqlContextConnection") ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
-var mySqlIdentityConnectionString = builder.Configuration.GetConnectionString("MySqlIdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
-
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
-builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySqlIdentityConnectionString, ServerVersion.AutoDetect(mySqlIdentityConnectionString)));
-
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddUserSecrets<Program>()
     .Build();
+
+var mySqlConnectionString = builder.Configuration.GetConnectionString("MySqlContextConnection") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
+var mySqlIdentityConnectionString = builder.Configuration.GetConnectionString("MySqlIdentityContextConnection") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
+
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
+builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySqlIdentityConnectionString, ServerVersion.AutoDetect(mySqlIdentityConnectionString)));
+
 
 builder.Services.Configure<EmailContext>(configuration.GetSection("Email"));
 
