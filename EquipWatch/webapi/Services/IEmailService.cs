@@ -4,6 +4,6 @@ namespace webapi.Services
 {
     public interface IEmailService
     {
-        void SendEmailForConfirmation(User user, string confirmationLink);
+        Task SendEmailForConfirmationAsync(User user, string confirmationLink);
     }
 }
