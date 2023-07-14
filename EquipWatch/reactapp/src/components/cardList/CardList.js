@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import UniversalCard from '../card/Card';
 import './CardList.css';
 
@@ -58,6 +60,7 @@ function CardList() {
             <div className="cardsContainer">
                 {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<UniversalCard key={index} data={card} dataType={itemType}></UniversalCard>))}
             </div>
+            <Button as={Link} to={`/${itemType}/create`}>Add New</Button>
         </div>
     );
 
