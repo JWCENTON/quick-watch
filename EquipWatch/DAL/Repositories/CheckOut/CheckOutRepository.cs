@@ -9,7 +9,7 @@ public class CheckOutRepository : ICheckOutRepository
     public CheckOutRepository(DatabaseContext context)
     {
         _context = context;
-        DatabaseContext.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.CheckOut.Models.CheckOut>> GetAllAsync()

@@ -9,7 +9,7 @@ public class UserRepository : IUserRepository
     public UserRepository(DatabaseContext context)
     {
         _context = context;
-        DatabaseContext.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.User.Models.User>> GetAllAsync()

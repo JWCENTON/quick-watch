@@ -10,7 +10,7 @@ public class CompanyRepository : ICompanyRepository
     public CompanyRepository(DatabaseContext context)
     {
         _context = context;
-        DatabaseContext.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.Company.Models.Company>> GetAllAsync()

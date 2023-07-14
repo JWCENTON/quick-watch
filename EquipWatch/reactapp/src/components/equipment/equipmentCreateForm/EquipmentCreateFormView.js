@@ -21,7 +21,7 @@ export default function EquipmentCreateFormView() {
             "location": formLocation,
             "condition": rating,
             "company": {
-                "id": "2d60c065-fae2-4b0b-87c9-08db8134c4aa"
+                "id": "08db8371-a411-4205-8f71-fab9671d1ef2"
             }
         });
 

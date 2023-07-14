@@ -9,7 +9,7 @@ public class WorksOnRepository : IWorksOnRepository
     public WorksOnRepository(DatabaseContext context)
     {
         _context = context;
-        DatabaseContext.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.WorksOn.Models.WorksOn>> GetAllAsync()

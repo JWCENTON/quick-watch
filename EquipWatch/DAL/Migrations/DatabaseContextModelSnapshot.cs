@@ -16,7 +16,7 @@ namespace DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Domain.BookedEquipment.Models.BookedEquipment", b =>
@@ -33,11 +33,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommissionId")
-                        .IsUnique();
+                    b.HasIndex("CommissionId");
 
-                    b.HasIndex("EquipmentId")
-                        .IsUnique();
+                    b.HasIndex("EquipmentId");
 
                     b.ToTable("BookedEquipments");
                 });
@@ -59,11 +57,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
-                    b.HasIndex("EquipmentId")
-                        .IsUnique();
+                    b.HasIndex("EquipmentId");
 
                     b.ToTable("CheckIns");
                 });
@@ -85,11 +81,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
-                    b.HasIndex("EquipmentId")
-                        .IsUnique();
+                    b.HasIndex("EquipmentId");
 
                     b.ToTable("CheckOuts");
                 });
@@ -125,8 +119,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Client");
                 });
@@ -163,11 +156,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId")
-                        .IsUnique();
+                    b.HasIndex("ClientId");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Commissions");
                 });
@@ -188,8 +179,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId")
-                        .IsUnique();
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Company");
                 });
@@ -212,11 +202,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Employees");
                 });
@@ -250,8 +238,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Equipment");
                 });
@@ -277,11 +264,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Invites");
                 });
@@ -360,11 +345,9 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommissionId")
-                        .IsUnique();
+                    b.HasIndex("CommissionId");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("WorksOn");
                 });
@@ -372,14 +355,14 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.BookedEquipment.Models.BookedEquipment", b =>
                 {
                     b.HasOne("Domain.Commission.Models.Commission.Commission", "Commission")
-                        .WithOne()
-                        .HasForeignKey("Domain.BookedEquipment.Models.BookedEquipment", "CommissionId")
+                        .WithMany()
+                        .HasForeignKey("CommissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Equipment.Models.Equipment", "Equipment")
-                        .WithOne()
-                        .HasForeignKey("Domain.BookedEquipment.Models.BookedEquipment", "EquipmentId")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -391,14 +374,14 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.CheckIn.Models.CheckIn", b =>
                 {
                     b.HasOne("Domain.Employee.Models.Employee", "Employee")
-                        .WithOne()
-                        .HasForeignKey("Domain.CheckIn.Models.CheckIn", "EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Equipment.Models.Equipment", "Equipment")
-                        .WithOne()
-                        .HasForeignKey("Domain.CheckIn.Models.CheckIn", "EquipmentId")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -410,14 +393,14 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.CheckOut.Models.CheckOut", b =>
                 {
                     b.HasOne("Domain.Employee.Models.Employee", "Employee")
-                        .WithOne()
-                        .HasForeignKey("Domain.CheckOut.Models.CheckOut", "EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Equipment.Models.Equipment", "Equipment")
-                        .WithOne()
-                        .HasForeignKey("Domain.CheckOut.Models.CheckOut", "EquipmentId")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -429,8 +412,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Client.Models.Client", b =>
                 {
                     b.HasOne("Domain.Company.Models.Company", "Company")
-                        .WithOne()
-                        .HasForeignKey("Domain.Client.Models.Client", "CompanyId")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -440,14 +423,14 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Commission.Models.Commission.Commission", b =>
                 {
                     b.HasOne("Domain.Client.Models.Client", "Client")
-                        .WithOne()
-                        .HasForeignKey("Domain.Commission.Models.Commission.Commission", "ClientId")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Company.Models.Company", "Company")
-                        .WithOne()
-                        .HasForeignKey("Domain.Commission.Models.Commission.Commission", "CompanyId")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -459,8 +442,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Company.Models.Company", b =>
                 {
                     b.HasOne("Domain.User.Models.User", "Owner")
-                        .WithOne()
-                        .HasForeignKey("Domain.Company.Models.Company", "OwnerId")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -470,14 +453,14 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Employee.Models.Employee", b =>
                 {
                     b.HasOne("Domain.Company.Models.Company", "Company")
-                        .WithOne()
-                        .HasForeignKey("Domain.Employee.Models.Employee", "CompanyId")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("Domain.Employee.Models.Employee", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -489,8 +472,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Equipment.Models.Equipment", b =>
                 {
                     b.HasOne("Domain.Company.Models.Company", "Company")
-                        .WithOne()
-                        .HasForeignKey("Domain.Equipment.Models.Equipment", "CompanyId")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -500,14 +483,14 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Invite.Models.Invite", b =>
                 {
                     b.HasOne("Domain.Company.Models.Company", "Company")
-                        .WithOne()
-                        .HasForeignKey("Domain.Invite.Models.Invite", "CompanyId")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("Domain.Invite.Models.Invite", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -519,14 +502,14 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.WorksOn.Models.WorksOn", b =>
                 {
                     b.HasOne("Domain.Commission.Models.Commission.Commission", "Commission")
-                        .WithOne()
-                        .HasForeignKey("Domain.WorksOn.Models.WorksOn", "CommissionId")
+                        .WithMany()
+                        .HasForeignKey("CommissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Employee.Models.Employee", "Employee")
-                        .WithOne()
-                        .HasForeignKey("Domain.WorksOn.Models.WorksOn", "EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

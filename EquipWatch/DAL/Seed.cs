@@ -1,155 +1,21 @@
-﻿
-using Domain.BookedEquipment.Models;
+﻿using Domain.BookedEquipment.Models;
 using Domain.CheckIn.Models;
 using Domain.CheckOut.Models;
 using Domain.Client.Models;
 using Domain.Commission.Models.Commission;
 using Domain.Company.Models;
 using Domain.Employee.Models;
-using Microsoft.EntityFrameworkCore;
-using Domain.User.Models;
+using Domain.Employee;
 using Domain.Equipment.Models;
 using Domain.Invite.Models;
-using Domain.WorksOn.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Reflection.Emit;
-using Domain.Employee;
 using Domain.Invite;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Domain.User.Models;
+using Domain.WorksOn.Models;
 
 namespace DAL;
 
-public class DatabaseContext : DbContext
+public class Seed
 {
-    public DbSet<BookedEquipment> BookedEquipments { get; set; }
-    public DbSet<CheckIn> CheckIns { get; set; }
-    public DbSet<CheckOut> CheckOuts { get; set; }
-    public DbSet<Client> Client { get; set; }
-    public DbSet<Commission> Commissions { get; set; }
-    public DbSet<Company> Company { get; set; }
-    public DbSet<Employee> Employees { get; set; }
-    public DbSet<Equipment> Equipment { get; set; }
-    public DbSet<Invite> Invites { get; set; }
-    public DbSet<WorksOn> WorksOn { get; set; }
-    public DbSet<User> Users { get; set; }
-
-    public DatabaseContext(DbContextOptions<DatabaseContext> options)
-        : base(options)
-    {
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        builder.Entity<BookedEquipment>()
-            .HasOne(b => b.Equipment)
-            .WithMany()
-            .HasForeignKey("EquipmentId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<BookedEquipment>()
-            .HasOne(b => b.Commission)
-            .WithMany()
-            .HasForeignKey("CommissionId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<CheckIn>()
-            .HasOne(c => c.Equipment)
-            .WithMany()
-            .HasForeignKey("EquipmentId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<CheckIn>()
-            .HasOne(c => c.Employee)
-            .WithMany()
-            .HasForeignKey("EmployeeId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<CheckOut>()
-            .HasOne(c => c.Equipment)
-            .WithMany()
-            .HasForeignKey("EquipmentId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<CheckOut>()
-            .HasOne(c => c.Employee)
-            .WithMany()
-            .HasForeignKey("EmployeeId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<WorksOn>()
-            .HasOne(w => w.Commission)
-            .WithMany()
-            .HasForeignKey("CommissionId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<WorksOn>()
-            .HasOne(w => w.Employee)
-            .WithMany()
-            .HasForeignKey("EmployeeId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Client>()
-            .HasOne(c => c.Company)
-            .WithMany()
-            .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Company>()
-            .HasOne(c => c.Owner)
-            .WithMany()
-            .HasForeignKey("OwnerId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Commission>()
-            .HasOne(c => c.Client)
-            .WithMany()
-            .HasForeignKey("ClientId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Commission>()
-            .HasOne(c => c.Company)
-            .WithMany()
-            .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-
-        builder.Entity<Invite>()
-            .HasOne(i => i.Company)
-            .WithMany()
-            .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Invite>()
-            .HasOne(i => i.User)
-            .WithMany()
-            .HasForeignKey("UserId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Equipment>()
-            .HasOne(e => e.Company)
-            .WithMany()
-            .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Employee>()
-            .HasOne(e => e.Company)
-            .WithMany()
-            .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Employee>()
-            .HasOne(e => e.User)
-            .WithMany()
-            .HasForeignKey("UserId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
-    }
-
-
     public static void IfDbEmptyAddNewItems(DatabaseContext context)
     {
         if (!context.Equipment.Any())
@@ -271,9 +137,7 @@ public class DatabaseContext : DbContext
             context.CheckOuts.Add(checkOut1);
             context.CheckOuts.Add(checkOut2);
 
-            //equipment1.CheckedOutBy = employee1;
             equipment1.IsCheckedOut = true;
-            //equipment2.CheckedOutBy = employee2;
             equipment2.IsCheckedOut = true;
 
             var Client1 = new Client
@@ -298,7 +162,7 @@ public class DatabaseContext : DbContext
             };
             context.Client.Add(Client1);
             context.Client.Add(Client2);
-            
+
             var commission1 = new Commission()
             {
                 Client = Client1,
@@ -378,11 +242,10 @@ public class DatabaseContext : DbContext
             };
             context.Invites.Add(invite1);
             context.Invites.Add(invite2);
-            
+
 
             context.SaveChanges();
         }
 
     }
 }
-
