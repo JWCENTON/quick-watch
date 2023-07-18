@@ -42,7 +42,7 @@ public class UserController : ControllerBase
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
-            _emailService.SendEmailForConfirmation(user, confirmationLink);
+            //_emailService.SendEmailForConfirmation(user, confirmationLink);
             // User registration successful
             // Return any necessary response or redirect
             return Ok();
