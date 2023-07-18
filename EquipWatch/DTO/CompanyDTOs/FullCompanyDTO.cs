@@ -6,5 +6,5 @@ public record FullCompanyDTO
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public FullUserDTO Owner { get; set; }
+    public FullUserDTO OwnerId { get; set; }
 }

@@ -10,17 +10,17 @@ public class EmployMappingProfile : Profile
     {
         CreateMap<Employee, CreateEmployDTO>()
             .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ReverseMap();
 
         CreateMap<Employee, FullEmployDTO>()
             .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ReverseMap();
 
         CreateMap<Employee, UpdateEmployDTO>()
             .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ReverseMap();
     }
 }
