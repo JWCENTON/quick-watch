@@ -9,12 +9,11 @@ public class UserRepository : IUserRepository
     public UserRepository(DatabaseContext context)
     {
         _context = context;
-        Seed.IfDbEmptyAddNewItems(context);
     }
 
     public async Task<List<Domain.User.Models.User>> GetAllAsync()
     {
-        return await _context.Users.ToListAsync();
+        throw new NotImplementedException();
     }
 
     public async Task<Domain.User.Models.User> GetAsync(Guid id)
@@ -26,8 +25,7 @@ public class UserRepository : IUserRepository
 
     public async Task CreateAsync(Domain.User.Models.User entity)
     {
-        _context.Users.Add(entity);
-        await _context.SaveChangesAsync();
+        throw new NotImplementedException();
     }
 
     public async Task UpdateAsync(Domain.User.Models.User entity)

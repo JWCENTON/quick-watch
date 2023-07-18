@@ -26,7 +26,7 @@ namespace webapi.uow
         private IEquipmentRepository _equipmentService;
         private IInviteRepository _inviteService;
         private IWorksOnRepository _worksOnService;
-        private IUserRepository _userService;
+        private IUserRepository _userService; // // probably to be removed
 
         public UnitOfWork(DatabaseContext context)
         {
@@ -53,7 +53,7 @@ namespace webapi.uow
 
         public IWorksOnRepository WorksOn => _worksOnService ??= new WorksOnRepository(_context);
 
-        public IUserRepository Users => _userService ??= new UserRepository(_context);
+        public IUserRepository Users => _userService ??= new UserRepository(_context); // // probably to be removed
 
 
         public void SaveChanges()

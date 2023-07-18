@@ -25,7 +25,7 @@ namespace webapi.uow
         IEquipmentRepository Equipments { get; }
         IInviteRepository Invites { get; }
         IWorksOnRepository WorksOn { get; }
-        IUserRepository Users { get; }
+        IUserRepository Users { get; } // probably to be removed
         // Add other repositories as needed
 
         void SaveChanges();
