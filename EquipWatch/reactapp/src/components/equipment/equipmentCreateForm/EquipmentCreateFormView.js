@@ -13,7 +13,7 @@ export default function EquipmentCreateFormView() {
         event.preventDefault();
         let formSerialNumber = event.target.serialNumber.value;
         let formCategory = event.target.category.value;
-        let formLocation = event.target.category.value;
+        let formLocation = event.target.location.value;
 
         let raw = JSON.stringify({
             "serialNumber": formSerialNumber,

@@ -18,8 +18,21 @@ export default function EquipmentDetailView({ detailsData }) {
     const handleCheckoutModalClose = () => setShowCheckoutModal(false);
     const handleCheckoutModalShow = () => setShowCheckoutModal(true);
 
-    async function handleFormSubmit() {
+    async function handleFormSubmit(event) {
+        event.preventDefault();
+        let formLocation = event.target.location.value;
 
+        let raw = JSON.stringify({
+            "location": formLocation
+        });
+
+        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkout', {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: raw
+        });
+
+        navigate("/equipment/" + detailsData.id);
     }
 
     async function DeleteEquipment() {
