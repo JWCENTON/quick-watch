@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
+using Domain.CheckOut.Models;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
@@ -94,6 +95,32 @@ public class EquipmentController : ControllerBase
     {
         await _unitOfWork.Equipments.RemoveAsync(id);
         return NoContent();
+    }
+
+    [HttpPatch("{id}/checkout")]
+    public async Task<IActionResult> Checkout(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
+    {
+        var equipment = await _unitOfWork.Equipments.GetAsync(id);
+
+        if (equipment.IsCheckedOut) { return BadRequest(); }
+
+        equipment.IsCheckedOut = true;
+        equipment.Location = locationDto.Location;
+        await _unitOfWork.Equipments.UpdateAsync(equipment);
+
+        var checkout = new CheckOut
+        {
+            Id = Guid.NewGuid(),
+            Equipment = equipment,
+            //TODO attach employee
+            Time = DateTime.Now
+        };
+
+        await _unitOfWork.CheckOuts.CreateAsync(checkout);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Ok();
     }
 
 
