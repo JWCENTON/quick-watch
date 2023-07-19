@@ -7,7 +7,7 @@ namespace DTO.InviteDTOs;
 public record UpdateInviteDTO
 {
     public CompanyIdDTO Company { get; set; }
-    public UserIdDTO User { get; set; }
+    public UserIdDTO UserId { get; set; }
     public Status Status { get; set; }
     public DateTime CreatedAt { get; set; }
 }

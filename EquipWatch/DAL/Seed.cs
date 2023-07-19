@@ -4,12 +4,11 @@ using Domain.CheckOut.Models;
 using Domain.Client.Models;
 using Domain.Commission.Models.Commission;
 using Domain.Company.Models;
-using Domain.Employee.Models;
 using Domain.Employee;
+using Domain.Employee.Models;
 using Domain.Equipment.Models;
-using Domain.Invite.Models;
 using Domain.Invite;
-using Domain.User.Models;
+using Domain.Invite.Models;
 using Domain.WorksOn.Models;
 
 namespace DAL;
@@ -20,28 +19,15 @@ public class Seed
     {
         if (!context.Equipment.Any())
         {
-            var User1 = new User()
-            {
-                FirstName = "user",
-                LastName = "123"
-            };
-            var User2 = new User()
-            {
-                FirstName = "resu",
-                LastName = "312"
-            };
-
             var Company1 = new Company
             {
                 Id = new Guid(),
-                Name = "something",
-                Owner = User1
+                Name = "something"
             };
             var Company2 = new Company
             {
                 Id = new Guid(),
-                Name = "someasdasdthing",
-                Owner = User2
+                Name = "someasdasdthing"
             };
             context.Company.Add(Company1);
             context.Company.Add(Company2);
@@ -50,14 +36,12 @@ public class Seed
             {
                 Company = Company1,
                 Id = new Guid(),
-                User = User1,
                 Role = Role.Engineer
             };
             var employee2 = new Employee()
             {
                 Company = Company2,
                 Id = new Guid(),
-                User = User2,
                 Role = Role.Engineer
             };
             context.Employees.Add(employee1);
@@ -228,7 +212,6 @@ public class Seed
             {
                 Company = Company1,
                 Id = new Guid(),
-                User = User1,
                 CreatedAt = DateTime.Now,
                 Status = Status.Sent
             };
@@ -236,7 +219,6 @@ public class Seed
             {
                 Company = Company2,
                 Id = new Guid(),
-                User = User2,
                 CreatedAt = DateTime.Now,
                 Status = Status.Sent
             };

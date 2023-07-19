@@ -7,6 +7,6 @@ namespace DTO.EmployDTOs;
 public record FullEmployDTO
 {
     public FullCompanyDTO Company { get; set; }
-    public FullUserDTO User { get; set; }
+    public FullUserDTO UserId { get; set; }
     public Role Role { get; set; }
 }

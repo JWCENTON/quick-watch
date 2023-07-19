@@ -45,7 +45,6 @@ public class UserController : ControllerBase
             _emailService.SendEmailForConfirmation(user, confirmationLink);
             // User registration successful
             // Return any necessary response or redirect
-            await _unitOfWork.Users.CreateAsync(user).ConfigureAwait(true);
             return Ok();
         }
         else

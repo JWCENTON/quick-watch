@@ -1,21 +1,14 @@
-﻿
-using Domain.BookedEquipment.Models;
+﻿using Domain.BookedEquipment.Models;
 using Domain.CheckIn.Models;
 using Domain.CheckOut.Models;
 using Domain.Client.Models;
 using Domain.Commission.Models.Commission;
 using Domain.Company.Models;
 using Domain.Employee.Models;
-using Microsoft.EntityFrameworkCore;
-using Domain.User.Models;
 using Domain.Equipment.Models;
 using Domain.Invite.Models;
 using Domain.WorksOn.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Reflection.Emit;
-using Domain.Employee;
-using Domain.Invite;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL;
 
@@ -31,7 +24,6 @@ public class DatabaseContext : DbContext
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Invite> Invites { get; set; }
     public DbSet<WorksOn> WorksOn { get; set; }
-    public DbSet<User> Users { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
@@ -94,12 +86,6 @@ public class DatabaseContext : DbContext
             .HasForeignKey("CompanyId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<Company>()
-            .HasOne(c => c.Owner)
-            .WithMany()
-            .HasForeignKey("OwnerId")
-            .OnDelete(DeleteBehavior.Cascade);
-
         builder.Entity<Commission>()
             .HasOne(c => c.Client)
             .WithMany()
@@ -118,12 +104,6 @@ public class DatabaseContext : DbContext
             .HasForeignKey("CompanyId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<Invite>()
-            .HasOne(i => i.User)
-            .WithMany()
-            .HasForeignKey("UserId")
-            .OnDelete(DeleteBehavior.Cascade);
-
         builder.Entity<Equipment>()
             .HasOne(e => e.Company)
             .WithMany()
@@ -134,12 +114,6 @@ public class DatabaseContext : DbContext
             .HasOne(e => e.Company)
             .WithMany()
             .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Employee>()
-            .HasOne(e => e.User)
-            .WithMany()
-            .HasForeignKey("UserId")
             .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(builder);

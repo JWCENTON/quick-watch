@@ -10,7 +10,6 @@ using DAL.Repositories.Company;
 using DAL.Repositories.Employee;
 using DAL.Repositories.Equipment;
 using DAL.Repositories.Invite;
-using DAL.Repositories.User;
 using DAL.Repositories.WorksOn;
 using DTO.Mappers;
 using DTO.Validators;
@@ -36,7 +35,6 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<IEquipmentRepository, EquipmentRepository>();
         services.AddTransient<IInviteRepository, InviteRepository>();
         services.AddTransient<IWorksOnRepository, WorksOnRepository>();
-        services.AddTransient<IUserRepository, UserRepository>();
 
         services.AddScoped<EquipmentDTOValidator>();
         services.AddScoped<CompanyDTOValidator>();
