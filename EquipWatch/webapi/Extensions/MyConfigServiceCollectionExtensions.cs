@@ -35,6 +35,7 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<IEquipmentRepository, EquipmentRepository>();
         services.AddTransient<IInviteRepository, InviteRepository>();
         services.AddTransient<IWorksOnRepository, WorksOnRepository>();
+        services.AddTransient<CompanyDTOValidator>();
 
         services.AddScoped<EquipmentDTOValidator>();
         services.AddScoped<CompanyDTOValidator>();

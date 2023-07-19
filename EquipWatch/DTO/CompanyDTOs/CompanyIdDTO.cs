@@ -1,7 +1,6 @@
-﻿namespace DTO.CompanyDTOs
+﻿namespace DTO.CompanyDTOs;
+
+public record CompanyIdDTO
 {
-    public record CompanyIdDTO
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; init; }
 }
