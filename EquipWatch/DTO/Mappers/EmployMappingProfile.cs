@@ -22,5 +22,6 @@ public class EmployMappingProfile : Profile
             .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ReverseMap();
+        CreateMap<Employee, EmployIdDTO>().ReverseMap();
     }
 }

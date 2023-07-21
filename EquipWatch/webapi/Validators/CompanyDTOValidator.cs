@@ -2,59 +2,51 @@
 using DTO.Validators;
 using FluentValidation;
 
-
-public class CompanyDTOValidator
+public abstract class BaseCompanyDTOValidator<T> : AbstractValidator<T> where T : BaseCompanyDTO
 {
-    public class CompanyIdDTOValidator : AbstractValidator<CompanyIdDTO>
+    protected BaseCompanyDTOValidator()
     {
-        public CompanyIdDTOValidator()
-        {
-            RuleFor(dto => dto.Id).SetValidator(new CompanyIdValidator());
-        }
-    }
-
-    public class CreateCompanyDTOValidator : AbstractValidator<CreateCompanyDTO>
-    {
-        public CreateCompanyDTOValidator()
-        {
-            ApplyCommonRules(this);
-        }
-    }
-
-    public class FullCompanyDTOValidator : AbstractValidator<FullCompanyDTO>
-    {
-        public FullCompanyDTOValidator()
-        {
-            RuleFor(dto => dto.Id).SetValidator(new CompanyIdValidator());
-            ApplyCommonRules(this);
-        }
-    }
-
-    public class UpdateCompanyDTOValidator : AbstractValidator<UpdateCompanyDTO>
-    {
-        public UpdateCompanyDTOValidator()
-        {
-            ApplyCommonRules(this);
-        }
-    }
-    private static void ApplyCommonRules<T>(AbstractValidator<T> validator) where T : BaseCompanyDTO
-    {
-        validator.RuleFor(dto => dto.Name)
+        RuleFor(dto => dto.Name)
             .NotEmpty()
             .WithMessage("Company name cannot be empty.")
             .MaximumLength(50)
             .WithMessage("Company name cannot exceed 50 characters.");
-        validator.RuleFor(dto => dto.OwnerId).SetValidator(new UserDTOValidator.UserIdDTOValidator());
+        RuleFor(dto => dto.OwnerId).SetValidator(new UserIdDTOValidator());
     }
-    private class CompanyIdValidator : AbstractValidator<Guid>
+}
+
+public class CompanyIdDTOValidator : AbstractValidator<CompanyIdDTO>
+{
+    public CompanyIdDTOValidator()
     {
-        public CompanyIdValidator()
-        {
-            RuleFor(id => id.ToString())
-                .NotEmpty()
-                .WithMessage("Company id cannot be empty.")
-                .Must(GuidValidator.ValidateGuid)
-                .WithMessage("Invalid Company ID format.");
-        }
+        RuleFor(dto => dto.Id).SetValidator(new CompanyIdValidator());
+    }
+}
+
+public class CreateCompanyDTOValidator : BaseCompanyDTOValidator<CreateCompanyDTO>
+{
+}
+
+public class FullCompanyDTOValidator : BaseCompanyDTOValidator<FullCompanyDTO>
+{
+    public FullCompanyDTOValidator()
+    {
+        RuleFor(dto => dto.Id).SetValidator(new CompanyIdValidator());
+    }
+}
+
+public class UpdateCompanyDTOValidator : BaseCompanyDTOValidator<UpdateCompanyDTO>
+{
+}
+
+internal class CompanyIdValidator : AbstractValidator<Guid>
+{
+    internal CompanyIdValidator()
+    {
+        RuleFor(id => id.ToString())
+            .NotEmpty()
+            .WithMessage("Company id cannot be empty.")
+            .Must(GuidValidator.ValidateGuid)
+            .WithMessage("Invalid Company ID format.");
     }
 }

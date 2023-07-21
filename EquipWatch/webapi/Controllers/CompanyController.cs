@@ -8,7 +8,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.uow;
-using static CompanyDTOValidator;
 
 namespace webapi.Controllers
 {
@@ -56,8 +55,7 @@ namespace webapi.Controllers
                 await _unitOfWork.Companies.CreateAsync(company);
                 return CreatedAtAction(nameof(GetCompany), new { id = company.Id }, _mapper.Map<FullCompanyDTO>(company));
             }
-
-            throw new ArgumentException("Provided company details are incorrect");
+            return BadRequest("Provided company details are incorrect");
         }
     }
 }
