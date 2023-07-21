@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { SidebarContext } from '../../contexts/SidebarContext';
+import { useParams } from 'react-router-dom';
 import Navigation from '../../components/navigation/Navigation';
 import Sidebar from '../../components/sidebar/Sidebar';
 import ClientDetailView from '../../components/client/ClientDetailView';
@@ -9,6 +10,7 @@ import EmployeeDetailView from '../../components/employee/EmployeeDetailView';
 import CommissionDetailView from '../../components/commission/CommissionDetailView';
 
 export default function DetailView() {
+    const { toggleSidebar } = useContext(SidebarContext);
     const { id, dataType } = useParams();
 
     const [detailsData, setDetailsData] = useState(null);
@@ -34,13 +36,11 @@ export default function DetailView() {
 
     return (
         <div className="app-container">
-            <Navigation />
+            <Navigation onMenuClick={toggleSidebar} />
             <div className="main-container">
                 <Sidebar />
-                <ViewComponent detailsData={detailsData}></ViewComponent>
+                <ViewComponent detailsData={detailsData} className="main-content" ></ViewComponent>
             </div>
         </div>
     );
 };
-
-

@@ -54,10 +54,11 @@
     .login-page {
         flex-direction: column;
     }
-
+    
     .login-left {
-        height: 40vh; /* adjust this as needed */
+        display: none;
     }
+    
 
     .login-image {
         width: 100%;

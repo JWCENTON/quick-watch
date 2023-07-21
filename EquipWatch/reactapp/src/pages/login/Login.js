@@ -42,7 +42,7 @@ function Login() {
                 <form>
                     <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <Button as={Link} to="/employee" variant="outline-primary">Login</Button>
+                    <Button as={Link} to="/main" variant="outline-primary">Login</Button>
                     <Button onClick={handleRegister} variant="outline-primary">Register</Button>
                 </form>
             </div>

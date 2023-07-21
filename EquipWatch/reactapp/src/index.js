@@ -1,13 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { SidebarProvider } from './contexts/SidebarContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import './index.css';
 import ErrorPage from './pages/error/error-page';
-import CompanyMainPage from './pages/companyMain/CompanyMain';
+import MainPage from './pages/mainPage/MainPage';
 import CardList from './pages/cardList/CardListPage';
-import EmployeeMainPage from './pages/employeeMain/EmployeeMain';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
@@ -18,8 +18,7 @@ const router = createBrowserRouter([
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
-            { path: "employee", element: <EmployeeMainPage /> },
-            { path: "company", element: <CompanyMainPage /> },
+            { path: "main", element: <MainPage /> },
             { path: "clients", element: <CardList /> },
             { path: "companies", element: <CardList /> },
             { path: "equipment", element: <CardList /> },
@@ -34,6 +33,8 @@ const router = createBrowserRouter([
 const root = document.getElementById('root');
 createRoot(root).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <SidebarProvider>
+            <RouterProvider router={router} />
+        </ SidebarProvider>
     </React.StrictMode>
 );

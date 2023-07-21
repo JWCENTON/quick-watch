@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { SidebarContext } from '../../contexts/SidebarContext';
 import Navigation from '../../components/navigation/Navigation';
 import Sidebar from '../../components/sidebar/Sidebar';
 import CardList from '../../components/cardList/CardList';
 
-const ClientsPage = () => {
+const CardListPage = () => {
+    const { toggleSidebar } = useContext(SidebarContext);
     return (
         <div className="app-container">
-            <Navigation />
+            <Navigation onMenuClick={toggleSidebar} />
             <div className="main-container">
                 <Sidebar />
-                <CardList />
+                <CardList className="main-content" />
             </div>
         </div>
     );
 };
 
-export default ClientsPage;
+export default CardListPage;
