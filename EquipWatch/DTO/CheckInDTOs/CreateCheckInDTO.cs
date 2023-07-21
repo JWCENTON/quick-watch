@@ -3,9 +3,7 @@ using DTO.UserDTOs;
 
 namespace DTO.CheckInDTOs;
 
-public record CreateCheckInDTO
+public record CreateCheckInDTO : BaseCheckInDTO
 {
-    public EquipmentIdDTO Equipment { get; set; }
-    public UserIdDTO User { get; set; }
-    public DateTime Time { get; set; }
+    public EquipmentIdDTO Equipment { get; init; }
 }

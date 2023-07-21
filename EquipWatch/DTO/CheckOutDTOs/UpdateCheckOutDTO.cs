@@ -1,9 +1,5 @@
-﻿using DTO.UserDTOs;
+﻿namespace DTO.CheckOutDTOs;
 
-namespace DTO.CheckOutDTOs;
-
-public record UpdateCheckOutDTO
+public record UpdateCheckOutDTO : BaseCheckOutDTO
 {
-    public UserIdDTO User { get; set; }
-    public DateTime Time { get; set; }
 }

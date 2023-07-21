@@ -1,15 +1,10 @@
 ﻿using DTO.CompanyDTOs;
-using DTO.UserDTOs;
 
 namespace DTO.EquipmentDTOs;
 
-public record UpdateEquipmentDTO
+public record UpdateEquipmentDTO : BaseEquipmentDTO
 {
-    //public string Name { get; set; }
-    public string? Category { get; set; }
-    public string? Location { get; set; }
-    public int? Condition { get; set; }
-    public CompanyIdDTO? Company { get; set; }
-    public bool? IsCheckedOut { get; set; }
+    public CompanyIdDTO? Company { get; init; }
+    public bool? IsCheckedOut { get; init; }
 
 }

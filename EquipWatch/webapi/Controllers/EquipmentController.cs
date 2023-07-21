@@ -6,6 +6,7 @@ using DTO.EquipmentDTOs;
 using webapi.uow;
 using DTO.Validators;
 using Microsoft.AspNetCore.Authorization;
+using static EquipmentDTOValidator;
 
 namespace webapi.Controllers;
 
@@ -15,13 +16,13 @@ public class EquipmentController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    private readonly EquipmentDTOValidator _validator;
+    private readonly CreateEquipmentDTOValidator _createValidator;
 
-    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, EquipmentDTOValidator validator)
+    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _validator = validator;
+        _createValidator = createValidator;
     }
 
     [HttpGet]
@@ -55,7 +56,7 @@ public class EquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CreateEquipmentDTO>> CreateEquipment([FromBody] CreateEquipmentDTO equipmentDto)
     {
-        _validator.CreateEquipmentDTOValidate(equipmentDto);
+        var result = await _createValidator.ValidateAsync(equipmentDto);
         var equipment = _mapper.Map<Equipment>(equipmentDto);
 
         if (equipmentDto.Company?.Id != null)

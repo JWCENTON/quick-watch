@@ -1,12 +1,9 @@
 ﻿using DTO.EquipmentDTOs;
-using DTO.UserDTOs;
 
 namespace DTO.CheckOutDTOs;
 
-public record FullCheckOutDTO
+public record FullCheckOutDTO : BaseCheckOutDTO
 {
-    public Guid Id { get; set; }
-    public FullEquipmentDTO Equipment { get; set; }
-    public FullUserDTO User { get; set; }
-    public DateTime Time { get; set; }
+    public Guid Id { get; init; }
+    public FullEquipmentDTO Equipment { get; init; }
 }

@@ -1,16 +1,11 @@
 ﻿using DTO.CompanyDTOs;
-using DTO.UserDTOs;
 
 namespace DTO.EquipmentDTOs;
 
-public record FullEquipmentDTO
+public record FullEquipmentDTO : BaseEquipmentDTO
 {
-    public Guid Id { get; set; }
-    public string SerialNumber { get; set; }
-    //public string Name { get; set; }
-    public string Category { get; set; }
-    public string Location { get; set; }
-    public int Condition { get; set; }
-    public FullCompanyDTO Company { get; set; }
-    public bool IsCheckedOut { get; set; }
+    public Guid Id { get; init; }
+    public string SerialNumber { get; init; }
+    public CompanyIdDTO? Company { get; init; }
+    public bool IsCheckedOut { get; init; }
 }

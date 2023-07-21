@@ -1,11 +1,8 @@
 ﻿using DTO.EquipmentDTOs;
-using DTO.UserDTOs;
 
 namespace DTO.CheckOutDTOs;
 
-public record CreateCheckOutDTO
+public record CreateCheckOutDTO : BaseCheckOutDTO
 {
-    public EquipmentIdDTO Equipment { get; set; }
-    public UserIdDTO User { get; set; }
-    public DateTime Time { get; set; }
+    public EquipmentIdDTO Equipment { get; init; }
 }

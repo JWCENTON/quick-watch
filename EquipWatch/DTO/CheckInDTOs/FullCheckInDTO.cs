@@ -3,10 +3,8 @@ using DTO.UserDTOs;
 
 namespace DTO.CheckInDTOs;
 
-public record FullCheckInDTO
+public record FullCheckInDTO : BaseCheckInDTO
 {
-    public Guid Id { get; set; }
-    public FullEquipmentDTO Equipment { get; set; }
-    public FullUserDTO User { get; set; }
-    public DateTime Time { get; set; }
+    public Guid Id { get; init; }
+    public FullEquipmentDTO Equipment { get; init; }
 }

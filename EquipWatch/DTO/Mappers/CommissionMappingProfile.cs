@@ -20,5 +20,6 @@ public class CommissionMappingProfile : Profile
         CreateMap<Domain.Commission.Models.Commission.Commission, UpdateCommissionDTO>()
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
             .ReverseMap();
+        CreateMap<Domain.Commission.Models.Commission.Commission, CommissionIdDTO>().ReverseMap();
     }
 }

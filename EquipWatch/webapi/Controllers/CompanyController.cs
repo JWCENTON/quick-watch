@@ -19,19 +19,17 @@ namespace webapi.Controllers
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly UpdateCompanyDTOValidator _validator1;
-        private readonly CreateCompanyDTOValidator _validator2;
-        private readonly IEnumerable<IValidator> _validators;
-
+        private readonly CreateCompanyDTOValidator _createCompanyValidator;
+        private readonly UpdateCompanyDTOValidator _updateCompanyValidator;
+        
         public CompanyController(IUnitOfWork unitOfWork, IMapper mapper,
-            CreateCompanyDTOValidator validator1,
-            UpdateCompanyDTOValidator validator2,
-            IEnumerable<IValidator> validators)
+            CreateCompanyDTOValidator createValidator,
+            UpdateCompanyDTOValidator updateValidator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _validator1 = validator2;
-            _validator2 = validator1;
+            _createCompanyValidator = createValidator;
+            _updateCompanyValidator = updateValidator;
         }
 
         [HttpGet("{id}")]
@@ -47,19 +45,19 @@ namespace webapi.Controllers
         }
 
         [HttpPost]
-        public async Task<Company> CreateCompany([FromBody] CreateCompanyDTO companyDto)
+        public async Task<ActionResult<Company>> CreateCompany([FromBody] CreateCompanyDTO companyDto)
         {
-            var createCompanyValidator = new UpdateCompanyDTOValidator();
-            createCompanyValidator
-            //var user = 
-            _validator.
-            
-            var company = _mapper.Map<Company>(companyDto);
-            //company.Owner = user;
-            company.Id = Guid.NewGuid();
+            var result = await _createCompanyValidator.ValidateAsync(companyDto);
+            if (result.IsValid)
+            {
+                var company = _mapper.Map<Company>(companyDto);
+                company.Id = Guid.NewGuid();
 
-            await _unitOfWork.Companies.CreateAsync(company);
-            return company;
+                await _unitOfWork.Companies.CreateAsync(company);
+                return CreatedAtAction(nameof(GetCompany), new { id = company.Id }, _mapper.Map<FullCompanyDTO>(company));
+            }
+
+            throw new ArgumentException("Provided company details are incorrect");
         }
     }
 }
