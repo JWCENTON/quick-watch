@@ -90,3 +90,13 @@
 .background-color {
     background-color: #DBE2EF;
 }
+
+.success-message {
+    color: green;
+    font-weight: bold;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}

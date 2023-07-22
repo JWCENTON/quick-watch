@@ -5,12 +5,14 @@ import { SidebarProvider } from './contexts/SidebarContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import './index.css';
+import Registration from './components/userRegistration/UserRegistration';
 import ErrorPage from './pages/error/error-page';
 import MainPage from './pages/mainPage/MainPage';
 import CardList from './pages/cardList/CardListPage';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
+import { AuthProvider } from './components/authProvider/AuthContext'
 
 const router = createBrowserRouter([
     {
@@ -19,6 +21,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             { path: "main", element: <MainPage /> },
+            { path: "register", element: <Registration /> },
             { path: "clients", element: <CardList /> },
             { path: "companies", element: <CardList /> },
             { path: "equipment", element: <CardList /> },

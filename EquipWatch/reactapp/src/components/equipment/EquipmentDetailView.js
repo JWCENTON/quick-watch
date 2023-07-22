@@ -1,5 +1,7 @@
 import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { Modal, Button } from 'react-bootstrap';
 
 //const [Commissions, setCommissions] = useState(null);
 
@@ -10,7 +12,28 @@ import { useNavigate } from "react-router-dom";
 //}
 
 export default function EquipmentDetailView({ detailsData }) {
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const navigate = useNavigate();
+
+    const handleCheckoutModalClose = () => setShowCheckoutModal(false);
+    const handleCheckoutModalShow = () => setShowCheckoutModal(true);
+
+    async function handleFormSubmit(event) {
+        event.preventDefault();
+        let formLocation = event.target.location.value;
+
+        let raw = JSON.stringify({
+            "location": formLocation
+        });
+
+        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkout', {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: raw
+        });
+
+        navigate("/equipment/" + detailsData.id);
+    }
 
     async function DeleteEquipment() {
         await fetch(`https://localhost:7007/api/equipment/${detailsData.id}`, { method: "DELETE" });
@@ -33,8 +56,24 @@ export default function EquipmentDetailView({ detailsData }) {
                     {/*<div className="cardsContainer">*/}
                     {/*    {Commissions == null ? <p>Loading...</p> : Commissions.map((card, index) => (<UniversalCard key={index} data={Commissions} dataType={'commission'}></UniversalCard>))}*/}
                     {/*</div>*/}
-                    <button>Edit</button>
-                        <button onClick={ DeleteEquipment }>Remove</button>
+                        <button>Edit</button>
+                        <Button onClick={handleCheckoutModalShow}>Checkout</Button>
+                        <button onClick={DeleteEquipment}>Remove</button>
+                        <Modal show={showCheckoutModal} onHide={handleCheckoutModalClose}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Checkout Equipment</Modal.Title>
+                            </Modal.Header>
+                            <form onSubmit={handleFormSubmit}>
+                                <Modal.Body>
+                                    <label for="location">Location:</label>
+                                    <br />
+                                    <input type="text" id="location" name="location" />
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button type="submit">Checkout</Button>
+                                </Modal.Footer>
+                            </form>
+                        </Modal>
                 </div>
             )}
         </div>
