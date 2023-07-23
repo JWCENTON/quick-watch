@@ -25,7 +25,7 @@ public class CheckInRepository : ICheckInRepository
 
     public async Task CreateAsync(Domain.CheckIn.Models.CheckIn entity)
     {
-        throw new NotImplementedException();
+        await _context.CheckIns.AddAsync(entity);
     }
 
     public async Task UpdateAsync(Domain.CheckIn.Models.CheckIn entity)

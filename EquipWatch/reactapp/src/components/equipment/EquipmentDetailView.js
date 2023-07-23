@@ -1,7 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
+import { AuthContext } from '../authProvider/AuthContext';
 
 //const [Commissions, setCommissions] = useState(null);
 
@@ -13,20 +14,51 @@ import { Modal, Button } from 'react-bootstrap';
 
 export default function EquipmentDetailView({ detailsData }) {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [showCheckinModal, setShowCheckinModal] = useState(false);
     const navigate = useNavigate();
 
     const handleCheckoutModalClose = () => setShowCheckoutModal(false);
     const handleCheckoutModalShow = () => setShowCheckoutModal(true);
 
-    async function handleFormSubmit(event) {
+    const handleCheckinModalClose = () => setShowCheckinModal(false);
+    const handleCheckinModalShow = () => setShowCheckinModal(true);
+
+    const user = useContext(AuthContext);
+
+    async function handleCheckoutFormSubmit(event) {
+        event.preventDefault();
+        let formLocation = event.target.location.value;
+
+        console.log(user.user);
+
+        let raw = JSON.stringify({
+            "location": formLocation,
+            "userId": {
+                "id": user.user
+            }
+        });
+
+        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkout', {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: raw
+        });
+
+        navigate("/equipment/" + detailsData.id);
+    }
+
+    async function handleCheckinFormSubmit(event) {
         event.preventDefault();
         let formLocation = event.target.location.value;
 
         let raw = JSON.stringify({
-            "location": formLocation
+            "location": formLocation,
+            "userId": {
+                "id": user.user
+            }
         });
 
-        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkout', {
+        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkin', {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: raw
@@ -58,19 +90,35 @@ export default function EquipmentDetailView({ detailsData }) {
                     {/*</div>*/}
                         <button>Edit</button>
                         <Button onClick={handleCheckoutModalShow}>Checkout</Button>
+                        <Button onClick={handleCheckinModalShow}>Checkin</Button>
                         <button onClick={DeleteEquipment}>Remove</button>
                         <Modal show={showCheckoutModal} onHide={handleCheckoutModalClose}>
                             <Modal.Header closeButton>
                                 <Modal.Title>Checkout Equipment</Modal.Title>
                             </Modal.Header>
-                            <form onSubmit={handleFormSubmit}>
+                            <form onSubmit={handleCheckoutFormSubmit}>
                                 <Modal.Body>
-                                    <label for="location">Location:</label>
+                                    <label for="outlocation">Location:</label>
                                     <br />
-                                    <input type="text" id="location" name="location" />
+                                    <input type="text" id="outlocation" name="location" />
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button type="submit">Checkout</Button>
+                                </Modal.Footer>
+                            </form>
+                        </Modal>
+                        <Modal show={showCheckinModal} onHide={handleCheckinModalClose}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Checkin Equipment</Modal.Title>
+                            </Modal.Header>
+                            <form onSubmit={handleCheckinFormSubmit}>
+                                <Modal.Body>
+                                    <label for="inlocation">Location:</label>
+                                    <br />
+                                    <input type="text" id="inlocation" name="location" />
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button type="submit">Checkin</Button>
                                 </Modal.Footer>
                             </form>
                         </Modal>

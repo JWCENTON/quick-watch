@@ -25,7 +25,7 @@ public class CheckOutRepository : ICheckOutRepository
 
     public async Task CreateAsync(Domain.CheckOut.Models.CheckOut entity)
     {
-        throw new NotImplementedException();
+        await _context.CheckOuts.AddAsync(entity);
     }
 
     public async Task UpdateAsync(Domain.CheckOut.Models.CheckOut entity)

@@ -8,6 +8,7 @@ using DTO.EquipmentDTOs;
 using webapi.uow;
 using DTO.Validators;
 using Microsoft.AspNetCore.Authorization;
+using Domain.User.Models;
 
 namespace webapi.Controllers;
 
@@ -103,6 +104,8 @@ public class EquipmentController : ControllerBase
     {
         var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
+        var user = await _unitOfWork.Employees.GetAsync(locationDto.UserId.Id);
+
         if (equipment.IsCheckedOut) { return BadRequest(); }
 
         equipment.IsCheckedOut = true;
@@ -113,7 +116,7 @@ public class EquipmentController : ControllerBase
         {
             Id = Guid.NewGuid(),
             Equipment = equipment,
-            //TODO attach employee
+            Employee = user,
             Time = DateTime.Now
         };
 
@@ -129,6 +132,8 @@ public class EquipmentController : ControllerBase
     {
         var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
+        var user = await _unitOfWork.Employees.GetAsync(locationDto.UserId.Id);
+
         if (!equipment.IsCheckedOut) { return BadRequest(); }
 
         equipment.IsCheckedOut = false;
@@ -139,7 +144,7 @@ public class EquipmentController : ControllerBase
         {
             Id = Guid.NewGuid(),
             Equipment = equipment,
-            //TODO attach employee
+            Employee = user,
             Time = DateTime.Now
         };
 
