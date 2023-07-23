@@ -38,11 +38,8 @@ function App() {
                     <Route path="/commissions" element={<PrivateRoute />}>
                         <Route path="/commissions" element={<CardList />} />
                     </Route>
-                    <Route path="/equipment/create" element={<PrivateRoute />}>
-                        <Route path="/equipment/create" element={<CreateForm />} />
-                    </Route>
-                    <Route path="/client/create" element={<PrivateRoute />}>
-                        <Route path="/client/create" element={<CreateForm />} />
+                    <Route path="/:formType/create" element={<PrivateRoute />}>
+                        <Route path="/:formType/create" element={<CreateForm />} />
                     </Route>
                     <Route path="/personal-info" element={<PrivateRoute />}>
                         <Route path="/personal-info" element={<PersonalInfoPage />} />
