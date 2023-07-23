@@ -10,7 +10,7 @@ using webapi.uow;
 
 namespace webapi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController, Route("api/[controller]")]
     public class CommissionController : ControllerBase
     {
