@@ -3,10 +3,10 @@ import { SidebarContext } from '../../contexts/SidebarContext';
 import { useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import ClientEditView from '../../components/client/ClientEditView';
-import EquipmentEditView from '../../components/client/EquipmentEditView';
-import CommissionEditView from '../../components/client/CommissionEditView';
-import CompanyEditView from '../../components/client/CompanyEditView';
-import EmployeeEditView from '../../components/client/EmployeeEditView';
+import EquipmentEditView from '../../components/equipment/EquipmentEditView';
+import CommissionEditView from '../../components/commission/CommissionEditView';
+import CompanyEditView from '../../components/company/CompanyEditView';
+import EmployeeEditView from '../../components/employee/EmployeeEditView';
 
 export default function EditView() {
     const { id, dataType } = useParams();

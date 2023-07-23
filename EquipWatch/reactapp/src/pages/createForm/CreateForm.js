@@ -2,10 +2,10 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import ClientCreateFormView from '../../components/client/clientCreateForm/ClientCreateFormView';
-import EquipmentCreateFormView from '../../components/client/equipmentCreateForm/EquipmentCreateFormView';
-//import EmployeeCreateFormView from '../../components/client/employeeCreateForm/EmployeeCreateFormView';
-//import CommissionCreateFormView from '../../components/client/commissionCreateForm/CommissionCreateFormView';
-//import CompanyCreateFormView from '../../components/client/companyCreateForm/CompanyCreateFormView';
+import EquipmentCreateFormView from '../../components/equipment/equipmentCreateForm/EquipmentCreateFormView';
+//import EmployeeCreateFormView from '../../components/employee/employeeCreateForm/EmployeeCreateFormView';
+//import CommissionCreateFormView from '../../components/commission/commissionCreateForm/CommissionCreateFormView';
+//import CompanyCreateFormView from '../../components/company/companyCreateForm/CompanyCreateFormView';
 
 const CreateForm = () => {
     const { formType } = useParams();
