@@ -6,15 +6,17 @@ public abstract class BaseEquipmentDTOValidator<T> : AbstractValidator<T> where 
 {
     protected BaseEquipmentDTOValidator()
     {
-        RuleFor(dto => dto.Category)
-            .NotEmpty()
-            .WithMessage("Category cannot be empty.");
-        RuleFor(dto => dto.Location)
-            .NotEmpty()
-            .WithMessage("Location cannot be empty.");
+        RuleFor(dto => dto.Category).SetValidator(new EquipmentCategoryValidator());
+        
+        RuleFor(dto => dto.Location).SetValidator(new EquipmentLocationValidator());
+
         RuleFor(dto => dto.Condition)
             .NotNull()
-            .WithMessage("Condition cannot be empty.");
+            .WithMessage("Condition cannot be empty.")
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("Condition cannot be less than 0.")
+            .LessThanOrEqualTo(5)
+            .WithMessage("Condition cannot be higher than 5.");
     }
 }
 
@@ -32,10 +34,8 @@ public class CreateEquipmentDTOValidator : BaseEquipmentDTOValidator<CreateEquip
     public CreateEquipmentDTOValidator()
     {
         RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
-        When(dto => dto.Company != null, () =>
-        {
-            RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
-        });
+        
+        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
     }
 }
 
@@ -44,11 +44,10 @@ public class FullEquipmentDTOValidator : BaseEquipmentDTOValidator<FullEquipment
     public FullEquipmentDTOValidator()
     {
         RuleFor(dto => dto.Id).SetValidator(new EquipmentIdValidator());
+
         RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
-        When(dto => dto.Company != null, () =>
-        {
-            RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
-        });
+        
+        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
     }
 }
 
@@ -57,19 +56,34 @@ public class PartialEquipmentDTOValidator : BaseEquipmentDTOValidator<PartialEqu
     public PartialEquipmentDTOValidator()
     {
         RuleFor(dto => dto.Id).SetValidator(new EquipmentIdValidator());
+
         RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
     }
 }
 
-public class UpdateEquipmentDTOValidator : BaseEquipmentDTOValidator<UpdateEquipmentDTO>
+public class UpdateEquipmentDTOValidator : AbstractValidator<UpdateEquipmentDTO>
 {
     public UpdateEquipmentDTOValidator()
     {
-        When(dto => dto.Company != null, () =>
-        {
-            RuleFor(dto => dto.Company)
-                .SetValidator(new CompanyIdDTOValidator());
-        });
+        
+        RuleFor(dto => dto.Company)
+            .SetValidator(new CompanyIdDTOValidator()!)
+            .When(dto => dto.Company != null);
+
+        RuleFor(dto => dto.Category)
+            .SetValidator(new EquipmentCategoryValidator()!)
+            .When(dto => dto.Category != null);
+
+        RuleFor(dto => dto.Location)
+            .SetValidator(new EquipmentLocationValidator()!)
+            .When(dto => dto.Location != null);
+
+        RuleFor(dto => dto.Condition)
+            .GreaterThanOrEqualTo(1)
+            .WithMessage("Condition cannot be less than 1.")
+            .LessThanOrEqualTo(5)
+            .WithMessage("Condition cannot be higher than 5.")
+            .When(dto => dto.Condition != null);
     }
 }
 internal class EquipmentSerialNumberValidator : AbstractValidator<string>
@@ -79,8 +93,8 @@ internal class EquipmentSerialNumberValidator : AbstractValidator<string>
         RuleFor(serialNumber => serialNumber)
             .NotEmpty()
             .WithMessage("Serial number cannot be empty.")
-            .MinimumLength(10)
-            .WithMessage("Serial number cannot be shorter than 10 characters")
+            .MinimumLength(1)
+            .WithMessage("Serial number cannot be shorter than 1 characters")
             .MaximumLength(30)
             .WithMessage("Serial number cannot exceed 30 characters.");
     }
@@ -94,5 +108,30 @@ internal class EquipmentIdValidator : AbstractValidator<Guid>
             .WithMessage("Equipment ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)
             .WithMessage("Invalid Equipment ID format.");
+    }
+}
+
+internal class EquipmentCategoryValidator : AbstractValidator<string>
+{
+    internal EquipmentCategoryValidator()
+    {
+        RuleFor(category => category)
+            .NotEmpty()
+            .WithMessage("Category cannot be empty.")
+            .MaximumLength(50)
+            .WithMessage("Category cannot exceed 50 characters.");
+        
+    }
+}
+
+internal class EquipmentLocationValidator : AbstractValidator<string>
+{
+    internal EquipmentLocationValidator()
+    {
+        RuleFor(location => location)
+            .NotEmpty()
+            .WithMessage("Location cannot be empty.")
+            .MaximumLength(50)
+            .WithMessage("Location cannot exceed 50 characters.");
     }
 }

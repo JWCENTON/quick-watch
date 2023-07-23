@@ -50,17 +50,16 @@ public class CreateUserDTOValidator : BaseUserDTOValidator<CreateUserDTO>
 
 public class LoginUserDTOValidator : BaseUserDTOValidator<LoginUserDTO>
 {
-    public LoginUserDTOValidator()
-    {
-    }
 }
 
 public class UpdateUserDTOValidator : AbstractValidator<UpdateUserDTO>
 {
     public UpdateUserDTOValidator()
     {
-        RuleFor(dto => dto.UserName).SetValidator(new UserUsernameValidator());
-        RuleFor(dto => dto.Email).SetValidator(new UserEmailValidator());
+        RuleFor(dto => dto.UserName).SetValidator(new UserUsernameValidator())
+            .When(dto => dto.UserName != null);
+        RuleFor(dto => dto.Email).SetValidator(new UserEmailValidator())
+            .When(dto => dto.Email != null);
     }
 }
 

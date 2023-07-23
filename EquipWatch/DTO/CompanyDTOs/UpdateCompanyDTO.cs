@@ -1,6 +1,10 @@
-﻿namespace DTO.CompanyDTOs;
+﻿using DTO.UserDTOs;
 
-public record UpdateCompanyDTO : BaseCompanyDTO
+namespace DTO.CompanyDTOs;
+
+public record UpdateCompanyDTO
 {
-
+    public Guid Id { get; init; }
+    public string? Name { get; init; }
+    public UserIdDTO? OwnerId { get; init; }
 }

@@ -2,7 +2,13 @@
 
 namespace DTO.ClientDTOs;
 
-public record UpdateClientDTO : BaseClientDTO
+public record UpdateClientDTO
 {
+    public Guid Id { get; init; }
     public CompanyIdDTO? Company { get; init; }
+    public string? FirstName { get; init; }
+    public string? LastName { get; init; }
+    public string? Email { get; init; }
+    public string? PhoneNumber { get; init; }
+    public string? ContactAddress { get; init; }
 }

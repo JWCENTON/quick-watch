@@ -6,7 +6,6 @@ using DTO.EquipmentDTOs;
 using webapi.uow;
 using DTO.Validators;
 using Microsoft.AspNetCore.Authorization;
-using static EquipmentDTOValidator;
 
 namespace webapi.Controllers;
 
@@ -57,17 +56,20 @@ public class EquipmentController : ControllerBase
     public async Task<ActionResult<CreateEquipmentDTO>> CreateEquipment([FromBody] CreateEquipmentDTO equipmentDto)
     {
         var result = await _createValidator.ValidateAsync(equipmentDto);
-        var equipment = _mapper.Map<Equipment>(equipmentDto);
+        if (result.IsValid){
+            var equipment = _mapper.Map<Equipment>(equipmentDto);
 
-        if (equipmentDto.Company?.Id != null)
-        {
-            var company = await _unitOfWork.Companies.GetAsync(equipmentDto.Company.Id);
-            equipment.Company = company;
+            if (equipmentDto.Company?.Id != null)
+            {
+                var company = await _unitOfWork.Companies.GetAsync(equipmentDto.Company.Id);
+                equipment.Company = company;
+            }
+
+            equipment.Id = Guid.NewGuid();
+            await _unitOfWork.Equipments.CreateAsync(equipment);
+            return CreatedAtAction(nameof(Get), new { id = equipment.Id }, _mapper.Map<FullEquipmentDTO>(equipment));
         }
-
-        equipment.Id = Guid.NewGuid();
-        await _unitOfWork.Equipments.CreateAsync(equipment);
-        return CreatedAtAction(nameof(Get), new { id = equipment.Id }, _mapper.Map<FullEquipmentDTO>(equipment));
+        return BadRequest(result.Errors.First().ErrorMessage);
     }
 
     [HttpPut("{id}")]

@@ -55,7 +55,7 @@ namespace webapi.Controllers
                 await _unitOfWork.Companies.CreateAsync(company);
                 return CreatedAtAction(nameof(GetCompany), new { id = company.Id }, _mapper.Map<FullCompanyDTO>(company));
             }
-            return BadRequest("Provided company details are incorrect");
+            return BadRequest(result.Errors.First().ErrorMessage);
         }
     }
 }

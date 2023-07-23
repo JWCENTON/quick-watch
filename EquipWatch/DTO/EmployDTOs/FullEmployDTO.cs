@@ -1,8 +1,4 @@
-﻿using Domain.Employee;
-using DTO.CompanyDTOs;
-using DTO.UserDTOs;
-
-namespace DTO.EmployDTOs;
+﻿namespace DTO.EmployDTOs;
 
 public record FullEmployDTO : BaseEmployDTO
 {
