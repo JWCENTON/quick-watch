@@ -10,8 +10,7 @@ import CardList from './pages/cardList/CardListPage';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
-import EquipmentCreateForm from './pages/equipmentCreateForm/EquipmentCreateForm';
-import ClientCreateForm from './pages/clientCreateForm/ClientCreateForm';
+import CreateForm from './pages/createForm/CreateForm';
 import Registration from './components/userRegistration/UserRegistration';
 import ErrorPage from './pages/error/error-page';
 import './App.css';
@@ -40,10 +39,10 @@ function App() {
                         <Route path="/commissions" element={<CardList />} />
                     </Route>
                     <Route path="/equipment/create" element={<PrivateRoute />}>
-                        <Route path="/equipment/create" element={<EquipmentCreateForm />} />
+                        <Route path="/equipment/create" element={<CreateForm />} />
                     </Route>
                     <Route path="/client/create" element={<PrivateRoute />}>
-                        <Route path="/client/create" element={<ClientCreateForm />} />
+                        <Route path="/client/create" element={<CreateForm />} />
                     </Route>
                     <Route path="/personal-info" element={<PrivateRoute />}>
                         <Route path="/personal-info" element={<PersonalInfoPage />} />

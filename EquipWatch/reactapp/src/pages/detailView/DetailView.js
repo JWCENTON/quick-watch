@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { SidebarContext } from '../../contexts/SidebarContext';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Navigation from '../../components/navigation/Navigation';
-import Sidebar from '../../components/sidebar/Sidebar';
+import Layout from '../../components/layout/Layout';
 import ClientDetailView from '../../components/client/ClientDetailView';
 import EquipmentDetailView from '../../components/equipment/EquipmentDetailView';
 import CompanyDetailView from '../../components/company/CompanyDetailView';
@@ -10,7 +8,6 @@ import EmployeeDetailView from '../../components/employee/EmployeeDetailView';
 import CommissionDetailView from '../../components/commission/CommissionDetailView';
 
 export default function DetailView() {
-    const { toggleSidebar } = useContext(SidebarContext);
     const { id, dataType } = useParams();
 
     const [detailsData, setDetailsData] = useState(null);
@@ -32,15 +29,11 @@ export default function DetailView() {
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id]);
+    }, [id, dataType]);
 
     return (
-        <div className="app-container">
-            <Navigation onMenuClick={toggleSidebar} />
-            <div className="main-container">
-                <Sidebar />
-                <ViewComponent detailsData={detailsData} className="main-content" ></ViewComponent>
-            </div>
-        </div>
+        <Layout>
+            <ViewComponent detailsData={detailsData} />
+        </Layout>
     );
 };
