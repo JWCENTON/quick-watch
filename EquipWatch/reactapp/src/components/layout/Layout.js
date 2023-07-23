@@ -12,12 +12,10 @@ const Layout = ({ children }) => {
             <Navigation onMenuClick={toggleSidebar} />
             <div className="main-container">
                 <Sidebar />
-                <div className="main-content">
-                    {children}
-                </div>
+                {children}
             </div>
         </div>
-    )
+    );
 };
 
 export default Layout;
