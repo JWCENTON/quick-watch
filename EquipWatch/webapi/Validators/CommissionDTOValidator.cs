@@ -82,11 +82,11 @@ public class UpdateCommissionDTOValidator : AbstractValidator<UpdateCommissionDT
     }
 }
 
-internal class CommissionIdValidator : AbstractValidator<Guid>
+internal class CommissionIdValidator : AbstractValidator<string>
 {
     internal CommissionIdValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Commission ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)

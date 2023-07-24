@@ -63,7 +63,7 @@ public class EquipmentController : ControllerBase
 
             if (equipmentDto.Company?.Id != null)
             {
-                var company = await _unitOfWork.Companies.GetAsync(equipmentDto.Company.Id);
+                var company = await _unitOfWork.Companies.GetAsync(equipment.Company.Id);
                 equipment.Company = company;
             }
 
@@ -71,7 +71,7 @@ public class EquipmentController : ControllerBase
             await _unitOfWork.Equipments.CreateAsync(equipment);
             return CreatedAtAction(nameof(Get), new { id = equipment.Id }, _mapper.Map<FullEquipmentDTO>(equipment));
         }
-        return BadRequest(result.Errors.First().ErrorMessage);
+        throw new ArgumentException(result.Errors.First().ErrorMessage);
     }
 
     [HttpPut("{id}")]
@@ -90,7 +90,7 @@ public class EquipmentController : ControllerBase
             await _unitOfWork.Equipments.UpdateAsync(equipment);
             return NoContent();
         }
-        return BadRequest(result.Errors.First().ErrorMessage);
+        throw new ArgumentException(result.Errors.First().ErrorMessage);
     }
 
     [HttpDelete("{id}")]

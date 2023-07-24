@@ -2,5 +2,5 @@
 
 public record BookedEquipmentIdDTO()
 {
-    public Guid Id { get; init; }
+    public string Id { get; init; }
 };

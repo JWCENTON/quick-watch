@@ -60,11 +60,11 @@ public class UpdateInviteDTOValidator : AbstractValidator<UpdateInviteDTO>
     }
 }
 
-internal class InviteIdValidator : AbstractValidator<Guid>
+internal class InviteIdValidator : AbstractValidator<string>
 {
     internal InviteIdValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Invite ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)

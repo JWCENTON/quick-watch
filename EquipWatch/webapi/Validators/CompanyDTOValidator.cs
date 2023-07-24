@@ -46,11 +46,11 @@ public class UpdateCompanyDTOValidator : AbstractValidator<UpdateCompanyDTO>
     }
 }
 
-internal class CompanyIdValidator : AbstractValidator<Guid>
+internal class CompanyIdValidator : AbstractValidator<string>
 {
     internal CompanyIdValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Company id cannot be empty.")
             .Must(GuidValidator.ValidateGuid)

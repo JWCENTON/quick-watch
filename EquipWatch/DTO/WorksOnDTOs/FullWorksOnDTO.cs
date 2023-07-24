@@ -5,5 +5,5 @@ namespace DTO.WorksOnDTOs;
 
 public record FullWorksOnDTO() : BaseWorksOnDTO
 {
-    public Guid Id { get; init; }
+    public string Id { get; init; }
 };

@@ -60,11 +60,11 @@ public class UpdateEmployDTOValidator : AbstractValidator<UpdateEmployDTO>
     }
 }
 
-internal class EmployeIdValidator : AbstractValidator<Guid>
+internal class EmployeIdValidator : AbstractValidator<string>
 {
     internal EmployeIdValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Employee ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)

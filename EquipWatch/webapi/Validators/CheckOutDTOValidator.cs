@@ -43,11 +43,11 @@ public class UpdateCheckOutDTOValidator : AbstractValidator<UpdateCheckOutDTO>
 }
 
 
-internal class CheckOutIdDTOValidator : AbstractValidator<Guid>
+internal class CheckOutIdDTOValidator : AbstractValidator<string>
 {
     internal CheckOutIdDTOValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Check-in ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)

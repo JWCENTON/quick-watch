@@ -2,5 +2,5 @@
 
 public record FullCompanyDTO : BaseCompanyDTO
 {
-    public Guid Id { get; init; }
+    public string Id { get; init; }
 }

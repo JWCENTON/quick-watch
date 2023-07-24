@@ -4,5 +4,5 @@ namespace DTO.CheckOutDTOs;
 
 public record FullCheckOutDTO : BaseCheckOutDTO
 {
-    public Guid Id { get; init; }
+    public string Id { get; init; }
 }

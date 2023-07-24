@@ -102,11 +102,11 @@ internal class EquipmentSerialNumberValidator : AbstractValidator<string>
             .WithMessage("Serial number cannot exceed 30 characters.");
     }
 }
-internal class EquipmentIdValidator : AbstractValidator<Guid>
+internal class EquipmentIdValidator : AbstractValidator<string>
 {
     internal EquipmentIdValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Equipment ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)

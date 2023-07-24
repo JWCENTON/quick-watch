@@ -5,5 +5,4 @@ namespace DTO.BookedEquipmentDTOs;
 
 public record CreateBookedEquipmentDTO() : BaseBookedEquipmentDTO
 {
-    public Guid Id { get; init; }
 };

@@ -38,11 +38,11 @@ public class UpdateBookedEquipmentDTOValidator : AbstractValidator<UpdateBookedE
 }
 
 
-internal class BookedEquipmentIdValidator : AbstractValidator<Guid>
+internal class BookedEquipmentIdValidator : AbstractValidator<string>
 {
     internal BookedEquipmentIdValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Check-in ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)

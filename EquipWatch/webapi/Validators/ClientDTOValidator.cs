@@ -76,11 +76,11 @@ public class UpdateClientDTOValidator : AbstractValidator<UpdateClientDTO>
     }
 }
 
-internal class ClientIdValidator : AbstractValidator<Guid>
+internal class ClientIdValidator : AbstractValidator<string>
 {
     internal ClientIdValidator()
     {
-        RuleFor(id => id.ToString())
+        RuleFor(id => id)
             .NotEmpty()
             .WithMessage("Client ID cannot be empty.")
             .Must(GuidValidator.ValidateGuid)
