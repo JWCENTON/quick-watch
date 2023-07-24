@@ -1,7 +1,7 @@
 ﻿using DTO.CheckInDTOs;
 using FluentValidation;
 
-namespace DTO.Validators;
+namespace webapi.Validators;
 
 public abstract class BaseCheckInDTOValidator<T> : AbstractValidator<T> where T : BaseCheckInDTO
 {

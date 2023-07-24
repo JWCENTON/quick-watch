@@ -1,9 +1,8 @@
 ﻿using Domain.Employee;
-using Domain.Invite;
-using DTO.CheckInDTOs;
 using DTO.EmployDTOs;
-using DTO.Validators;
 using FluentValidation;
+
+namespace webapi.Validators;
 
 public abstract class BaseEmployDTOValidator<T> : AbstractValidator<T> where T : BaseEmployDTO
 {

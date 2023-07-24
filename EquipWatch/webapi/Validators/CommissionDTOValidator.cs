@@ -1,6 +1,7 @@
 ﻿using DTO.CommissionDTOs;
-using DTO.Validators;
 using FluentValidation;
+
+namespace webapi.Validators;
 
 public abstract class BaseCommissionDTOValidator<T> : AbstractValidator<T> where T : BaseCommissionDTO
 {
