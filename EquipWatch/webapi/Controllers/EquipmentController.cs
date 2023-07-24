@@ -1,11 +1,8 @@
-﻿using System.Diagnostics;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
 using webapi.uow;
-using DTO.Validators;
-using Microsoft.AspNetCore.Authorization;
 
 namespace webapi.Controllers;
 
@@ -16,12 +13,15 @@ public class EquipmentController : ControllerBase
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly CreateEquipmentDTOValidator _createValidator;
+    private readonly UpdateEquipmentDTOValidator _updateValidator;
 
-    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator)
+    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator, UpdateEquipmentDTOValidator updateValidator)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _createValidator = createValidator;
+        _updateValidator = updateValidator;
+
     }
 
     [HttpGet]
@@ -80,10 +80,15 @@ public class EquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateEquipment(Guid id, [FromBody] UpdateEquipmentDTO equipmentDto)
     {
-        var equipment = await _unitOfWork.Equipments.GetAsync(id);
-        _mapper.Map(equipmentDto, equipment);
-        await _unitOfWork.Equipments.UpdateAsync(equipment);
-        return NoContent();
+        var result = await _updateValidator.ValidateAsync(equipmentDto);
+        if (result.IsValid)
+        {
+            var equipment = await _unitOfWork.Equipments.GetAsync(id);
+            _mapper.Map(equipmentDto, equipment);
+            await _unitOfWork.Equipments.UpdateAsync(equipment);
+            return NoContent();
+        }
+        return BadRequest(result.Errors.First().ErrorMessage);
     }
 
     [HttpDelete("{id}")]

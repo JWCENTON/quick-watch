@@ -65,7 +65,10 @@ public class UpdateEquipmentDTOValidator : AbstractValidator<UpdateEquipmentDTO>
 {
     public UpdateEquipmentDTOValidator()
     {
-        
+        RuleFor(dto => dto.SerialNumber)
+            .SetValidator(new EquipmentSerialNumberValidator()!)
+            .When(dto => dto.SerialNumber != null);
+
         RuleFor(dto => dto.Company)
             .SetValidator(new CompanyIdDTOValidator()!)
             .When(dto => dto.Company != null);

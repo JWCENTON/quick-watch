@@ -7,17 +7,15 @@ public class CompanyMappingProfile : Profile
 {
     public CompanyMappingProfile()
     {
-        CreateMap<Domain.Company.Models.Company, CreateCompanyDTO>()
-                .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.OwnerId))
-                .ReverseMap();
+        CreateMap<Domain.Company.Models.Company, CreateCompanyDTO>().ReverseMap();
 
-        CreateMap<Domain.Company.Models.Company, FullCompanyDTO>()
-            .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.OwnerId))
-            .ReverseMap();
+        CreateMap<Domain.Company.Models.Company, FullCompanyDTO>().ReverseMap();
 
-        CreateMap<Domain.Company.Models.Company, UpdateCompanyDTO>()
-            .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.OwnerId))
-            .ReverseMap();
+        CreateMap<Domain.Company.Models.Company, UpdateCompanyDTO>();
+
+        CreateMap<UpdateCompanyDTO, Domain.Company.Models.Company>()
+            .ForAllMembers(opt => opt
+                .Condition((src, dest, srcMember) => srcMember != null));
 
         CreateMap<Domain.Company.Models.Company, CompanyIdDTO>().ReverseMap();
     }

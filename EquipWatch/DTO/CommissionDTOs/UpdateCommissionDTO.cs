@@ -5,7 +5,6 @@ namespace DTO.CommissionDTOs;
 
 public record UpdateCommissionDTO
 {
-    public Guid Id { get; init; }
     public CompanyIdDTO? Company { get; init; }
     public ClientIdDTO? Client { get; init; }
     public string? Location { get; init; }

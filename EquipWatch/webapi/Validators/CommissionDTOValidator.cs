@@ -55,8 +55,6 @@ public class UpdateCommissionDTOValidator : AbstractValidator<UpdateCommissionDT
 {
     public UpdateCommissionDTOValidator()
     {
-        RuleFor(dto => dto.Id).SetValidator(new CommissionIdValidator());
-
         RuleFor(dto => dto.Company)
             .SetValidator(new CompanyIdDTOValidator()!)
             .When(dto => dto.Company != null);

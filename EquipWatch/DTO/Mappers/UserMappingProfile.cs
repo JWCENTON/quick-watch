@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.WorksOn.Models;
 using DTO.UserDTOs;
 
 namespace DTO.Mappers;
@@ -9,17 +10,18 @@ public class UserMappingProfile : Profile
     {
         CreateMap<Domain.User.Models.User, CreateUserDTO>().ReverseMap();
 
-        CreateMap<Domain.User.Models.User, UserIdDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ReverseMap();
+        CreateMap<Domain.User.Models.User, UserIdDTO>().ReverseMap();
 
-        CreateMap<Domain.User.Models.User, FullUserDTO>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ReverseMap();
-
-        CreateMap<Domain.User.Models.User, UpdateUserDTO>().ReverseMap();
+        CreateMap<Domain.User.Models.User, FullUserDTO>().ReverseMap();
 
         CreateMap<Domain.User.Models.User, LoginUserDTO>().ReverseMap();
+
+        CreateMap<Domain.User.Models.User, UpdateUserDTO>();
+
+
+        CreateMap<UpdateUserDTO, Domain.User.Models.User>()
+            .ForAllMembers(opt => opt
+                .Condition((src, dest, srcMember) => srcMember != null));
 
     }
 }

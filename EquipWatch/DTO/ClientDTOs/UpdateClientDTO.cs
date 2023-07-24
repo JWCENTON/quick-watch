@@ -4,7 +4,6 @@ namespace DTO.ClientDTOs;
 
 public record UpdateClientDTO
 {
-    public Guid Id { get; init; }
     public CompanyIdDTO? Company { get; init; }
     public string? FirstName { get; init; }
     public string? LastName { get; init; }

@@ -55,24 +55,22 @@ public class UpdateClientDTOValidator : AbstractValidator<UpdateClientDTO>
 {
     public UpdateClientDTOValidator()
     {
-        RuleFor(dto => dto.Id).SetValidator(new ClientIdValidator());
-
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator())
+        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator()!)
             .When(dto => dto.Company != null);
 
-        RuleFor(dto => dto.FirstName).SetValidator(new ClientFirstNameValidator())
+        RuleFor(dto => dto.FirstName).SetValidator(new ClientFirstNameValidator()!)
             .When(dto => dto.FirstName != null);
 
-        RuleFor(dto => dto.LastName).SetValidator(new ClientLastNameValidator())
+        RuleFor(dto => dto.LastName).SetValidator(new ClientLastNameValidator()!)
             .When(dto => dto.LastName != null);
 
-        RuleFor(dto => dto.Email).SetValidator(new ClientEmailValidator())
+        RuleFor(dto => dto.Email).SetValidator(new ClientEmailValidator()!)
             .When(dto => dto.Email != null);
 
-        RuleFor(dto => dto.PhoneNumber).SetValidator(new ClientPhoneNumberValidator())
+        RuleFor(dto => dto.PhoneNumber).SetValidator(new ClientPhoneNumberValidator()!)
             .When(dto => dto.PhoneNumber != null);
 
-        RuleFor(dto => dto.ContactAddress).SetValidator(new ClientContactAddressValidator())
+        RuleFor(dto => dto.ContactAddress).SetValidator(new ClientContactAddressValidator()!)
             .When(dto => dto.ContactAddress != null);
 
     }
@@ -146,7 +144,7 @@ internal class ClientContactAddressValidator : AbstractValidator<string>
             .NotEmpty()
             .WithMessage("Contact address cannot be empty.")
             .MaximumLength(50)
-            .WithMessage("Contact address cannot exceed 50 characters."); ;
+            .WithMessage("Contact address cannot exceed 50 characters.");
     }
 }
 

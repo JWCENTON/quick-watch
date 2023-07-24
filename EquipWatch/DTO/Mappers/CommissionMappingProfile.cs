@@ -7,19 +7,16 @@ public class CommissionMappingProfile : Profile
 {
     public CommissionMappingProfile()
     {
-        CreateMap<Domain.Commission.Models.Commission.Commission, CreateCommissionDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
-            .ReverseMap();
+        CreateMap<Domain.Commission.Models.Commission.Commission, CreateCommissionDTO>().ReverseMap();
 
-        CreateMap<Domain.Commission.Models.Commission.Commission, FullCommissionDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
-            .ReverseMap();
+        CreateMap<Domain.Commission.Models.Commission.Commission, FullCommissionDTO>().ReverseMap();
 
-        CreateMap<Domain.Commission.Models.Commission.Commission, UpdateCommissionDTO>()
-            .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
-            .ReverseMap();
+        CreateMap<Domain.Commission.Models.Commission.Commission, UpdateCommissionDTO>();
+
+        CreateMap<UpdateCommissionDTO, Domain.Commission.Models.Commission.Commission>()
+            .ForAllMembers(opt => opt
+                .Condition((src, dest, srcMember) => srcMember != null));
+
         CreateMap<Domain.Commission.Models.Commission.Commission, CommissionIdDTO>().ReverseMap();
     }
 }

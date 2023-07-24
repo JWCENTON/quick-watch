@@ -36,8 +36,6 @@ public class UpdateCompanyDTOValidator : AbstractValidator<UpdateCompanyDTO>
 {
     public UpdateCompanyDTOValidator()
     {
-        RuleFor(dto => dto.Id).SetValidator(new CompanyIdValidator());
-
         RuleFor(dto => dto.Name)
             .SetValidator(new CompanyNameValidator()!)
             .When(dto => dto.Name != null);

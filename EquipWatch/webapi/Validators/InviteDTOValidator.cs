@@ -40,8 +40,6 @@ public class UpdateInviteDTOValidator : AbstractValidator<UpdateInviteDTO>
 {
     public UpdateInviteDTOValidator()
     {
-        RuleFor(dto => dto.Id).SetValidator(new InviteIdValidator());
-
         RuleFor(dto => dto.Company)
             .SetValidator(new CompanyIdDTOValidator()!)
             .When(dto => dto.Company != null);
