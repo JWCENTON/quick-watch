@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
 using webapi.uow;
+using webapi.Validators;
 
 namespace webapi.Controllers;
 

@@ -1,8 +1,7 @@
 ﻿using DTO.UserDTOs;
 using FluentValidation;
 
-
-namespace DTO.Validators;
+namespace webapi.Validators;
 
 public abstract class BaseUserDTOValidator<T> : AbstractValidator<T> where T : BaseUserDTO
 {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Client.Models;
 using webapi.uow;
 using Domain.Company.Models;
+using webapi.Validators;
 
 namespace webapi.Controllers;
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
+using webapi.Validators;
 
 namespace webapi.Controllers
 {

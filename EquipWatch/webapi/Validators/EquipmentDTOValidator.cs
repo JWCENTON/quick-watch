@@ -1,6 +1,7 @@
 ﻿using DTO.EquipmentDTOs;
-using DTO.Validators;
 using FluentValidation;
+
+namespace webapi.Validators;
 
 public abstract class BaseEquipmentDTOValidator<T> : AbstractValidator<T> where T : BaseEquipmentDTO
 {

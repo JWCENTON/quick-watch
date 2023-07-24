@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Domain.User.Models;
+﻿using Domain.User.Models;
 using DTO.UserDTOs;
-using DTO.Validators;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using webapi.uow;
-using NuGet.Common;
 using webapi.Services;
-using FluentValidation;
+using webapi.uow;
+using webapi.Validators;
+
+namespace webapi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
