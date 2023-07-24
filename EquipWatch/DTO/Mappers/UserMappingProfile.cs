@@ -10,8 +10,6 @@ public class UserMappingProfile : Profile
     {
         CreateMap<Domain.User.Models.User, CreateUserDTO>().ReverseMap();
 
-        CreateMap<Domain.User.Models.User, UserIdDTO>().ReverseMap();
-
         CreateMap<Domain.User.Models.User, FullUserDTO>().ReverseMap();
 
         CreateMap<Domain.User.Models.User, LoginUserDTO>().ReverseMap();

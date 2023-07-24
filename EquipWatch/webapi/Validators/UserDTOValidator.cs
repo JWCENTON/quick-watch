@@ -13,14 +13,6 @@ public abstract class BaseUserDTOValidator<T> : AbstractValidator<T> where T : B
     }
 }
 
-public class UserIdDTOValidator : AbstractValidator<UserIdDTO>
-{
-    public UserIdDTOValidator()
-    {
-        RuleFor(dto => dto.Id).SetValidator(new UserIdValidator());
-    }
-}
-
 public class FullUserDTOValidator : BaseUserDTOValidator<FullUserDTO>
 {
     public FullUserDTOValidator()

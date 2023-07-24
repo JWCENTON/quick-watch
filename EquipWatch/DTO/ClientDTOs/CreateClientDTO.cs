@@ -4,5 +4,5 @@ namespace DTO.ClientDTOs;
 
 public record CreateClientDTO : BaseClientDTO
 {
-    public CompanyIdDTO Company { get; init; }
+    public string CompanyId { get; init; }
 }

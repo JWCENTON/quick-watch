@@ -6,7 +6,7 @@ namespace DTO.EmployDTOs;
 
 public record BaseEmployDTO
 {
-    public CompanyIdDTO Company { get; init; }
-    public UserIdDTO UserId { get; init; }
+    public string CompanyId { get; init; }
+    public string UserId { get; init; }
     public Role Role { get; init; }
 };

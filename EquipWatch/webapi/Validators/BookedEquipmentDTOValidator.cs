@@ -6,9 +6,9 @@ public abstract class BaseBookedEquipmentDTOValidator<T> : AbstractValidator<T> 
 {
     protected BaseBookedEquipmentDTOValidator()
     {
-        RuleFor(dto => dto.Commission).SetValidator(new CommissionIdDTOValidator());
+        RuleFor(dto => dto.CommissionId).SetValidator(new CommissionIdValidator());
 
-        RuleFor(dto => dto.Equipment).SetValidator(new EquipmentIdDTOValidator());
+        RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
     }
 }
 public class CreateBookedEquipmentDTOValidator : BaseBookedEquipmentDTOValidator<CreateBookedEquipmentDTO>
@@ -27,13 +27,13 @@ public class UpdateBookedEquipmentDTOValidator : AbstractValidator<UpdateBookedE
 {
     public UpdateBookedEquipmentDTOValidator()
     {
-        RuleFor(dto => dto.Commission)
-            .SetValidator(new CommissionIdDTOValidator()!)
-            .When(dto => dto.Commission != null);
+        RuleFor(dto => dto.CommissionId)
+            .SetValidator(new CommissionIdValidator()!)
+            .When(dto => dto.CommissionId != null);
 
-        RuleFor(dto => dto.Equipment)
-            .SetValidator(new EquipmentIdDTOValidator()!)
-            .When(dto => dto.Equipment != null);
+        RuleFor(dto => dto.EquipmentId)
+            .SetValidator(new EquipmentIdValidator()!)
+            .When(dto => dto.EquipmentId != null);
     }
 }
 

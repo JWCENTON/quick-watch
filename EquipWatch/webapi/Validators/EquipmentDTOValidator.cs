@@ -20,22 +20,13 @@ public abstract class BaseEquipmentDTOValidator<T> : AbstractValidator<T> where 
     }
 }
 
-
-public class EquipmentIdDTOValidator : AbstractValidator<EquipmentIdDTO>
-{
-    public EquipmentIdDTOValidator()
-    {
-        RuleFor(dto => dto.Id).SetValidator(new EquipmentIdValidator());
-    }
-}
-
 public class CreateEquipmentDTOValidator : BaseEquipmentDTOValidator<CreateEquipmentDTO>
 {
     public CreateEquipmentDTOValidator()
     {
         RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
         
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
     }
 }
 
@@ -47,7 +38,7 @@ public class FullEquipmentDTOValidator : BaseEquipmentDTOValidator<FullEquipment
 
         RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
         
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
     }
 }
 
@@ -69,9 +60,9 @@ public class UpdateEquipmentDTOValidator : AbstractValidator<UpdateEquipmentDTO>
             .SetValidator(new EquipmentSerialNumberValidator()!)
             .When(dto => dto.SerialNumber != null);
 
-        RuleFor(dto => dto.Company)
-            .SetValidator(new CompanyIdDTOValidator()!)
-            .When(dto => dto.Company != null);
+        RuleFor(dto => dto.CompanyId.ToString())
+            .SetValidator(new EquipmentIdValidator()!)
+            .When(dto => dto.CompanyId != null);
 
         RuleFor(dto => dto.Category)
             .SetValidator(new EquipmentCategoryValidator()!)

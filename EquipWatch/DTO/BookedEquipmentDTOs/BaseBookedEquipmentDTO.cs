@@ -5,6 +5,6 @@ namespace DTO.BookedEquipmentDTOs;
 
 public record BaseBookedEquipmentDTO()
 {
-    public EquipmentIdDTO Equipment { get; init; }
-    public CommissionIdDTO Commission { get; init; }
+    public string EquipmentId { get; init; }
+    public string CommissionId { get; init; }
 };

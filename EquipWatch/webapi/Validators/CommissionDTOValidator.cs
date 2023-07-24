@@ -6,9 +6,9 @@ public abstract class BaseCommissionDTOValidator<T> : AbstractValidator<T> where
 {
     protected BaseCommissionDTOValidator()
     {
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
 
-        RuleFor(dto => dto.Client).SetValidator(new ClientIdDTOValidator());
+        RuleFor(dto => dto.ClientId).SetValidator(new ClientIdValidator());
 
         RuleFor(dto => dto.Location)
             .SetValidator(new CommissionLocationValidator());
@@ -31,14 +31,6 @@ public abstract class BaseCommissionDTOValidator<T> : AbstractValidator<T> where
     }
 }
 
-public class CommissionIdDTOValidator : AbstractValidator<CommissionIdDTO>
-{
-    public CommissionIdDTOValidator()
-    {
-        RuleFor(dto => dto.Id).SetValidator(new CommissionIdValidator());
-    }
-}
-
 public class CreateCommissionDTOValidator : BaseCommissionDTOValidator<CreateCommissionDTO>
 {
 }
@@ -55,13 +47,13 @@ public class UpdateCommissionDTOValidator : AbstractValidator<UpdateCommissionDT
 {
     public UpdateCommissionDTOValidator()
     {
-        RuleFor(dto => dto.Company)
-            .SetValidator(new CompanyIdDTOValidator()!)
-            .When(dto => dto.Company != null);
+        RuleFor(dto => dto.CompanyId)
+            .SetValidator(new CompanyIdValidator()!)
+            .When(dto => dto.CompanyId != null);
 
-        RuleFor(dto => dto.Client)
-            .SetValidator(new ClientIdDTOValidator()!)
-            .When(dto => dto.Client != null);
+        RuleFor(dto => dto.ClientId)
+            .SetValidator(new ClientIdValidator()!)
+            .When(dto => dto.ClientId != null);
 
         RuleFor(dto => dto.Location)
             .SetValidator(new CommissionLocationValidator()!)

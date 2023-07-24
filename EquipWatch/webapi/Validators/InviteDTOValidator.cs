@@ -7,8 +7,8 @@ public abstract class BaseInviteDTOValidator<T> : AbstractValidator<T> where T :
 {
     protected BaseInviteDTOValidator()
     {
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
-        RuleFor(dto => dto.UserId).SetValidator(new UserIdDTOValidator());
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
+        RuleFor(dto => dto.UserId).SetValidator(new UserIdValidator());
 
         RuleFor(dto => dto.Status)
             .NotNull()
@@ -40,12 +40,12 @@ public class UpdateInviteDTOValidator : AbstractValidator<UpdateInviteDTO>
 {
     public UpdateInviteDTOValidator()
     {
-        RuleFor(dto => dto.Company)
-            .SetValidator(new CompanyIdDTOValidator()!)
-            .When(dto => dto.Company != null);
+        RuleFor(dto => dto.CompanyId)
+            .SetValidator(new CompanyIdValidator()!)
+            .When(dto => dto.CompanyId != null);
 
         RuleFor(dto => dto.UserId)
-            .SetValidator(new UserIdDTOValidator()!)
+            .SetValidator(new UserIdValidator()!)
             .When(dto => dto.UserId != null);
 
         RuleFor(dto => dto.Status)

@@ -61,11 +61,7 @@ public class EquipmentController : ControllerBase
         if (result.IsValid){
             var equipment = _mapper.Map<Equipment>(equipmentDto);
 
-            if (equipmentDto.Company?.Id != null)
-            {
-                var company = await _unitOfWork.Companies.GetAsync(equipment.Company.Id);
-                equipment.Company = company;
-            }
+            equipment.Company = await _unitOfWork.Companies.GetAsync(equipment.CompanyId);
 
             equipment.Id = Guid.NewGuid();
             await _unitOfWork.Equipments.CreateAsync(equipment);
@@ -87,6 +83,10 @@ public class EquipmentController : ControllerBase
         {
             var equipment = await _unitOfWork.Equipments.GetAsync(id);
             _mapper.Map(equipmentDto, equipment);
+            if (equipmentDto.CompanyId != null)
+            {
+                equipment.Company = await _unitOfWork.Companies.GetAsync(equipment.CompanyId);
+            }
             await _unitOfWork.Equipments.UpdateAsync(equipment);
             return NoContent();
         }

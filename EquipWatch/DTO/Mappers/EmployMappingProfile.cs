@@ -18,6 +18,5 @@ public class EmployMappingProfile : Profile
             .ForAllMembers(opt => opt
                 .Condition((src, dest, srcMember) => srcMember != null));
 
-        CreateMap<Employee, EmployIdDTO>().ReverseMap();
     }
 }

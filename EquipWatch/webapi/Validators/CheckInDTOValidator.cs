@@ -7,9 +7,9 @@ public abstract class BaseCheckInDTOValidator<T> : AbstractValidator<T> where T 
 {
     protected BaseCheckInDTOValidator()
     {
-        RuleFor(dto => dto.Employ).SetValidator(new EmployIdDTOValidator());
+        RuleFor(dto => dto.EmployId).SetValidator(new EmployIdValidator());
 
-        RuleFor(dto => dto.Equipment).SetValidator(new EquipmentIdDTOValidator());
+        RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
 
         RuleFor(dto => dto.Time)
             .NotEmpty()
@@ -32,13 +32,13 @@ public class UpdateCheckInDTOValidator : AbstractValidator<UpdateCheckInDTO>
 {
     public UpdateCheckInDTOValidator()
     {
-        RuleFor(dto => dto.Employ)
-            .SetValidator(new EmployIdDTOValidator()!)
-            .When(dto => dto.Employ != null);
+        RuleFor(dto => dto.EmployId)
+            .SetValidator(new EmployIdValidator()!)
+            .When(dto => dto.EmployId != null);
 
-        RuleFor(dto => dto.Equipment)
-            .SetValidator(new EquipmentIdDTOValidator()!)
-            .When(dto => dto.Equipment != null);
+        RuleFor(dto => dto.EquipmentId)
+            .SetValidator(new EquipmentIdValidator()!)
+            .When(dto => dto.EquipmentId != null);
     }
 }
 
