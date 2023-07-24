@@ -20,7 +20,7 @@ function Login() {
 
         try {
             await login(email, password);
-            navigate('/employee');
+            navigate('/main');
         } catch (error) {
             if (error.message === 'EmailNotConfirmed') {
                 setErrorMessage('Email is not confirmed. Please check your email and confirm your account.');

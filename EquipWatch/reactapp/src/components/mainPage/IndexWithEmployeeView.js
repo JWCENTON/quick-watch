@@ -1,4 +1,3 @@
-import "./Index.css";
 import { Link } from 'react-router-dom';
 
 function IndexEmployeeView() {

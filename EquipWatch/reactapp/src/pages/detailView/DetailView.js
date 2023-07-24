@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import Navigation from '../../components/navigation/Navigation';
-import Sidebar from '../../components/sidebar/Sidebar';
+import { useParams } from 'react-router-dom';
+import Layout from '../../components/layout/Layout';
 import ClientDetailView from '../../components/client/ClientDetailView';
 import EquipmentDetailView from '../../components/equipment/EquipmentDetailView';
 import CompanyDetailView from '../../components/company/CompanyDetailView';
@@ -30,17 +29,11 @@ export default function DetailView() {
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id]);
+    }, [id, dataType]);
 
     return (
-        <div className="app-container">
-            <Navigation />
-            <div className="main-container">
-                <Sidebar />
-                <ViewComponent detailsData={detailsData}></ViewComponent>
-            </div>
-        </div>
+        <Layout>
+            <ViewComponent detailsData={detailsData} />
+        </Layout>
     );
 };
-
-

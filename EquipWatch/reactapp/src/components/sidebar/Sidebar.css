@@ -1,6 +1,26 @@
 .sidebar {
+    height: calc(100vh - 60px);
+    width: 250px;
     background-color: #3F72AF;
+    overflow-x: hidden;
+    transition: 0.5s;
     padding: 20px;
+    padding-top: 60px;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 0;
+        padding: 0;
+        position: fixed;
+        z-index: 2;
+    }
+}
+
+.sidebar.open {
+    width: 250px;
+    padding: 20px;
+    padding-top: 20px;
 }
 
 .sidebar ul {
@@ -10,6 +30,17 @@
 
 .sidebar li {
     margin-bottom: 15px;
+}
+
+.sidebar > ul > li > button {
+    width: 100%;
+    border: none;
+    display: block;
+    background: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .sidebar .btn-outline-primary {
@@ -23,4 +54,16 @@
 .sidebar .btn-outline-primary:hover {
     background-color: #F9F7F7;
     color: #3F72AF;
+}
+
+.sidebar .sidebar-searchbar {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar .sidebar-searchbar {
+        display: block;
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
 }

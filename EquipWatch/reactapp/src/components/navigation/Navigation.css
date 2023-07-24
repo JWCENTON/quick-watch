@@ -1,25 +1,33 @@
 .navbar {
     background-color: #112D4E;
     padding: 0 30px;
+    padding-left: 1em;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    transition: 0.5s;
+}
+
+.left-nav {
+    display: flex;
+    align-items: center;
 }
 
 .navbar-brand {
     color: #F9F7F7;
     margin-right: auto;
     margin-left: 60px;
-    background: none; /* Remove background */
-    border: none; /* Remove border */
+    background: none;
+    border: none;
 }
 
+.sidebar-toggle-button {
+    display: none;
+}
 
 .navbar-brand:hover {
     background: none;
-}
-
-@media screen and (max-width: 768px) {
-    .logout-link {
-        order: 0; /* Reset order for mobile view */
-    }
+    margin-right: auto;
 }
 
 .nav-link {
@@ -27,6 +35,21 @@
     margin-left: auto;
 }
 
+.navbar .navbar-toggler {
+    border: none;
+}
+
+.navbar.open {
+    width: 100%;
+}
+
 .logout-link {
-    order: 2; /* Make sure Logout is always the last item */
+    margin-right: 1em;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar-toggle-button {
+        display: block;
+        margin-left: 0;
+    }
 }

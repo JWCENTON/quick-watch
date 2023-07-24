@@ -1,18 +1,21 @@
 import React from 'react';
+import { useContext } from 'react';
+import { SidebarContext } from '../../contexts/SidebarContext';
 import Navigation from '../../components/navigation/Navigation';
 import Sidebar from '../../components/sidebar/Sidebar';
-import EquipmentCreateFormView from '../../components/equipment/equipmentCreateForm/EquipmentCreateFormView';
 
-const EquipmentCreateForm = () => {
+const Layout = ({ children }) => {
+    const { toggleSidebar } = useContext(SidebarContext);
+
     return (
         <div className="app-container">
-            <Navigation />
+            <Navigation onMenuClick={toggleSidebar} />
             <div className="main-container">
                 <Sidebar />
-                <EquipmentCreateFormView />
+                {children}
             </div>
         </div>
     );
 };
 
-export default EquipmentCreateForm;
+export default Layout;

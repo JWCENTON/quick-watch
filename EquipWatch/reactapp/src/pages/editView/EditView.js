@@ -1,13 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { SidebarContext } from '../../contexts/SidebarContext';
 import { useParams } from 'react-router-dom';
-import Navigation from '../../components/navigation/Navigation';
-import Sidebar from '../../components/sidebar/Sidebar';
+import Layout from '../../components/layout/Layout';
 import ClientEditView from '../../components/client/ClientEditView';
+import EquipmentEditView from '../../components/equipment/EquipmentEditView';
+import CommissionEditView from '../../components/commission/CommissionEditView';
+import CompanyEditView from '../../components/company/CompanyEditView';
+import EmployeeEditView from '../../components/employee/EmployeeEditView';
 
 export default function EditView() {
     const { id, dataType } = useParams();
 
     const [detailsData, setDetailsData] = useState(null);
+
+    const components = {
+        client: ClientEditView,
+        equipment: EquipmentEditView,
+        commission: CommissionEditView,
+        company: CompanyEditView,
+        employee: EmployeeEditView
+    };
+
+    const ViewComponent = components[dataType];
 
     useEffect(() => {
         const fetchDetailsData = async () => {
@@ -19,12 +33,8 @@ export default function EditView() {
     }, [id]);
 
     return (
-        <div className="app-container">
-            <Navigation />
-            <div className="main-container">
-                <Sidebar />
-                <ClientEditView detailsData={detailsData} />
-            </div>
-        </div>
+        <Layout>
+                <ViewComponent detailsData={detailsData} />
+        </Layout >
     );
 };
