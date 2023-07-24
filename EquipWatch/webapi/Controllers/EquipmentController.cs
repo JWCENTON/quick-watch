@@ -16,14 +16,15 @@ public class EquipmentController : ControllerBase
     private readonly IMapper _mapper;
     private readonly CreateEquipmentDTOValidator _createValidator;
     private readonly UpdateEquipmentDTOValidator _updateValidator;
+    private readonly LocationEquipmentDTOValidator _locationValidator;
 
-    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator, UpdateEquipmentDTOValidator updateValidator)
+    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator, UpdateEquipmentDTOValidator updateValidator, LocationEquipmentDTOValidator locationValidator)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
-
+        _locationValidator = locationValidator;
     }
 
     [HttpGet]
@@ -109,27 +110,32 @@ public class EquipmentController : ControllerBase
     [HttpPatch("{id}/checkout")]
     public async Task<IActionResult> Checkout(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
     {
-        var equipment = await _unitOfWork.Equipments.GetAsync(id);
-
-        if (equipment.IsCheckedOut) { return BadRequest(); }
-
-        equipment.IsCheckedOut = true;
-        equipment.Location = locationDto.Location;
-        await _unitOfWork.Equipments.UpdateAsync(equipment);
-
-        var checkout = new CheckOut
+        var result = await _locationValidator.ValidateAsync(locationDto);
+        if (result.IsValid)
         {
-            Id = Guid.NewGuid(),
-            Equipment = equipment,
-            //TODO attach employee
-            Time = DateTime.Now
-        };
+            var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
-        await _unitOfWork.CheckOuts.CreateAsync(checkout);
+            if (equipment.IsCheckedOut) { return BadRequest(); }
 
-        await _unitOfWork.SaveChangesAsync();
+            equipment.IsCheckedOut = true;
+            equipment.Location = locationDto.Location;
+            await _unitOfWork.Equipments.UpdateAsync(equipment);
 
-        return Ok();
+            var checkout = new CheckOut
+            {
+                Id = Guid.NewGuid(),
+                Equipment = equipment,
+                //TODO attach employee
+                Time = DateTime.Now
+            };
+
+            await _unitOfWork.CheckOuts.CreateAsync(checkout);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok();
+        }
+        throw new ArgumentException(result.Errors.First().ErrorMessage);
     }
 
 

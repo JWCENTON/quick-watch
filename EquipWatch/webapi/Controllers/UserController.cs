@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Domain.User.Models;
 using DTO.UserDTOs;
+using DTO.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.uow;
 using NuGet.Common;
 using webapi.Services;
+using FluentValidation;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -15,75 +17,90 @@ public class UserController : ControllerBase
     private readonly SignInManager<User> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
+    private readonly CreateUserDTOValidator _createValidator;
+    private readonly LoginUserDTOValidator _loginValidator;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork, IEmailService emailService)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork, IEmailService emailService, CreateUserDTOValidator createValidator, LoginUserDTOValidator loginValidator)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _unitOfWork = unitOfWork;
         _emailService = emailService;
+        _createValidator = createValidator;
+        _loginValidator = loginValidator;
     }
 
     [HttpPost("register")]
     [AllowAnonymous]
     public async Task<IActionResult> Register([FromBody] CreateUserDTO model)
     {
-        var user = new User
+        var validateResult = await _createValidator.ValidateAsync(model);
+        if (validateResult.IsValid)
         {
-            UserName = model.Email,
-            Email = model.Email,
-            FirstName = model.FirstName,
-            LastName = model.LastName
-        };
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
+            };
 
-        var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
+            var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
 
-        if (result.Succeeded)
-        {
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
-            _emailService.SendEmailForConfirmation(user, confirmationLink);
-            // User registration successful
-            // Return any necessary response or redirect
-            return Ok();
+            if (result.Succeeded)
+            {
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
+                _emailService.SendEmailForConfirmation(user, confirmationLink);
+                // User registration successful
+                // Return any necessary response or redirect
+                return Ok();
+            }
+            else
+            {
+                // User registration failed
+                // Return any necessary response or error messages
+                return BadRequest(result.Errors);
+            }
         }
-        else
-        {
-            // User registration failed
-            // Return any necessary response or error messages
-            return BadRequest(result.Errors);
-        }
+        throw new ArgumentException(validateResult.Errors.First().ErrorMessage);
     }
 
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
     {
-        var user = await _userManager.FindByEmailAsync(model.Email);
-
-        if (user != null)
+        var validateResult = await _loginValidator.ValidateAsync(model);
+        if (validateResult.IsValid)
         {
-            if (!await _userManager.IsEmailConfirmedAsync(user))
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user != null)
             {
-                // User's email is not confirmed
-                return Unauthorized(new { title = "EmailNotConfirmed" });
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    // User's email is not confirmed
+                    return Unauthorized(new { title = "EmailNotConfirmed" });
+                }
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false,
+                lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                // User login successful
+                // Return any necessary response or redirect
+                return Ok("User has successfully logged in");
+            }
+            else
+            {
+                // User login failed
+                // Return any necessary response or error messages
+                return Unauthorized();
             }
         }
-
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
-
-        if (result.Succeeded)
-        {
-            // User login successful
-            // Return any necessary response or redirect
-            return Ok("User has successfully logged in");
-        }
-        else
-        {
-            // User login failed
-            // Return any necessary response or error messages
-            return Unauthorized();
-        }
+        throw new ArgumentException(validateResult.Errors.First().ErrorMessage);
     }
 
     [AllowAnonymous]

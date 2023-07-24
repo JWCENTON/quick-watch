@@ -52,6 +52,14 @@ public class PartialEquipmentDTOValidator : BaseEquipmentDTOValidator<PartialEqu
     }
 }
 
+public class LocationEquipmentDTOValidator : AbstractValidator<UpdateEquipmentLocationDTO>
+{
+    public LocationEquipmentDTOValidator()
+    {
+        RuleFor(dto => dto.Location).SetValidator(new EquipmentLocationValidator());
+    }
+}
+
 public class UpdateEquipmentDTOValidator : AbstractValidator<UpdateEquipmentDTO>
 {
     public UpdateEquipmentDTOValidator()
