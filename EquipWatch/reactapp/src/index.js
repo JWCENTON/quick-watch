@@ -12,7 +12,6 @@ import EmployeeMainPage from './pages/employeeMain/EmployeeMain';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
-import { AuthProvider } from './components/authProvider/AuthContext'
 
 const router = createBrowserRouter([
     {

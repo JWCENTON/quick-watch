@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import UniversalCard from '../card/Card';
 import './CardList.css';
+import { useAuth } from '../authProvider/AuthContext';
 
 function CardList() {
     const [cards, setCards] = useState(null);
     const location = useLocation();
+    const { token } = useAuth(); 
+
     let itemType;
 
     let displayedCategory = location.pathname.slice(1);
@@ -49,8 +52,21 @@ function CardList() {
                 url = 'https://localhost:7007/api/employee';
                 break;
         }
-        GetData(url);
-    }, [location]);
+        GetData(url, token);
+    }, [location, token]);
+
+    async function GetData(url, token) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        const response = await fetch(url, { headers });
+        const data = await response.json();
+        setCards(data);
+    }
 
     return (
         <div className="cardSection">
@@ -60,12 +76,6 @@ function CardList() {
             </div>
         </div>
     );
-
-    async function GetData(url) {
-        const response = await fetch(url);
-        const data = await response.json();
-        setCards(data);
-    }
 }
 
 export default CardList;

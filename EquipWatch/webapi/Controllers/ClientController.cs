@@ -9,7 +9,7 @@ using Domain.Company.Models;
 
 namespace webapi.Controllers;
 
-//[Authorize]
+[Authorize]
 [ApiController, Route("api/[controller]")]
 public class ClientController : ControllerBase
 {
