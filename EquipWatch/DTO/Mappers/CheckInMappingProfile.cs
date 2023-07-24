@@ -7,18 +7,14 @@ public class CheckInMappingProfile : Profile
 {
     public CheckInMappingProfile()
     {
-        CreateMap<Domain.CheckIn.Models.CheckIn, CreateCheckInDTO>()
-            .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.Employee))
-            .ReverseMap();
+        CreateMap<Domain.CheckIn.Models.CheckIn, CreateCheckInDTO>().ReverseMap();
 
-        CreateMap<Domain.CheckIn.Models.CheckIn, FullCheckInDTO>()
-            .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.Employee))
-            .ReverseMap();
+        CreateMap<Domain.CheckIn.Models.CheckIn, FullCheckInDTO>().ReverseMap();
 
-        CreateMap<Domain.CheckIn.Models.CheckIn, UpdateCheckInDTO>()
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.Employee))
-            .ReverseMap();
+        CreateMap<Domain.CheckIn.Models.CheckIn, UpdateCheckInDTO>();
+
+        CreateMap<UpdateCheckInDTO, Domain.CheckIn.Models.CheckIn>()
+            .ForAllMembers(opt => opt
+                .Condition((src, dest, srcMember) => srcMember != null));
     }
 }

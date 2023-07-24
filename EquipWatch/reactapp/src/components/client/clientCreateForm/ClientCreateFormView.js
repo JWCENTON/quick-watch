@@ -23,7 +23,7 @@ export default function ClientCreateFormView() {
             "phoneNumber": formPhoneNubmer,
             "contactAddress": formAddress,
             "company": {
-                "id": "2d60c065-fae2-4b0b-87c9-08db8134c4aa"
+                "id": "08db879b-9008-41bc-82d9-43c9b26f2323"
             }
         });
 

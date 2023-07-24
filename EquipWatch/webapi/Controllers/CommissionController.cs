@@ -62,13 +62,13 @@ namespace webapi.Controllers
 
             if (commissionDto.Company?.Id != null)
             {
-                var company = await _unitOfWork.Companies.GetAsync(commissionDto.Company.Id);
+                var company = await _unitOfWork.Companies.GetAsync(commission.Company.Id);
                 commission.Company = company;
             }
 
             if (commissionDto.Client?.Id != null)
             {
-                var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
+                var client = await _unitOfWork.Clients.GetAsync(commission.Client.Id);
                 commission.Client = client;
             }
 
@@ -94,7 +94,7 @@ namespace webapi.Controllers
 
             if (commissionDto.Client?.Id != null)
             {
-                var client = await _unitOfWork.Clients.GetAsync(commissionDto.Client.Id);
+                var client = await _unitOfWork.Clients.GetAsync(commission.Client.Id);
                 commission.Client = client;
             }
 

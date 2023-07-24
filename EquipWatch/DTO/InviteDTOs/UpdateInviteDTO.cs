@@ -6,8 +6,8 @@ namespace DTO.InviteDTOs;
 
 public record UpdateInviteDTO
 {
-    public CompanyIdDTO Company { get; set; }
-    public UserIdDTO UserId { get; set; }
-    public Status Status { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public CompanyIdDTO? Company { get; init; }
+    public UserIdDTO? UserId { get; init; }
+    public Status? Status { get; init; }
+    public DateTime? CreatedAt { get; init; }
 }

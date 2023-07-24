@@ -8,19 +8,16 @@ public class EmployMappingProfile : Profile
 {
     public EmployMappingProfile()
     {
-        CreateMap<Employee, CreateEmployDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-            .ReverseMap();
+        CreateMap<Employee, CreateEmployDTO>().ReverseMap();
 
-        CreateMap<Employee, FullEmployDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-            .ReverseMap();
+        CreateMap<Employee, FullEmployDTO>().ReverseMap();
 
-        CreateMap<Employee, UpdateEmployDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-            .ReverseMap();
+        CreateMap<Employee, UpdateEmployDTO>();
+
+        CreateMap<UpdateEmployDTO, Employee>()
+            .ForAllMembers(opt => opt
+                .Condition((src, dest, srcMember) => srcMember != null));
+
+        CreateMap<Employee, EmployIdDTO>().ReverseMap();
     }
 }

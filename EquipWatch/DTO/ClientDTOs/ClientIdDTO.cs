@@ -2,5 +2,5 @@
 
 public record ClientIdDTO
 {
-    public Guid Id { get; set; }
+    public string Id { get; init; }
 }

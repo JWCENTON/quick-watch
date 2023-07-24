@@ -53,9 +53,10 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<Client> CreateClient([FromBody] CreateClientDTO clientDto)
     {
-        var company = await _unitOfWork.Companies.GetAsync(clientDto.Company.Id);
-        
+
         var client = _mapper.Map<Client>(clientDto);
+
+        var company = await _unitOfWork.Companies.GetAsync(client.Company.Id);
         client.Company = company;
         client.Id = Guid.NewGuid();
 
@@ -76,7 +77,7 @@ public class ClientController : ControllerBase
 
         if (clientDto.Company?.Id != null)
         {
-            var company = await _unitOfWork.Companies.GetAsync(clientDto.Company.Id);
+            var company = await _unitOfWork.Companies.GetAsync(client.Company.Id);
             client.Company = company;
         }
 

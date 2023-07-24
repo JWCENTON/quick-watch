@@ -21,8 +21,10 @@ public class ClientMappingProfile : Profile
             .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
             .ReverseMap();
 
-        CreateMap<Domain.Client.Models.Client, UpdateClientDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ReverseMap();
+        CreateMap<Domain.Client.Models.Client, UpdateClientDTO>();
+
+        CreateMap<UpdateClientDTO, Domain.Client.Models.Client>()
+            .ForAllMembers(opt => opt
+                .Condition((src, dest, srcMember) => srcMember != null));
     }
 }

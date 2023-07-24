@@ -6,7 +6,7 @@ namespace DTO.EmployDTOs;
 
 public record UpdateEmployDTO
 {
-    public CompanyIdDTO Company { get; set; }
-    public UserIdDTO UserId { get; set; }
-    public Role Role { get; set; }
+    public CompanyIdDTO? Company { get; init; }
+    public UserIdDTO? UserId { get; init; }
+    public Role? Role { get; init; }
 }

@@ -2,5 +2,5 @@
 
 public record EquipmentIdDTO
 {
-    public Guid Id { get; set; }
+    public string Id { get; init; }
 }
