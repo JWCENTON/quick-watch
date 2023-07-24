@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using AutoMapper;
 using Domain.CheckIn.Models;
 using Domain.CheckOut.Models;
@@ -9,6 +10,7 @@ using webapi.uow;
 using DTO.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace webapi.Controllers;
 
@@ -16,12 +18,14 @@ namespace webapi.Controllers;
 [ApiController, Route("api/[controller]")]
 public class EquipmentController : ControllerBase
 {
+    private readonly UserManager<User> _userManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly EquipmentDTOValidator _validator;
 
-    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, EquipmentDTOValidator validator)
+    public EquipmentController(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper, EquipmentDTOValidator validator)
     {
+        _userManager = userManager;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _validator = validator;
@@ -100,11 +104,21 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpPatch("{id}/checkout")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Checkout(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
     {
+        Debug.WriteLine("hhi");
+
         var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
-        var user = await _unitOfWork.Employees.GetAsync(locationDto.UserId.Id);
+        var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+
+        var employee = await _unitOfWork.Employees.GetAsync(Guid.Parse(user.Id));
 
         if (equipment.IsCheckedOut) { return BadRequest(); }
 
@@ -116,7 +130,7 @@ public class EquipmentController : ControllerBase
         {
             Id = Guid.NewGuid(),
             Equipment = equipment,
-            Employee = user,
+            Employee = employee,
             Time = DateTime.Now
         };
 
@@ -128,11 +142,22 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpPatch("{id}/checkin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CheckIn(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
     {
+
+        Debug.WriteLine("hhi");
+
         var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
-        var user = await _unitOfWork.Employees.GetAsync(locationDto.UserId.Id);
+        var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+
+        var employee = await _unitOfWork.Employees.GetAsync(Guid.Parse(user.Id));
 
         if (!equipment.IsCheckedOut) { return BadRequest(); }
 
@@ -144,7 +169,7 @@ public class EquipmentController : ControllerBase
         {
             Id = Guid.NewGuid(),
             Equipment = equipment,
-            Employee = user,
+            Employee = employee,
             Time = DateTime.Now
         };
 
