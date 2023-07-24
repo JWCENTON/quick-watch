@@ -60,17 +60,13 @@ namespace webapi.Controllers
         {
             var commission = _mapper.Map<Domain.Commission.Models.Commission.Commission>(commissionDto);
 
-            if (commissionDto.Company?.Id != null)
-            {
-                var company = await _unitOfWork.Companies.GetAsync(commission.Company.Id);
-                commission.Company = company;
-            }
+           
+            var company = await _unitOfWork.Companies.GetAsync(commission.Company.Id);
+            commission.Company = company;
+            
 
-            if (commissionDto.Client?.Id != null)
-            {
-                var client = await _unitOfWork.Clients.GetAsync(commission.Client.Id);
-                commission.Client = client;
-            }
+            var client = await _unitOfWork.Clients.GetAsync(commission.Client.Id);
+            commission.Client = client;
 
             commission.Id = Guid.NewGuid();
 
@@ -92,10 +88,9 @@ namespace webapi.Controllers
             var commission = await _unitOfWork.Commissions.GetAsync(id);
             _mapper.Map(commissionDto, commission);
 
-            if (commissionDto.Client?.Id != null)
+            if (commissionDto.ClientId != null)
             {
-                var client = await _unitOfWork.Clients.GetAsync(commission.Client.Id);
-                commission.Client = client;
+                commission.Client = await _unitOfWork.Clients.GetAsync(commission.ClientId);
             }
 
             await _unitOfWork.Commissions.UpdateAsync(commission);

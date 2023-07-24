@@ -3,6 +3,8 @@
 public class Commission
 {
     public Guid Id { get; set; }
+    public Guid CompanyId { get; set; }
+    public Guid ClientId { get; set; }
     public Company.Models.Company Company { get; set; }
     public Client.Models.Client Client { get; set; }
     public string Description { get; set; }

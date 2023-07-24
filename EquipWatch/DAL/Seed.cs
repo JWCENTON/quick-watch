@@ -22,12 +22,14 @@ public class Seed
             var Company1 = new Company
             {
                 Id = new Guid(),
-                Name = "something"
+                Name = "something",
+                OwnerId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca"
             };
             var Company2 = new Company
             {
                 Id = new Guid(),
-                Name = "someasdasdthing"
+                Name = "someasdasdthing",
+                OwnerId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca"
             };
             context.Company.Add(Company1);
             context.Company.Add(Company2);
@@ -35,12 +37,16 @@ public class Seed
             var employee1 = new Employee()
             {
                 Company = Company1,
+                CompanyId = Company1.Id,
+                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
                 Id = new Guid(),
                 Role = Role.Engineer
             };
             var employee2 = new Employee()
             {
                 Company = Company2,
+                CompanyId = Company2.Id,
+                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
                 Id = new Guid(),
                 Role = Role.Engineer
             };
@@ -87,7 +93,9 @@ public class Seed
             var checkIn1 = new CheckIn()
             {
                 Employee = employee1,
+                EmployeeId = employee1.Id,
                 Equipment = equipment1,
+                EquipmentId = equipment1.Id,
                 Id = new Guid(),
                 Time = DateTime.Now
 
@@ -95,7 +103,9 @@ public class Seed
             var checkIn2 = new CheckIn()
             {
                 Employee = employee2,
+                EmployeeId = employee2.Id,
                 Equipment = equipment2,
+                EquipmentId = equipment2.Id,
                 Id = new Guid(),
                 Time = DateTime.Now
 
@@ -104,7 +114,9 @@ public class Seed
             var checkOut1 = new CheckOut()
             {
                 Employee = employee1,
+                EmployeeId = employee1.Id,
                 Equipment = equipment1,
+                EquipmentId = equipment1.Id,
                 Id = new Guid(),
                 Time = DateTime.Now
 
@@ -112,7 +124,9 @@ public class Seed
             var checkOut2 = new CheckOut()
             {
                 Employee = employee2,
+                EmployeeId = employee2.Id,
                 Equipment = equipment2,
+                EquipmentId = equipment2.Id,
                 Id = new Guid(),
                 Time = DateTime.Now
             };
@@ -127,6 +141,7 @@ public class Seed
             var Client1 = new Client
             {
                 Company = Company1,
+                CompanyId = Company1.Id,
                 Email = "some@some.com",
                 FirstName = "someone",
                 Id = new Guid(),
@@ -137,6 +152,7 @@ public class Seed
             var Client2 = new Client
             {
                 Company = Company2,
+                CompanyId = Company2.Id,
                 Email = "some@somasdasde.com",
                 FirstName = "soasdasmeone",
                 Id = new Guid(),
@@ -150,7 +166,9 @@ public class Seed
             var commission1 = new Commission()
             {
                 Client = Client1,
+                ClientId = Client1.Id,
                 Company = Company1,
+                CompanyId = Company1.Id,
                 Description = "description",
                 EndTime = DateTime.Now,
                 Id = new Guid(),
@@ -161,7 +179,9 @@ public class Seed
             var commission2 = new Commission()
             {
                 Client = Client2,
+                ClientId = Client2.Id,
                 Company = Company2,
+                CompanyId = Company2.Id,
                 Description = "description2",
                 EndTime = DateTime.Now,
                 Id = new Guid(),
@@ -184,12 +204,16 @@ public class Seed
             {
                 Id = new Guid(),
                 Commission = commission1,
-                Equipment = equipment1
+                CommissionId = commission1.Id,
+                Equipment = equipment1,
+                EquipmentId = equipment1.Id
             };
             var book2 = new BookedEquipment()
             {
                 Commission = commission2,
-                Equipment = equipment2
+                CommissionId = commission2.Id,
+                Equipment = equipment2,
+                EquipmentId = equipment2.Id
             };
             context.BookedEquipments.Add(book1);
             context.BookedEquipments.Add(book2);
@@ -198,26 +222,34 @@ public class Seed
             {
                 Id = new Guid(),
                 Commission = commission1,
-                Employee = employee1
+                CommissionId = commission1.Id,
+                Employee = employee1,
+                EmployeeId = employee1.Id
             };
             var work2 = new WorksOn()
             {
                 Id = new Guid(),
                 Commission = commission2,
-                Employee = employee2
+                CommissionId = commission2.Id,
+                Employee = employee2,
+                EmployeeId = employee2.Id
             };
             context.WorksOn.Add(work1);
             context.WorksOn.Add(work2);
             var invite1 = new Invite()
             {
+                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
                 Company = Company1,
+                CompanyId = Company1.Id,
                 Id = new Guid(),
                 CreatedAt = DateTime.Now,
                 Status = Status.Sent
             };
             var invite2 = new Invite()
             {
+                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
                 Company = Company2,
+                CompanyId = Company2.Id,
                 Id = new Guid(),
                 CreatedAt = DateTime.Now,
                 Status = Status.Sent

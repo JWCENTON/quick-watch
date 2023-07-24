@@ -9,23 +9,15 @@ public abstract class BaseEmployDTOValidator<T> : AbstractValidator<T> where T :
 {
     protected BaseEmployDTOValidator()
     {
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
 
-        RuleFor(dto => dto.UserId).SetValidator(new UserIdDTOValidator());
+        RuleFor(dto => dto.UserId).SetValidator(new UserIdValidator());
 
         RuleFor(dto => dto.Role)
             .NotNull()
             .WithMessage("Role cannot be empty.")
             .IsInEnum()
             .WithMessage($"Invalid role. Role must be one of the following values: {string.Join(", ", Enum.GetNames(typeof(Role)))}");
-    }
-}
-
-public class EmployIdDTOValidator : AbstractValidator<EmployIdDTO>
-{
-    public EmployIdDTOValidator()
-    {
-        RuleFor(dto => dto.Id).SetValidator(new EmployeIdValidator());
     }
 }
 
@@ -37,7 +29,7 @@ public class FullEmployDTOValidator : BaseEmployDTOValidator<FullEmployDTO>
 {
     public FullEmployDTOValidator()
     {
-        RuleFor(dto => dto.Id).SetValidator(new EmployeIdValidator());
+        RuleFor(dto => dto.Id).SetValidator(new EmployIdValidator());
     }
 }
 
@@ -45,12 +37,12 @@ public class UpdateEmployDTOValidator : AbstractValidator<UpdateEmployDTO>
 {
     public UpdateEmployDTOValidator()
     {
-        RuleFor(dto => dto.Company)
-            .SetValidator(new CompanyIdDTOValidator()!)
-            .When(dto => dto.Company != null);
+        RuleFor(dto => dto.CompanyId)
+            .SetValidator(new CompanyIdValidator()!)
+            .When(dto => dto.CompanyId != null);
 
         RuleFor(dto => dto.UserId)
-            .SetValidator(new UserIdDTOValidator()!)
+            .SetValidator(new UserIdValidator()!)
             .When(dto => dto.UserId != null);
 
         RuleFor(dto => dto.Role)
@@ -60,9 +52,9 @@ public class UpdateEmployDTOValidator : AbstractValidator<UpdateEmployDTO>
     }
 }
 
-internal class EmployeIdValidator : AbstractValidator<string>
+internal class EmployIdValidator : AbstractValidator<string>
 {
-    internal EmployeIdValidator()
+    internal EmployIdValidator()
     {
         RuleFor(id => id)
             .NotEmpty()

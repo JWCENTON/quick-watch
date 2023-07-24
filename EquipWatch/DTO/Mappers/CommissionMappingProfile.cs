@@ -17,6 +17,5 @@ public class CommissionMappingProfile : Profile
             .ForAllMembers(opt => opt
                 .Condition((src, dest, srcMember) => srcMember != null));
 
-        CreateMap<Domain.Commission.Models.Commission.Commission, CommissionIdDTO>().ReverseMap();
     }
 }

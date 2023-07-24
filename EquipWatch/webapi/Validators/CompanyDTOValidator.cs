@@ -1,22 +1,13 @@
 ﻿using DTO.CompanyDTOs;
 using DTO.Validators;
 using FluentValidation;
-using Humanizer;
 
 public abstract class BaseCompanyDTOValidator<T> : AbstractValidator<T> where T : BaseCompanyDTO
 {
     protected BaseCompanyDTOValidator()
     {
         RuleFor(dto => dto.Name).SetValidator(new CompanyNameValidator());
-        RuleFor(dto => dto.OwnerId).SetValidator(new UserIdDTOValidator());
-    }
-}
-
-public class CompanyIdDTOValidator : AbstractValidator<CompanyIdDTO>
-{
-    public CompanyIdDTOValidator()
-    {
-        RuleFor(dto => dto.Id).SetValidator(new CompanyIdValidator());
+        RuleFor(dto => dto.OwnerId).SetValidator(new UserIdValidator());
     }
 }
 
@@ -41,7 +32,7 @@ public class UpdateCompanyDTOValidator : AbstractValidator<UpdateCompanyDTO>
             .When(dto => dto.Name != null);
 
         RuleFor(dto => dto.OwnerId)
-            .SetValidator(new UserIdDTOValidator()!)
+            .SetValidator(new UserIdValidator()!)
             .When(dto => dto.OwnerId != null);
     }
 }

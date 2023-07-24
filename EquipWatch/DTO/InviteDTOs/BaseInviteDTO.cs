@@ -6,8 +6,8 @@ namespace DTO.InviteDTOs;
 
 public record BaseInviteDTO
 {
-    public CompanyIdDTO Company { get; init; }
-    public UserIdDTO UserId { get; init; }
+    public string CompanyId { get; init; }
+    public string UserId { get; init; }
     public Status Status { get; init; }
     public DateTime CreatedAt { get; init; }
 };

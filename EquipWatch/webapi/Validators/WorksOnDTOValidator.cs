@@ -7,9 +7,9 @@ public abstract class BaseWorksOnDTOValidator<T> : AbstractValidator<T> where T 
 {
     protected BaseWorksOnDTOValidator()
     {
-        RuleFor(dto => dto.Commission).SetValidator(new CommissionIdDTOValidator());
+        RuleFor(dto => dto.CommissionId).SetValidator(new CommissionIdValidator());
 
-        RuleFor(dto => dto.Employee).SetValidator(new EmployIdDTOValidator());
+        RuleFor(dto => dto.EmployeeId).SetValidator(new EmployIdValidator());
     }
 }
 public class CreateWorksOnDTOValidator : BaseWorksOnDTOValidator<CreateWorksOnDTO>
@@ -28,13 +28,13 @@ public class UpdateWorksOnDTOValidator : AbstractValidator<UpdateWorksOnDTO>
 {
     public UpdateWorksOnDTOValidator()
     {
-        RuleFor(dto => dto.Commission)
-            .SetValidator(new CommissionIdDTOValidator()!)
-            .When(dto => dto.Commission != null);
+        RuleFor(dto => dto.CommissionId)
+            .SetValidator(new CommissionIdValidator()!)
+            .When(dto => dto.CommissionId != null);
 
-        RuleFor(dto => dto.Employee)
-            .SetValidator(new EmployIdDTOValidator()!)
-            .When(dto => dto.Employee != null);
+        RuleFor(dto => dto.EmployeeId)
+            .SetValidator(new EmployIdValidator()!)
+            .When(dto => dto.EmployeeId != null);
     }
 }
 

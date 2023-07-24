@@ -5,7 +5,7 @@ namespace DTO.CheckOutDTOs;
 
 public record UpdateCheckOutDTO
 {
-    public EmployIdDTO? Employ { get; init; }
-    public EquipmentIdDTO? Equipment { get; init; }
+    public string? EmployId { get; init; }
+    public string? EquipmentId { get; init; }
     public DateTime? Time { get; init; }
 }

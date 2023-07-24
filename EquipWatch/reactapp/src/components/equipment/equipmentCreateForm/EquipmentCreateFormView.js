@@ -20,9 +20,8 @@ export default function EquipmentCreateFormView() {
             "category": formCategory,
             "location": formLocation,
             "condition": rating,
-            "company": {
-                "id": "08db879b-9008-41bc-82d9-43c9b26f2323"
-            }
+            "companyId": "08db8c4f-47e7-4a22-8216-e1e16e7e9958"
+            
         });
 
         const response = await fetch('https://localhost:7007/api/equipment', {

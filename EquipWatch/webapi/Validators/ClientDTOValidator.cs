@@ -18,19 +18,11 @@ public abstract class BaseClientDTOValidator<T> : AbstractValidator<T> where T :
     }
 }
 
-public class ClientIdDTOValidator : AbstractValidator<ClientIdDTO>
-{
-    public ClientIdDTOValidator()
-    {
-        RuleFor(dto => dto.Id).SetValidator(new CompanyIdValidator());
-    }
-}
-
 public class CreateClientDTOValidator : BaseClientDTOValidator<CreateClientDTO>
 {
     public CreateClientDTOValidator()
     {
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
     }
 }
 
@@ -39,7 +31,7 @@ public class FullClientDTOValidator : BaseClientDTOValidator<FullClientDTO>
     public FullClientDTOValidator()
     {
         RuleFor(dto => dto.Id).SetValidator(new ClientIdValidator());
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator());
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
     }
 }
 
@@ -55,8 +47,8 @@ public class UpdateClientDTOValidator : AbstractValidator<UpdateClientDTO>
 {
     public UpdateClientDTOValidator()
     {
-        RuleFor(dto => dto.Company).SetValidator(new CompanyIdDTOValidator()!)
-            .When(dto => dto.Company != null);
+        RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator()!)
+            .When(dto => dto.CompanyId != null);
 
         RuleFor(dto => dto.FirstName).SetValidator(new ClientFirstNameValidator()!)
             .When(dto => dto.FirstName != null);

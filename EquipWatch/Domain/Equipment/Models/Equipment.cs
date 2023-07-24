@@ -8,6 +8,7 @@ public class Equipment
     public string Category { get; set; }
     public string Location { get; set; }
     public int Condition { get; set; } // mb enum
+    public Guid CompanyId { get; set; }
     public Company.Models.Company Company { get; set; }
     public bool IsCheckedOut { get; set; }
 
