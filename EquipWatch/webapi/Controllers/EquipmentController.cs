@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-﻿using AutoMapper;
-=======
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using AutoMapper;
 using Domain.CheckOut.Models;
->>>>>>> development
 using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
