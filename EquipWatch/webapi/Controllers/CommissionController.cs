@@ -10,7 +10,7 @@ using webapi.uow;
 
 namespace webapi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController, Route("api/[controller]")]
     public class CommissionController : ControllerBase
     {
@@ -30,10 +30,10 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<FullCommissionDTO>>> GetAllCommissions()
+        public async Task<ActionResult<List<PartialCommissionDTO>>> GetAllCommissions()
         {
             var commissions = await _unitOfWork.Commissions.GetAllAsync();
-            var fullCommissionDtos = _mapper.Map<List<FullCommissionDTO>>(commissions);
+            var fullCommissionDtos = _mapper.Map<List<PartialCommissionDTO>>(commissions);
             return Ok(fullCommissionDtos);
         }
 
