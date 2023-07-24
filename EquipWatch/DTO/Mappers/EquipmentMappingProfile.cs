@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
 namespace DTO.Mappers;
 
@@ -21,5 +22,7 @@ public class EquipmentMappingProfile : Profile
         CreateMap<Domain.Equipment.Models.Equipment, PartialEquipmentDTO>().ReverseMap();
 
         CreateMap<Domain.Equipment.Models.Equipment, EquipmentIdDTO>().ReverseMap();
+
+        CreateMap<Domain.Equipment.Models.Equipment, UpdateEquipmentLocationDTO>().ReverseMap();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
+using Domain.CheckIn.Models;
 using Domain.CheckOut.Models;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
@@ -7,6 +8,7 @@ using DTO.EquipmentDTOs;
 using webapi.uow;
 using DTO.Validators;
 using Microsoft.AspNetCore.Authorization;
+using Domain.User.Models;
 
 namespace webapi.Controllers;
 
@@ -102,6 +104,8 @@ public class EquipmentController : ControllerBase
     {
         var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
+        var user = await _unitOfWork.Employees.GetAsync(locationDto.UserId.Id);
+
         if (equipment.IsCheckedOut) { return BadRequest(); }
 
         equipment.IsCheckedOut = true;
@@ -112,7 +116,7 @@ public class EquipmentController : ControllerBase
         {
             Id = Guid.NewGuid(),
             Equipment = equipment,
-            //TODO attach employee
+            Employee = user,
             Time = DateTime.Now
         };
 
@@ -123,7 +127,33 @@ public class EquipmentController : ControllerBase
         return Ok();
     }
 
+    [HttpPatch("{id}/checkin")]
+    public async Task<IActionResult> CheckIn(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
+    {
+        var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
+        var user = await _unitOfWork.Employees.GetAsync(locationDto.UserId.Id);
+
+        if (!equipment.IsCheckedOut) { return BadRequest(); }
+
+        equipment.IsCheckedOut = false;
+        equipment.Location = locationDto.Location;
+        await _unitOfWork.Equipments.UpdateAsync(equipment);
+
+        var checkIn = new CheckIn
+        {
+            Id = Guid.NewGuid(),
+            Equipment = equipment,
+            Employee = user,
+            Time = DateTime.Now
+        };
+
+        await _unitOfWork.CheckIns.CreateAsync(checkIn);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Ok();
+    }
 
     //[HttpDelete("{id}")]
     //public async Task<IActionResult> Delete(Guid id)
