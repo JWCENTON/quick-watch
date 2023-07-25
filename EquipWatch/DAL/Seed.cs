@@ -18,7 +18,7 @@ public class Seed
     public static void IfDbEmptyAddNewItems(DatabaseContext context, IdentityContext identityContext)
     {
 
-        if (!context.Company.Any() || !identityContext.Users.Any())
+        if (!context.Company.Any() && identityContext.Users.Any())
         {
             var Company1 = new Company
             {
