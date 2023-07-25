@@ -112,11 +112,11 @@ public class EquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Checkout(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
     {
-        Debug.WriteLine("hhi");
-
         var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
-        var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        var user = await _userManager.FindByIdAsync(userId);
 
         if (equipment.IsCheckedOut) { return BadRequest(); }
 
@@ -148,12 +148,11 @@ public class EquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CheckIn(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
     {
-
-        Debug.WriteLine("hhi");
-
         var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
-        var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        var user = await _userManager.FindByIdAsync(userId);
 
         if (!equipment.IsCheckedOut) { return BadRequest(); }
 
