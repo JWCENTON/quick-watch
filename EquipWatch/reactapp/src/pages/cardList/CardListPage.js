@@ -1,18 +1,13 @@
 import React from 'react';
-import Navigation from '../../components/navigation/Navigation';
-import Sidebar from '../../components/sidebar/Sidebar';
+import Layout from '../../components/layout/Layout';
 import CardList from '../../components/cardList/CardList';
 
-const ClientsPage = () => {
+const CardListPage = () => {
     return (
-        <div className="app-container">
-            <Navigation />
-            <div className="main-container">
-                <Sidebar />
-                <CardList />
-            </div>
-        </div>
+        <Layout>
+            <CardList />
+        </Layout>
     );
 };
 
-export default ClientsPage;
+export default CardListPage;

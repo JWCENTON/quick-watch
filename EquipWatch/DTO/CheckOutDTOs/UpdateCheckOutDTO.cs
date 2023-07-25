@@ -1,9 +1,11 @@
-﻿using DTO.UserDTOs;
+﻿using DTO.EmployDTOs;
+using DTO.EquipmentDTOs;
 
 namespace DTO.CheckOutDTOs;
 
 public record UpdateCheckOutDTO
 {
-    public UserIdDTO User { get; set; }
-    public DateTime Time { get; set; }
+    public string? UserId { get; init; }
+    public string? EquipmentId { get; init; }
+    public DateTime? Time { get; init; }
 }

@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import { AuthContext } from '../authProvider/AuthContext';
+import { useAuth } from '../authProvider/AuthContext';
 
 //const [Commissions, setCommissions] = useState(null);
 
@@ -16,6 +17,7 @@ export default function EquipmentDetailView({ detailsData }) {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [showCheckinModal, setShowCheckinModal] = useState(false);
     const navigate = useNavigate();
+	const { token } = useAuth(); 
 
     const handleCheckoutModalClose = () => setShowCheckoutModal(false);
     const handleCheckoutModalShow = () => setShowCheckoutModal(true);
@@ -40,7 +42,8 @@ export default function EquipmentDetailView({ detailsData }) {
 
         const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkout', {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`},
             body: raw
         });
 
@@ -60,7 +63,8 @@ export default function EquipmentDetailView({ detailsData }) {
 
         const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkin', {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`},
             body: raw
         });
 
@@ -68,7 +72,9 @@ export default function EquipmentDetailView({ detailsData }) {
     }
 
     async function DeleteEquipment() {
-        await fetch(`https://localhost:7007/api/equipment/${detailsData.id}`, { method: "DELETE" });
+        await fetch(`https://localhost:7007/api/equipment/${detailsData.id}`, { method: "DELETE",
+			headers: {'Authorization': `Bearer ${token}`} 
+		});
         navigate("/equipment");
     }
 

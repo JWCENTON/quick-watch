@@ -6,10 +6,10 @@ public class InviteRepository : IInviteRepository
 {
     private readonly DatabaseContext _context;
 
-    public InviteRepository(DatabaseContext context)
+    public InviteRepository(DatabaseContext context, IdentityContext identityContext)
     {
         _context = context;
-        Seed.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context, identityContext);
     }
 
     public async Task<List<Domain.Invite.Models.Invite>> GetAllAsync()

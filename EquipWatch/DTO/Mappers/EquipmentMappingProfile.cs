@@ -7,21 +7,17 @@ public class EquipmentMappingProfile : Profile
 {
     public EquipmentMappingProfile()
     {
-        CreateMap<Domain.Equipment.Models.Equipment, CreateEquipmentDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ReverseMap();
+        CreateMap<Domain.Equipment.Models.Equipment, CreateEquipmentDTO>().ReverseMap();
 
-        CreateMap<Domain.Equipment.Models.Equipment, FullEquipmentDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ReverseMap();
+        CreateMap<Domain.Equipment.Models.Equipment, FullEquipmentDTO>().ReverseMap();
 
-        CreateMap<Domain.Equipment.Models.Equipment, UpdateEquipmentDTO>()
-            .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
-            .ReverseMap();
+        CreateMap<Domain.Equipment.Models.Equipment, UpdateEquipmentDTO>();
+
+        CreateMap<UpdateEquipmentDTO, Domain.Equipment.Models.Equipment>()
+            .ForAllMembers(opt => opt
+                .Condition((src, dest, srcMember) => srcMember != null));
 
         CreateMap<Domain.Equipment.Models.Equipment, PartialEquipmentDTO>().ReverseMap();
-
-        CreateMap<Domain.Equipment.Models.Equipment, EquipmentIdDTO>().ReverseMap();
 
         CreateMap<Domain.Equipment.Models.Equipment, UpdateEquipmentLocationDTO>().ReverseMap();
     }

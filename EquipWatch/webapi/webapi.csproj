@@ -10,6 +10,9 @@
   <ItemGroup>
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 	  <PackageReference Include="DotNetEnv" Version="2.5.0" />
+	  <PackageReference Include="FluentValidation" Version="11.6.0" />
+	  <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+	  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.8" />

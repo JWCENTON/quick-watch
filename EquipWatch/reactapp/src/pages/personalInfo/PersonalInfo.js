@@ -1,18 +1,12 @@
 import React from 'react';
-import Navigation from '../../components/navigation/Navigation';
-import Sidebar from '../../components/sidebar/Sidebar';
+import Layout from '../../components/layout/Layout';
 import PersonalInfo from '../../components/personalInfo/PersonalInfo';
 
 const PersonalInfoPage = () => {
     return (
-        <div className="app-container">
-            <Navigation />
-            <div className="main-container">
-                <Sidebar />
-                <PersonalInfo />
-            </div>
-        </div>
+        <Layout>
+            <PersonalInfo />
+        </Layout>
     );
 };
-
 export default PersonalInfoPage;

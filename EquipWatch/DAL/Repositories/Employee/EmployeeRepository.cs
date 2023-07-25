@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.Employee;
 
@@ -6,10 +8,10 @@ public class EmployeeRepository : IEmployeeRepository
 {
     private readonly DatabaseContext _context;
 
-    public EmployeeRepository(DatabaseContext context)
+    public EmployeeRepository(DatabaseContext context, IdentityContext identityContext)
     {
         _context = context;
-        Seed.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context, identityContext);
     }
 
     public async Task<List<Domain.Employee.Models.Employee>> GetAllAsync()

@@ -1,16 +1,6 @@
-﻿using DTO.ClientDTOs;
-using DTO.CompanyDTOs;
+﻿namespace DTO.CommissionDTOs;
 
-namespace DTO.CommissionDTOs;
-
-public record FullCommissionDTO
+public record FullCommissionDTO : BaseCommissionDTO
 {
-    public Guid Id { get; set; }
-    public FullCompanyDTO Company { get; set; }
-    public FullClientDTO Client { get; set; }
-    public string Description { get; set; }
-    public string Scope { get; set; } 
-    public string Location { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public string Id { get; init; }
 }

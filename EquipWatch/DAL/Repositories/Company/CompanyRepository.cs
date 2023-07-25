@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.Company;
 
@@ -7,10 +6,10 @@ public class CompanyRepository : ICompanyRepository
 {
     private readonly DatabaseContext _context;
 
-    public CompanyRepository(DatabaseContext context)
+    public CompanyRepository(DatabaseContext context, IdentityContext identityContext)
     {
         _context = context;
-        Seed.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context, identityContext);
     }
 
     public async Task<List<Domain.Company.Models.Company>> GetAllAsync()

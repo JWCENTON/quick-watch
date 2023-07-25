@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Form, FormControl, Dropdown, InputGroup, Button } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 import './Searchbar.css';
 
-const Searchbar = () => {
+const Searchbar = ({ inSidebar }) => { // Add a new prop
     const [category, setCategory] = useState("Equipment");
 
     const handleSelect = (eventKey) => {
@@ -10,7 +11,7 @@ const Searchbar = () => {
     }
 
     return (
-        <Form inline="true" className="ml-3 search-bar">
+        <Form inline="true" className={`search-bar ${inSidebar ? 'sidebar-search' : ''}`}>
 
             <InputGroup>
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -26,7 +27,7 @@ const Searchbar = () => {
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
-                <Button variant="outline-primary">Search</Button>
+                <Button variant="outline-primary"><FaSearch /></Button>
             </InputGroup>
         </Form>
     );

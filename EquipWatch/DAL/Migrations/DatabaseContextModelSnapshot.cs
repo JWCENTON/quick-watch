@@ -37,7 +37,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("BookedEquipments");
+                    b.ToTable("BookedEquipments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.CheckIn.Models.CheckIn", b =>
@@ -46,22 +46,21 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("EquipmentId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("CheckIns");
+                    b.ToTable("CheckIns", (string)null);
                 });
 
             modelBuilder.Entity("Domain.CheckOut.Models.CheckOut", b =>
@@ -70,22 +69,21 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("EquipmentId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EquipmentId");
 
-                    b.ToTable("CheckOuts");
+                    b.ToTable("CheckOuts", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Client.Models.Client", b =>
@@ -121,7 +119,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Client");
+                    b.ToTable("Client", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Commission.Models.Commission.Commission", b =>
@@ -160,7 +158,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Commissions");
+                    b.ToTable("Commissions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Company.Models.Company", b =>
@@ -179,7 +177,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Company");
+                    b.ToTable("Company", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Employee.Models.Employee", b =>
@@ -202,7 +200,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Equipment.Models.Equipment", b =>
@@ -236,7 +234,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Equipment");
+                    b.ToTable("Equipment", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Invite.Models.Invite", b =>
@@ -262,7 +260,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Invites");
+                    b.ToTable("Invites", (string)null);
                 });
 
             modelBuilder.Entity("Domain.WorksOn.Models.WorksOn", b =>
@@ -274,16 +272,15 @@ namespace DAL.Migrations
                     b.Property<Guid>("CommissionId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommissionId");
 
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("WorksOn");
+                    b.ToTable("WorksOn", (string)null);
                 });
 
             modelBuilder.Entity("Domain.BookedEquipment.Models.BookedEquipment", b =>
@@ -307,38 +304,22 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.CheckIn.Models.CheckIn", b =>
                 {
-                    b.HasOne("Domain.Employee.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Equipment.Models.Equipment", "Equipment")
                         .WithMany()
                         .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Employee");
 
                     b.Navigation("Equipment");
                 });
 
             modelBuilder.Entity("Domain.CheckOut.Models.CheckOut", b =>
                 {
-                    b.HasOne("Domain.Employee.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Equipment.Models.Equipment", "Equipment")
                         .WithMany()
                         .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Employee");
 
                     b.Navigation("Equipment");
                 });
@@ -414,15 +395,7 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Employee.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Commission");
-
-                    b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618
         }
