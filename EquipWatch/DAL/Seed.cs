@@ -86,7 +86,6 @@ public class Seed
 
             var checkIn1 = new CheckIn()
             {
-                Employee = employee1,
                 Equipment = equipment1,
                 Id = new Guid(),
                 Time = DateTime.Now
@@ -94,7 +93,6 @@ public class Seed
             };
             var checkIn2 = new CheckIn()
             {
-                Employee = employee2,
                 Equipment = equipment2,
                 Id = new Guid(),
                 Time = DateTime.Now
@@ -103,7 +101,6 @@ public class Seed
 
             var checkOut1 = new CheckOut()
             {
-                Employee = employee1,
                 Equipment = equipment1,
                 Id = new Guid(),
                 Time = DateTime.Now
@@ -111,7 +108,6 @@ public class Seed
             };
             var checkOut2 = new CheckOut()
             {
-                Employee = employee2,
                 Equipment = equipment2,
                 Id = new Guid(),
                 Time = DateTime.Now

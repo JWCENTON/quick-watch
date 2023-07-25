@@ -118,8 +118,6 @@ public class EquipmentController : ControllerBase
 
         var user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
-        var employee = await _unitOfWork.Employees.GetAsync(Guid.Parse(user.Id));
-
         if (equipment.IsCheckedOut) { return BadRequest(); }
 
         equipment.IsCheckedOut = true;
@@ -130,7 +128,7 @@ public class EquipmentController : ControllerBase
         {
             Id = Guid.NewGuid(),
             Equipment = equipment,
-            Employee = employee,
+            User = user,
             Time = DateTime.Now
         };
 
@@ -157,8 +155,6 @@ public class EquipmentController : ControllerBase
 
         var user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
-        var employee = await _unitOfWork.Employees.GetAsync(Guid.Parse(user.Id));
-
         if (!equipment.IsCheckedOut) { return BadRequest(); }
 
         equipment.IsCheckedOut = false;
@@ -169,7 +165,7 @@ public class EquipmentController : ControllerBase
         {
             Id = Guid.NewGuid(),
             Equipment = equipment,
-            Employee = employee,
+            User = user,
             Time = DateTime.Now
         };
 

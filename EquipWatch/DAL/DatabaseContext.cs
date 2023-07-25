@@ -51,7 +51,7 @@ public class DatabaseContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CheckIn>()
-            .HasOne(c => c.Employee)
+            .HasOne(c => c.User)
             .WithMany()
             .HasForeignKey("EmployeeId")
             .OnDelete(DeleteBehavior.Cascade);
@@ -63,7 +63,7 @@ public class DatabaseContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CheckOut>()
-            .HasOne(c => c.Employee)
+            .HasOne(c => c.User)
             .WithMany()
             .HasForeignKey("EmployeeId")
             .OnDelete(DeleteBehavior.Cascade);
