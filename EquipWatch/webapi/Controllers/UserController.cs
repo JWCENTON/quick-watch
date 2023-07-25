@@ -21,13 +21,10 @@ public class UserController : ControllerBase
     private readonly SignInManager<User> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
-    private readonly CreateUserDTOValidator _createValidator;
-    private readonly LoginUserDTOValidator _loginValidator;
     private readonly IConfiguration _configuration;
 
     public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork,
-        IEmailService emailService, CreateUserDTOValidator createValidator, LoginUserDTOValidator loginValidator,
-        IConfiguration configuration)
+        IEmailService emailService, IConfiguration configuration)
 
 
     {
@@ -35,8 +32,6 @@ public class UserController : ControllerBase
         _signInManager = signInManager;
         _unitOfWork = unitOfWork;
         _emailService = emailService;
-        _createValidator = createValidator;
-        _loginValidator = loginValidator;
         _configuration = configuration;
     }
 
@@ -44,72 +39,62 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] CreateUserDTO model)
     {
-        var validateResult = await _createValidator.ValidateAsync(model);
-        if (validateResult.IsValid)
+        
+        var user = new User
         {
-            var user = new User
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
+            UserName = model.Email,
+            Email = model.Email,
+            FirstName = model.FirstName,
+            LastName = model.LastName
+        };
 
-            var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
+        var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
 
-            if (result.Succeeded)
-            {
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
+        if (result.Succeeded)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
 
-                await _emailService.SendEmailForConfirmationAsync(user, confirmationLink).ConfigureAwait(true);
+            await _emailService.SendEmailForConfirmationAsync(user, confirmationLink).ConfigureAwait(true);
 
-                return Ok();
-            }
-
-            return BadRequest(result.Errors);
+            return Ok();
         }
 
-        throw new ArgumentException(validateResult.Errors.First().ErrorMessage);
+        return BadRequest(result.Errors);
     }
 
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
     {
-        var validateResult = await _loginValidator.ValidateAsync(model);
-        if (validateResult.IsValid)
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if (user != null)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user != null)
+            if (!await _userManager.IsEmailConfirmedAsync(user))
             {
-                if (!await _userManager.IsEmailConfirmedAsync(user))
-                {
-                    return Unauthorized(new { title = "EmailNotConfirmed" });
-                }
-            }
-
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
-
-            if (result.Succeeded)
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                };
-
-                var token = GenerateJwtToken(claims);
-                return Ok(new { token });
-            }
-            else
-            {
-                return Unauthorized();
+                return Unauthorized(new { title = "EmailNotConfirmed" });
             }
         }
 
-        throw new ArgumentException(validateResult.Errors.First().ErrorMessage);
+        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.UserName),
+            };
+
+            var token = GenerateJwtToken(claims);
+            return Ok(new { token });
+        }
+        else
+        {
+            return Unauthorized();
+        }
+   
     }
 
     [AllowAnonymous]
