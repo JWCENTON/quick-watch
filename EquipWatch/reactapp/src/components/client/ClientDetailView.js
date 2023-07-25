@@ -1,5 +1,8 @@
 import React from 'react';
 import UniversalCard from '../card/Card';
+import { useAuth } from '../authProvider/AuthContext'; // Import useAuth
+
+
 
 //const [Commissions, setCommissions] = useState(null);
 
@@ -10,6 +13,7 @@ import UniversalCard from '../card/Card';
 //}
 
 export default function ClientDetailView({ detailsData }) {
+    const { token } = useAuth();
     return (
         <div >
         { detailsData === null ? (
