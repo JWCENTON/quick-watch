@@ -1,11 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Domain.User.Models;
+﻿using Domain.User.Models;
 using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using webapi.uow;
-using NuGet.Common;
 using webapi.Services;
+using webapi.uow;
+using webapi.Validators;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+
+namespace webapi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -15,19 +21,25 @@ public class UserController : ControllerBase
     private readonly SignInManager<User> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
+    private readonly IConfiguration _configuration;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork, IEmailService emailService)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork,
+        IEmailService emailService, IConfiguration configuration)
+
+
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _unitOfWork = unitOfWork;
         _emailService = emailService;
+        _configuration = configuration;
     }
 
-    [HttpPost("register")]
     [AllowAnonymous]
+    [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] CreateUserDTO model)
     {
+        
         var user = new User
         {
             UserName = model.Email,
@@ -42,21 +54,17 @@ public class UserController : ControllerBase
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
-            _emailService.SendEmailForConfirmation(user, confirmationLink);
-            // User registration successful
-            // Return any necessary response or redirect
+
+            await _emailService.SendEmailForConfirmationAsync(user, confirmationLink).ConfigureAwait(true);
+
             return Ok();
         }
-        else
-        {
-            // User registration failed
-            // Return any necessary response or error messages
-            return BadRequest(result.Errors);
-        }
+
+        return BadRequest(result.Errors);
     }
 
-    [HttpPost("login")]
     [AllowAnonymous]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
@@ -65,7 +73,6 @@ public class UserController : ControllerBase
         {
             if (!await _userManager.IsEmailConfirmedAsync(user))
             {
-                // User's email is not confirmed
                 return Unauthorized(new { title = "EmailNotConfirmed" });
             }
         }
@@ -74,16 +81,20 @@ public class UserController : ControllerBase
 
         if (result.Succeeded)
         {
-            // User login successful
-            // Return any necessary response or redirect
-            return Ok("User has successfully logged in");
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.UserName),
+            };
+
+            var token = GenerateJwtToken(claims);
+            return Ok(new { token });
         }
         else
         {
-            // User login failed
-            // Return any necessary response or error messages
             return Unauthorized();
         }
+   
     }
 
     [AllowAnonymous]
@@ -92,28 +103,39 @@ public class UserController : ControllerBase
     {
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
         {
-            // Invalid user ID or token
             return BadRequest("Invalid user ID or token");
         }
 
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            // User not found
             return NotFound("User not found");
         }
 
         var result = await _userManager.ConfirmEmailAsync(user, token);
         if (result.Succeeded)
         {
-            // Email confirmed successfully
             return Redirect("https://localhost:3000/");
         }
         else
         {
-            // Failed to confirm email
             return BadRequest("Failed to confirm email");
         }
+    }
+
+    private string GenerateJwtToken(IEnumerable<Claim> claims)
+    {
+        var secretKey = _configuration[key: "JwtSettings:SecretKey"];
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var token = new JwtSecurityToken(
+            issuer: "equip-watch",
+            audience: "your-audience",
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(12), 
+            signingCredentials: credentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
 }

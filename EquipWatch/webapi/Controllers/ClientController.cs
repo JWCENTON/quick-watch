@@ -6,19 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Client.Models;
 using webapi.uow;
 using Domain.Company.Models;
+using webapi.Validators;
 
 namespace webapi.Controllers;
 
-//[Authorize]
+[Authorize]
 [ApiController, Route("api/[controller]")]
 public class ClientController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    public ClientController(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly CreateClientDTOValidator _createValidator;
+    private readonly UpdateClientDTOValidator _updateValidator;
+    public ClientController(IUnitOfWork unitOfWork, IMapper mapper, CreateClientDTOValidator createValidator, UpdateClientDTOValidator updateValidator)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _createValidator = createValidator;
+        _updateValidator = updateValidator;
     }
 
     [HttpGet]
@@ -53,14 +58,19 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<Client> CreateClient([FromBody] CreateClientDTO clientDto)
     {
-        var company = await _unitOfWork.Companies.GetAsync(clientDto.Company.Id);
-        
-        var client = _mapper.Map<Client>(clientDto);
-        client.Company = company;
-        client.Id = Guid.NewGuid();
+        var result = await _createValidator.ValidateAsync(clientDto);
+        if (result.IsValid)
+        {
+            var client = _mapper.Map<Client>(clientDto);
 
-        await _unitOfWork.Clients.CreateAsync(client);
-        return client;
+            var company = await _unitOfWork.Companies.GetAsync(client.CompanyId);
+            client.Company = company;
+            client.Id = Guid.NewGuid();
+
+            await _unitOfWork.Clients.CreateAsync(client);
+            return client;
+        }
+        throw new ArgumentException(result.Errors.First().ErrorMessage);
     }
 
     [HttpPut("{id}")]
@@ -71,19 +81,23 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateClient(Guid id, [FromBody] UpdateClientDTO clientDto)
     {
-        var client = await _unitOfWork.Clients.GetAsync(id);
-        _mapper.Map(clientDto, client);
-
-        if (clientDto.Company?.Id != null)
+        var result = await _updateValidator.ValidateAsync(clientDto);
+        if (result.IsValid)
         {
-            var company = await _unitOfWork.Companies.GetAsync(clientDto.Company.Id);
-            client.Company = company;
+            var client = await _unitOfWork.Clients.GetAsync(id);
+            _mapper.Map(clientDto, client);
+
+            if (clientDto.CompanyId != null)
+            {
+                client.Company = await _unitOfWork.Companies.GetAsync(client.CompanyId);
+            }
+
+            await _unitOfWork.Clients.UpdateAsync(client);
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
         }
-
-        await _unitOfWork.Clients.UpdateAsync(client);
-        await _unitOfWork.SaveChangesAsync();
-
-        return NoContent();
+        throw new ArgumentException(result.Errors.First().ErrorMessage);
     }
 
     [HttpDelete("{id}")]

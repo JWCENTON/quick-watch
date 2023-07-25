@@ -4,12 +4,13 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('token') || null);
 
     const login = async (email, password) => {
         const response = await fetch('https://localhost:7007/api/User/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 email,
@@ -18,6 +19,9 @@ export const AuthProvider = ({ children }) => {
         });
 
         if (response.ok) {
+            const { token } = await response.json();
+            localStorage.setItem('token', token);
+            setToken(token);
             setUser({ email });
         } else {
             const errorData = await response.json();
@@ -26,11 +30,12 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
+        localStorage.removeItem('token');
         setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, token, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

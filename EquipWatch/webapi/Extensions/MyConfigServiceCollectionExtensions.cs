@@ -12,7 +12,7 @@ using DAL.Repositories.Equipment;
 using DAL.Repositories.Invite;
 using DAL.Repositories.WorksOn;
 using DTO.Mappers;
-using DTO.Validators;
+using FluentValidation;
 using webapi.Services;
 using webapi.uow;
 
@@ -35,9 +35,8 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<IEquipmentRepository, EquipmentRepository>();
         services.AddTransient<IInviteRepository, InviteRepository>();
         services.AddTransient<IWorksOnRepository, WorksOnRepository>();
-
-        services.AddScoped<EquipmentDTOValidator>();
-        services.AddScoped<CompanyDTOValidator>();
+        //services.AddTransient<CompanyIdDTOValidator>();
+        services.AddValidatorsFromAssembly(Assembly.Load("webapi"));
 
         services.AddTransient<IEmailService, EmailService>();
 

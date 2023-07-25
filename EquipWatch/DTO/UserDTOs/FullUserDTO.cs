@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿namespace DTO.UserDTOs;
 
-namespace DTO.UserDTOs;
-
-public record FullUserDTO
+public record FullUserDTO : BaseUserDTO
 {
-    public string Id { get; set; }
-    public string UserName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public string Id { get; init; }
+    public string UserName { get; init; }
 }

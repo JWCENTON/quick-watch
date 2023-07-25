@@ -15,6 +15,7 @@ import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
 import CreateForm from './pages/createForm/CreateForm';
 
+
 const router = createBrowserRouter([
     {
         path: "/",
