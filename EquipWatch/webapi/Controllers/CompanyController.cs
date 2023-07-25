@@ -4,26 +4,31 @@ using Domain.Equipment.Models;
 using DTO.CompanyDTOs;
 using DTO.EquipmentDTOs;
 using DTO.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.uow;
 
 namespace webapi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController, Route("api/[controller]")]
     public class CompanyController : ControllerBase
     {
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly CompanyDTOValidator _validator;
-
-        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper, CompanyDTOValidator validator)
+        private readonly CreateCompanyDTOValidator _createCompanyValidator;
+        private readonly UpdateCompanyDTOValidator _updateCompanyValidator;
+        
+        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper,
+            CreateCompanyDTOValidator createValidator,
+            UpdateCompanyDTOValidator updateValidator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _validator = validator;
+            _createCompanyValidator = createValidator;
+            _updateCompanyValidator = updateValidator;
         }
 
         [HttpGet("{id}")]
@@ -39,16 +44,18 @@ namespace webapi.Controllers
         }
 
         [HttpPost]
-        public async Task<Company> CreateCompany([FromBody] CreateCompanyDTO companyDto)
+        public async Task<ActionResult<Company>> CreateCompany([FromBody] CreateCompanyDTO companyDto)
         {
-            //var user = 
-            _validator.CreateCompanyDTOValidate(companyDto);
-            var company = _mapper.Map<Company>(companyDto);
-            //company.Owner = user;
-            company.Id = Guid.NewGuid();
+            var result = await _createCompanyValidator.ValidateAsync(companyDto);
+            if (result.IsValid)
+            {
+                var company = _mapper.Map<Company>(companyDto);
+                company.Id = Guid.NewGuid();
 
-            await _unitOfWork.Companies.CreateAsync(company);
-            return company;
+                await _unitOfWork.Companies.CreateAsync(company);
+                return CreatedAtAction(nameof(GetCompany), new { id = company.Id }, _mapper.Map<FullCompanyDTO>(company));
+            }
+            return BadRequest(result.Errors.First().ErrorMessage);
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿namespace DTO.UserDTOs
 {
-    public class LoginUserDTO
+    public record LoginUserDTO : BaseUserDTO
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace DAL.Repositories.Equipment
         public EquipmentRepository(DatabaseContext context)
         {
             _context = context;
-            DatabaseContext.IfDbEmptyAddNewItems(context);
+            Seed.IfDbEmptyAddNewItems(context);
         }
 
         public async Task<List<Domain.Equipment.Models.Equipment>> GetAllAsync()

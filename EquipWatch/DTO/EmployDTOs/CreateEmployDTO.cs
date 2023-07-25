@@ -4,9 +4,6 @@ using DTO.UserDTOs;
 
 namespace DTO.EmployDTOs;
 
-public record CreateEmployDTO
+public record CreateEmployDTO : BaseEmployDTO
 {
-    public CompanyIdDTO Company { get; set; }
-    public UserIdDTO User { get; set; }
-    public Role Role { get; set; }
 }

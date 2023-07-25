@@ -1,11 +1,8 @@
 ﻿namespace DTO.EquipmentDTOs;
 
-public record PartialEquipmentDTO
+public record PartialEquipmentDTO : BaseEquipmentDTO
 {
-    public Guid Id { get; set; }
-    public string SerialNumber { get; set; }
-    public string Category { get; set; }
-    public string Location { get; set; }
-    public int Condition { get; set; }
-    public bool IsCheckedOut { get; set; }
+    public string Id { get; init; }
+    public string SerialNumber { get; init; }
+    public bool IsCheckedOut { get; init; }
 }

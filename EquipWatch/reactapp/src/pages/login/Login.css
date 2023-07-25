@@ -13,9 +13,9 @@
 
 .login-image {
     width: 40%;
-    max-width: 400px; /* adjust this as needed */
+    max-width: 400px;
     object-fit: cover;
-    margin-bottom: 10%; /* adjust this as needed */
+    margin-bottom: 10%;
 }
 
 .login-right {
@@ -54,10 +54,11 @@
     .login-page {
         flex-direction: column;
     }
-
+    
     .login-left {
-        height: 40vh; /* adjust this as needed */
+        display: none;
     }
+    
 
     .login-image {
         width: 100%;

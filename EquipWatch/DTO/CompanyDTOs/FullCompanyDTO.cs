@@ -1,10 +1,6 @@
-﻿using DTO.UserDTOs;
+﻿namespace DTO.CompanyDTOs;
 
-namespace DTO.CompanyDTOs;
-
-public record FullCompanyDTO
+public record FullCompanyDTO : BaseCompanyDTO
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public FullUserDTO Owner { get; set; }
+    public string Id { get; init; }
 }

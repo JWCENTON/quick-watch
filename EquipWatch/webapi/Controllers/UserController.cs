@@ -47,14 +47,13 @@ public class UserController : ControllerBase
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
-            _emailService.SendEmailForConfirmationAsync(user, confirmationLink);
-            await _unitOfWork.Users.CreateAsync(user).ConfigureAwait(true);
+
+            await _emailService.SendEmailForConfirmationAsync(user, confirmationLink).ConfigureAwait(true);
+
             return Ok();
         }
-        else
-        {
-            return BadRequest(result.Errors);
-        }
+
+        return BadRequest(result.Errors);
     }
 
     [AllowAnonymous]
