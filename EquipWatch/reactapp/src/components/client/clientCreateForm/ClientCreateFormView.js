@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import './clientCreateForm.css';
+import { useAuth } from '../../components/authProvider/AuthContext';
 
 export default function ClientCreateFormView() {
     const navigate = useNavigate();
+    const { token } = useAuth();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -26,8 +28,11 @@ export default function ClientCreateFormView() {
         });
 
         const response = await fetch('https://localhost:7007/api/client', {
-            method: "POST", 
-            headers: { "Content-Type": "application/json"},
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
             body: raw
         });
 
