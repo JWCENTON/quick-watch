@@ -4,12 +4,13 @@ using Domain.CheckOut.Models;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
+using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
 using webapi.Validators;
 
 namespace webapi.Controllers;
 
-//[Authorize]
+[Authorize]
 [ApiController, Route("api/[controller]")]
 public class EquipmentController : ControllerBase
 {

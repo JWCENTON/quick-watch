@@ -10,7 +10,7 @@ using webapi.Validators;
 
 namespace webapi.Controllers;
 
-//[Authorize]
+[Authorize]
 [ApiController, Route("api/[controller]")]
 public class ClientController : ControllerBase
 {
