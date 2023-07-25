@@ -7,11 +7,11 @@ import EquipmentEditView from '../../components/equipment/EquipmentEditView';
 import CommissionEditView from '../../components/commission/CommissionEditView';
 import CompanyEditView from '../../components/company/CompanyEditView';
 import EmployeeEditView from '../../components/employee/EmployeeEditView';
-import { useAuth } from '../../components/authProvider/AuthContext'; // Import useAuth
+import { useAuth } from '../../components/authProvider/AuthContext';
 
 export default function EditView() {
     const { id, dataType } = useParams();
-    const { token } = useAuth(); // Get token from useAuth
+    const { token } = useAuth();
 
     const [detailsData, setDetailsData] = useState(null);
 
@@ -30,14 +30,14 @@ export default function EditView() {
             const response = await fetch(`https://localhost:7007/api/${dataType}/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Include token in the request headers
+                    'Authorization': `Bearer ${token}`
                 }
             });
             const data = await response.json();
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id, token]); // Add token to the dependency array
+    }, [id, token]);
 
     return (
         <Layout>

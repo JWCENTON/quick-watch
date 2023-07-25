@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import './clientCreateForm.css';
-import { useAuth } from '../../components/authProvider/AuthContext';
+import { useAuth } from '../../authProvider/AuthContext';
 
 export default function ClientCreateFormView() {
     const navigate = useNavigate();
