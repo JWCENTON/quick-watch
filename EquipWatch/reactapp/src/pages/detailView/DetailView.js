@@ -6,9 +6,11 @@ import EquipmentDetailView from '../../components/equipment/EquipmentDetailView'
 import CompanyDetailView from '../../components/company/CompanyDetailView';
 import EmployeeDetailView from '../../components/employee/EmployeeDetailView';
 import CommissionDetailView from '../../components/commission/CommissionDetailView';
+import { useAuth } from '../../components/authProvider/AuthContext';
 
 export default function DetailView() {
     const { id, dataType } = useParams();
+    const { token } = useAuth();
 
     const [detailsData, setDetailsData] = useState(null);
 
@@ -24,12 +26,17 @@ export default function DetailView() {
 
     useEffect(() => {
         const fetchDetailsData = async () => {
-            const response = await fetch(`https://localhost:7007/api/${dataType}/${id}`);
+            const response = await fetch(`https://localhost:7007/api/${dataType}/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const data = await response.json();
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id, dataType]);
+    }, [id, dataType, token]);
 
     return (
         <Layout>
