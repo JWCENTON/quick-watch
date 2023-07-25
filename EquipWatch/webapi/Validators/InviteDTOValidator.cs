@@ -1,7 +1,8 @@
 ﻿using Domain.Invite;
 using DTO.InviteDTOs;
-using DTO.Validators;
 using FluentValidation;
+
+namespace webapi.Validators;
 
 public abstract class BaseInviteDTOValidator<T> : AbstractValidator<T> where T : BaseInviteDTO
 {

@@ -3,11 +3,11 @@ using Domain.Company.Models;
 using Domain.Equipment.Models;
 using DTO.CompanyDTOs;
 using DTO.EquipmentDTOs;
-using DTO.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.uow;
+using webapi.Validators;
 
 namespace webapi.Controllers
 {

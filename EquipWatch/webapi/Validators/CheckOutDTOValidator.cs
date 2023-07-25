@@ -1,7 +1,7 @@
 ﻿using DTO.CheckOutDTOs;
 using FluentValidation;
 
-namespace DTO.Validators;
+namespace webapi.Validators;
 
 public abstract class BaseCheckOutDTOValidator<T> : AbstractValidator<T> where T : BaseCheckOutDTO
 {

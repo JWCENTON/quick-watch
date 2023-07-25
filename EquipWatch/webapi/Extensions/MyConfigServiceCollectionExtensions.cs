@@ -12,7 +12,6 @@ using DAL.Repositories.Equipment;
 using DAL.Repositories.Invite;
 using DAL.Repositories.WorksOn;
 using DTO.Mappers;
-using DTO.Validators;
 using FluentValidation;
 using webapi.Services;
 using webapi.uow;

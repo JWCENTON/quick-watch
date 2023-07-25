@@ -1,6 +1,7 @@
 ﻿using DTO.EquipmentDTOs;
-using DTO.Validators;
 using FluentValidation;
+
+namespace webapi.Validators;
 
 public abstract class BaseEquipmentDTOValidator<T> : AbstractValidator<T> where T : BaseEquipmentDTO
 {
@@ -49,6 +50,14 @@ public class PartialEquipmentDTOValidator : BaseEquipmentDTOValidator<PartialEqu
         RuleFor(dto => dto.Id).SetValidator(new EquipmentIdValidator());
 
         RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
+    }
+}
+
+public class LocationEquipmentDTOValidator : AbstractValidator<UpdateEquipmentLocationDTO>
+{
+    public LocationEquipmentDTOValidator()
+    {
+        RuleFor(dto => dto.Location).SetValidator(new EquipmentLocationValidator());
     }
 }
 
