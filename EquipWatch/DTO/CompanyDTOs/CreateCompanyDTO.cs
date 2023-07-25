@@ -1,9 +1,6 @@
-﻿using DTO.UserDTOs;
+﻿namespace DTO.CompanyDTOs;
 
-namespace DTO.CompanyDTOs;
-
-public record CreateCompanyDTO
+public record CreateCompanyDTO : BaseCompanyDTO
 {
-    public string Name { get; set; }
-    public UserIdDTO OwnerId { get; set; }
+   
 }

@@ -1,12 +1,7 @@
-﻿using Domain.User.Models;
-using Microsoft.AspNetCore.Identity;
+﻿namespace DTO.UserDTOs;
 
-namespace DTO.UserDTOs;
-
-public record CreateUserDTO
+public record CreateUserDTO : BaseUserDTO
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public string FirstName { get; init; }
+    public string LastName { get; init; }
 }
