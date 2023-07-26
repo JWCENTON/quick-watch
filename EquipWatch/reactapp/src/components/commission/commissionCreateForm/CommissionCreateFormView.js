@@ -1,14 +1,17 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Form} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import './commissionCreateForm.css';
 import { DateRangePicker } from 'react-date-range';
+import { useAuth } from '../../authProvider/AuthContext';
 
 export default function CommissionCreateFormView() {
     const navigate = useNavigate();
+    const [options, setOptions] = useState(null);
+    const { token } = useAuth(); 
     const [dateRange, setDateRange] = useState([
         {
             startDate: null,
@@ -41,6 +44,20 @@ export default function CommissionCreateFormView() {
 
         navigate("/equipment");
     }
+    async function GetData(token) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        const response = await fetch('https://localhost:7007/api/client', { headers });
+        const data = await response.json();
+        setOptions(data);
+    }
+
+    useEffect(() => { GetData(token) })
 
     return (
         <div >
@@ -48,6 +65,7 @@ export default function CommissionCreateFormView() {
                 <Form.Group>
                     <Form.Label for="client">Client: </Form.Label>
                     <Form.Select id="client" aria-label="Select Client">
+                        {options == null ? <option disabled>Loading...</option> : options.map((client, index) => (<option key={index} value={client.id}>{client.firstName} {client.lastName}</option>))}
                     </Form.Select>
                 </Form.Group>
                 <Form.Group>
