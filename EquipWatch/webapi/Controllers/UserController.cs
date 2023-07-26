@@ -124,6 +124,46 @@ public class UserController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
+    [HttpPost("forgotPassword")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO model)
+    {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var resetLink = Url.Action("ResetPassword", "User", new { userId = user.Id, token }, Request.Scheme);
+
+        // TODO: Send the password reset link to the user's email
+
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpPost("resetPassword")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
+        if (result.Succeeded)
+        {
+            return Ok();
+        }
+
+        return BadRequest(result.Errors);
+    }
+
     private string GenerateJwtToken(IEnumerable<Claim> claims)
     {
         var secretKey = _configuration[key: "JwtSettings:SecretKey"];
