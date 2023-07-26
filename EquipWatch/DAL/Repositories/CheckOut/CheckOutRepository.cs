@@ -6,10 +6,10 @@ public class CheckOutRepository : ICheckOutRepository
 {
     private readonly DatabaseContext _context;
 
-    public CheckOutRepository(DatabaseContext context)
+    public CheckOutRepository(DatabaseContext context, IdentityContext identityContext)
     {
         _context = context;
-        Seed.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context, identityContext);
     }
 
     public async Task<List<Domain.CheckOut.Models.CheckOut>> GetAllAsync()
@@ -25,7 +25,7 @@ public class CheckOutRepository : ICheckOutRepository
 
     public async Task CreateAsync(Domain.CheckOut.Models.CheckOut entity)
     {
-        throw new NotImplementedException();
+        await _context.CheckOuts.AddAsync(entity);
     }
 
     public async Task UpdateAsync(Domain.CheckOut.Models.CheckOut entity)

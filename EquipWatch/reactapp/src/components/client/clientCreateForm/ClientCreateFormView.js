@@ -24,7 +24,7 @@ export default function ClientCreateFormView() {
             "email": formEmail,
             "phoneNumber": formPhoneNubmer,
             "contactAddress": formAddress,
-            "companyId": "08db8c4f-47e7-4a22-8216-e1e16e7e9958"
+            "companyId": "08db8d19-9af1-4672-8929-920221b5bace"
         });
 
         const response = await fetch('https://localhost:7007/api/client', {

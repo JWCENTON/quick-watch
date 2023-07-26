@@ -50,11 +50,11 @@ public class DatabaseContext : DbContext
             .HasForeignKey("EquipmentId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<CheckIn>()
-            .HasOne(c => c.Employee)
-            .WithMany()
-            .HasForeignKey("EmployeeId")
-            .OnDelete(DeleteBehavior.Cascade);
+        //builder.Entity<CheckIn>()
+        //    .HasOne(c => c.User)
+        //    .WithMany()
+        //    .HasForeignKey("UserId")
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CheckOut>()
             .HasOne(c => c.Equipment)
@@ -62,11 +62,11 @@ public class DatabaseContext : DbContext
             .HasForeignKey("EquipmentId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<CheckOut>()
-            .HasOne(c => c.Employee)
-            .WithMany()
-            .HasForeignKey("EmployeeId")
-            .OnDelete(DeleteBehavior.Cascade);
+        //builder.Entity<CheckOut>()
+        //    .HasOne(c => c.User)
+        //    .WithMany()
+        //    .HasForeignKey("UserId")
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<WorksOn>()
             .HasOne(w => w.Commission)
@@ -74,11 +74,11 @@ public class DatabaseContext : DbContext
             .HasForeignKey("CommissionId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<WorksOn>()
-            .HasOne(w => w.Employee)
-            .WithMany()
-            .HasForeignKey("EmployeeId")
-            .OnDelete(DeleteBehavior.Cascade);
+        //builder.Entity<WorksOn>()
+        //    .HasOne(w => w.User)
+        //    .WithMany()
+        //    .HasForeignKey("UserId")
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Client>()
             .HasOne(c => c.Company)

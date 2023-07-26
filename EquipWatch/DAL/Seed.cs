@@ -15,43 +15,44 @@ namespace DAL;
 
 public class Seed
 {
-    public static void IfDbEmptyAddNewItems(DatabaseContext context)
+    public static void IfDbEmptyAddNewItems(DatabaseContext context, IdentityContext identityContext)
     {
-        if (!context.Equipment.Any())
+
+        if (!context.Company.Any() && identityContext.Users.Any())
         {
             var Company1 = new Company
             {
                 Id = new Guid(),
                 Name = "something",
-                OwnerId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca"
+                OwnerId = identityContext.Users.First().Id
             };
             var Company2 = new Company
             {
                 Id = new Guid(),
                 Name = "someasdasdthing",
-                OwnerId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca"
+                OwnerId = identityContext.Users.First().Id
             };
             context.Company.Add(Company1);
             context.Company.Add(Company2);
 
-            var employee1 = new Employee()
-            {
-                Company = Company1,
-                CompanyId = Company1.Id,
-                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
-                Id = new Guid(),
-                Role = Role.Engineer
-            };
-            var employee2 = new Employee()
-            {
-                Company = Company2,
-                CompanyId = Company2.Id,
-                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
-                Id = new Guid(),
-                Role = Role.Engineer
-            };
-            context.Employees.Add(employee1);
-            context.Employees.Add(employee2);
+            //var employee1 = new Employee()
+            //{
+            //    Company = Company1,
+            //    CompanyId = Company1.Id,
+            //    UserId = identityContext.Users.First().Id,
+            //    Id = new Guid(),
+            //    Role = Role.Engineer
+            //};
+            //var employee2 = new Employee()
+            //{
+            //    Company = Company2,
+            //    CompanyId = Company2.Id,
+            //    UserId = identityContext.Users.First().Id,
+            //    Id = new Guid(),
+            //    Role = Role.Engineer
+            //};
+            //context.Employees.Add(employee1);
+            //context.Employees.Add(employee2);
 
             var equipment1 = new Equipment
             {
@@ -92,8 +93,7 @@ public class Seed
 
             var checkIn1 = new CheckIn()
             {
-                Employee = employee1,
-                EmployeeId = employee1.Id,
+                UserId = identityContext.Users.First().Id,
                 Equipment = equipment1,
                 EquipmentId = equipment1.Id,
                 Id = new Guid(),
@@ -102,8 +102,7 @@ public class Seed
             };
             var checkIn2 = new CheckIn()
             {
-                Employee = employee2,
-                EmployeeId = employee2.Id,
+                UserId = identityContext.Users.First().Id,
                 Equipment = equipment2,
                 EquipmentId = equipment2.Id,
                 Id = new Guid(),
@@ -113,8 +112,7 @@ public class Seed
 
             var checkOut1 = new CheckOut()
             {
-                Employee = employee1,
-                EmployeeId = employee1.Id,
+                UserId = identityContext.Users.First().Id,
                 Equipment = equipment1,
                 EquipmentId = equipment1.Id,
                 Id = new Guid(),
@@ -123,8 +121,7 @@ public class Seed
             };
             var checkOut2 = new CheckOut()
             {
-                Employee = employee2,
-                EmployeeId = employee2.Id,
+                UserId = identityContext.Users.First().Id,
                 Equipment = equipment2,
                 EquipmentId = equipment2.Id,
                 Id = new Guid(),
@@ -223,22 +220,20 @@ public class Seed
                 Id = new Guid(),
                 Commission = commission1,
                 CommissionId = commission1.Id,
-                Employee = employee1,
-                EmployeeId = employee1.Id
+                UserId = identityContext.Users.First().Id
             };
             var work2 = new WorksOn()
             {
                 Id = new Guid(),
                 Commission = commission2,
                 CommissionId = commission2.Id,
-                Employee = employee2,
-                EmployeeId = employee2.Id
+                UserId = identityContext.Users.First().Id
             };
             context.WorksOn.Add(work1);
             context.WorksOn.Add(work2);
             var invite1 = new Invite()
             {
-                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
+                UserId = identityContext.Users.First().Id,
                 Company = Company1,
                 CompanyId = Company1.Id,
                 Id = new Guid(),
@@ -247,7 +242,7 @@ public class Seed
             };
             var invite2 = new Invite()
             {
-                UserId = "9fe9c2da-5b18-4392-9802-7ff2593bf5ca",
+                UserId = identityContext.Users.First().Id,
                 Company = Company2,
                 CompanyId = Company2.Id,
                 Id = new Guid(),
