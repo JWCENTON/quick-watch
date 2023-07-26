@@ -6,7 +6,7 @@ namespace DTO.CheckInDTOs;
 
 public record UpdateCheckInDTO
 {
-    public string? EmployId { get; init; }
+    public string? UserId { get; init; }
     public string? EquipmentId { get; init; }
     public DateTime? Time { get; init; }
 }

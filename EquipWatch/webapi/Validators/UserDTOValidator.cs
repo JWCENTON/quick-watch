@@ -1,8 +1,7 @@
 ﻿using DTO.UserDTOs;
 using FluentValidation;
 
-
-namespace DTO.Validators;
+namespace webapi.Validators;
 
 public abstract class BaseUserDTOValidator<T> : AbstractValidator<T> where T : BaseUserDTO
 {
@@ -40,8 +39,13 @@ public class CreateUserDTOValidator : BaseUserDTOValidator<CreateUserDTO>
     }
 }
 
-public class LoginUserDTOValidator : BaseUserDTOValidator<LoginUserDTO>
+public class LoginUserDTOValidator : AbstractValidator<LoginUserDTO>
 {
+    public LoginUserDTOValidator()
+    {
+        RuleFor(dto => dto.Email).SetValidator(new UserEmailValidator());
+        RuleFor(dto => dto.Password).SetValidator(new UserLoginPasswordValidator());
+    }
 }
 
 public class UpdateUserDTOValidator : AbstractValidator<UpdateUserDTO>
@@ -113,6 +117,18 @@ internal class UserPasswordValidator : AbstractValidator<string>
             .WithMessage("Password must contain at least one special character.")
             .Must(password => !password.Contains(' '))
             .WithMessage("Password cannot contain spaces.")
+            .MaximumLength(50)
+            .WithMessage("Password cannot be longer than 50 characters.");
+    }
+}
+
+internal class UserLoginPasswordValidator : AbstractValidator<string>
+{
+    internal UserLoginPasswordValidator()
+    {
+        RuleFor(password => password)
+            .NotEmpty()
+            .WithMessage("Password cannot be empty.")
             .MaximumLength(50)
             .WithMessage("Password cannot be longer than 50 characters.");
     }

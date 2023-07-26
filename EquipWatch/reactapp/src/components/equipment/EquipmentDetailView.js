@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
-import { AuthContext } from '../authProvider/AuthContext';
+import { useAuth } from '../authProvider/AuthContext';
 
 //const [Commissions, setCommissions] = useState(null);
 
@@ -16,6 +16,7 @@ export default function EquipmentDetailView({ detailsData }) {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [showCheckinModal, setShowCheckinModal] = useState(false);
     const navigate = useNavigate();
+    const { token } = useAuth();
 
     const handleCheckoutModalClose = () => setShowCheckoutModal(false);
     const handleCheckoutModalShow = () => setShowCheckoutModal(true);
@@ -23,28 +24,24 @@ export default function EquipmentDetailView({ detailsData }) {
     const handleCheckinModalClose = () => setShowCheckinModal(false);
     const handleCheckinModalShow = () => setShowCheckinModal(true);
 
-    const user = useContext(AuthContext);
-
     async function handleCheckoutFormSubmit(event) {
         event.preventDefault();
         let formLocation = event.target.location.value;
 
-        console.log(user.user);
-
         let raw = JSON.stringify({
-            "location": formLocation,
-            "userId": {
-                "id": user.user
-            }
+            "location": formLocation
         });
 
         const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkout', {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
             body: raw
         });
 
-        navigate("/equipment/" + detailsData.id);
+        navigate("/equipment");
     }
 
     async function handleCheckinFormSubmit(event) {
@@ -52,23 +49,28 @@ export default function EquipmentDetailView({ detailsData }) {
         let formLocation = event.target.location.value;
 
         let raw = JSON.stringify({
-            "location": formLocation,
-            "userId": {
-                "id": user.user
-            }
+            "location": formLocation
         });
 
         const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkin', {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
             body: raw
         });
 
-        navigate("/equipment/" + detailsData.id);
+        navigate("/equipment");
     }
 
     async function DeleteEquipment() {
-        await fetch(`https://localhost:7007/api/equipment/${detailsData.id}`, { method: "DELETE" });
+        await fetch(`https://localhost:7007/api/equipment/${detailsData.id}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         navigate("/equipment");
     }
 

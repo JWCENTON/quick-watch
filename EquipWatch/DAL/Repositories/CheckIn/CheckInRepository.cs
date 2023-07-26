@@ -6,10 +6,10 @@ public class CheckInRepository : ICheckInRepository
 {
     private readonly DatabaseContext _context;
 
-    public CheckInRepository(DatabaseContext context)
+    public CheckInRepository(DatabaseContext context, IdentityContext identityContext)
     {
         _context = context;
-        Seed.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context, identityContext);
     }
 
     public async Task<List<Domain.CheckIn.Models.CheckIn>> GetAllAsync()

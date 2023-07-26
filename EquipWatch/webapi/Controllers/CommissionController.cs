@@ -7,20 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
+using webapi.Validators;
 
 namespace webapi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController, Route("api/[controller]")]
     public class CommissionController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly CreateCommissionDTOValidator _CreateValidator;
+        private readonly UpdateCommissionDTOValidator _UpdateValidator;
 
-        public CommissionController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CommissionController(IUnitOfWork unitOfWork, IMapper mapper, CreateCommissionDTOValidator createValidator, UpdateCommissionDTOValidator updateValidator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _CreateValidator = createValidator;
+            _UpdateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -30,10 +35,10 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<FullCommissionDTO>>> GetAllCommissions()
+        public async Task<ActionResult<List<PartialCommissionDTO>>> GetAllCommissions()
         {
             var commissions = await _unitOfWork.Commissions.GetAllAsync();
-            var fullCommissionDtos = _mapper.Map<List<FullCommissionDTO>>(commissions);
+            var fullCommissionDtos = _mapper.Map<List<PartialCommissionDTO>>(commissions);
             return Ok(fullCommissionDtos);
         }
 
@@ -58,23 +63,26 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FullCommissionDTO>> CreateCommission([FromBody] CreateCommissionDTO commissionDto)
         {
-            var commission = _mapper.Map<Domain.Commission.Models.Commission.Commission>(commissionDto);
+            var result = await _CreateValidator.ValidateAsync(commissionDto);
+            if (result.IsValid)
+            {
+                var commission = _mapper.Map<Domain.Commission.Models.Commission.Commission>(commissionDto);
 
-           
-            var company = await _unitOfWork.Companies.GetAsync(commission.Company.Id);
-            commission.Company = company;
-            
+                var company = await _unitOfWork.Companies.GetAsync(commission.CompanyId);
+                commission.Company = company;
 
-            var client = await _unitOfWork.Clients.GetAsync(commission.Client.Id);
-            commission.Client = client;
+                var client = await _unitOfWork.Clients.GetAsync(commission.ClientId);
+                commission.Client = client;
 
-            commission.Id = Guid.NewGuid();
+                commission.Id = Guid.NewGuid();
 
-            await _unitOfWork.Commissions.CreateAsync(commission);
-            await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.Commissions.CreateAsync(commission);
+                await _unitOfWork.SaveChangesAsync();
 
-            var fullCommissionDto = _mapper.Map<FullCommissionDTO>(commission);
-            return CreatedAtAction(nameof(GetCommission), new { id = fullCommissionDto.Id }, fullCommissionDto);
+                var fullCommissionDto = _mapper.Map<FullCommissionDTO>(commission);
+                return CreatedAtAction(nameof(GetCommission), new { id = fullCommissionDto.Id }, fullCommissionDto);
+            }
+            throw new ArgumentException(result.Errors.First().ErrorMessage);
         }
 
         [HttpPut("{id}")]
@@ -85,18 +93,29 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateCommission(Guid id, [FromBody] UpdateCommissionDTO commissionDto)
         {
-            var commission = await _unitOfWork.Commissions.GetAsync(id);
-            _mapper.Map(commissionDto, commission);
-
-            if (commissionDto.ClientId != null)
+            var result = await _UpdateValidator.ValidateAsync(commissionDto);
+            if (result.IsValid)
             {
-                commission.Client = await _unitOfWork.Clients.GetAsync(commission.ClientId);
+                var commission = await _unitOfWork.Commissions.GetAsync(id);
+                _mapper.Map(commissionDto, commission);
+
+                if (commissionDto.ClientId != null)
+                {
+                    commission.Client = await _unitOfWork.Clients.GetAsync(commission.ClientId);
+                }
+
+                if (commissionDto.CompanyId != null)
+                {
+                    var company = await _unitOfWork.Companies.GetAsync(commission.CompanyId);
+                    commission.Company = company;
+                }
+
+                await _unitOfWork.Commissions.UpdateAsync(commission);
+                await _unitOfWork.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            await _unitOfWork.Commissions.UpdateAsync(commission);
-            await _unitOfWork.SaveChangesAsync();
-
-            return NoContent();
+            throw new ArgumentException(result.Errors.First().ErrorMessage);
 
         }
 

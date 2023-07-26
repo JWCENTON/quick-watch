@@ -1,4 +1,4 @@
-﻿namespace DTO.Validators;
+﻿namespace webapi.Validators;
 
 public static class GuidValidator
 {

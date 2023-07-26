@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import './equipmentCreateForm.css';
+import { useAuth } from '../../authProvider/AuthContext';
 
 export default function EquipmentCreateFormView() {
     const navigate = useNavigate();
     const [rating, setRating] = useState(0);
+    const { token } = useAuth();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -20,13 +22,15 @@ export default function EquipmentCreateFormView() {
             "category": formCategory,
             "location": formLocation,
             "condition": rating,
-            "companyId": "08db8c4f-47e7-4a22-8216-e1e16e7e9958"
-            
+            "companyId": "08db8d19-9af1-4672-8929-920221b5bace"
         });
 
         const response = await fetch('https://localhost:7007/api/equipment', {
-            method: "POST", 
-            headers: { "Content-Type": "application/json"},
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
             body: raw
         });
 

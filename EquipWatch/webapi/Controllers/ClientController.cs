@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Client.Models;
 using webapi.uow;
 using Domain.Company.Models;
+using webapi.Validators;
 
 namespace webapi.Controllers;
 
@@ -62,7 +63,7 @@ public class ClientController : ControllerBase
         {
             var client = _mapper.Map<Client>(clientDto);
 
-            var company = await _unitOfWork.Companies.GetAsync(client.Company.Id);
+            var company = await _unitOfWork.Companies.GetAsync(client.CompanyId);
             client.Company = company;
             client.Id = Guid.NewGuid();
 
@@ -88,7 +89,7 @@ public class ClientController : ControllerBase
 
             if (clientDto.CompanyId != null)
             {
-                client.Company = await _unitOfWork.Companies.GetAsync(client.Company.Id);
+                client.Company = await _unitOfWork.Companies.GetAsync(client.CompanyId);
             }
 
             await _unitOfWork.Clients.UpdateAsync(client);

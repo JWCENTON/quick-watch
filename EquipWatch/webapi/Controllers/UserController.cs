@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Domain.User.Models;
+﻿using Domain.User.Models;
 using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using webapi.uow;
 using webapi.Services;
+using webapi.uow;
+using webapi.Validators;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+
+namespace webapi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -20,7 +23,10 @@ public class UserController : ControllerBase
     private readonly IEmailService _emailService;
     private readonly IConfiguration _configuration;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork, IEmailService emailService, IConfiguration configuration)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork,
+        IEmailService emailService, IConfiguration configuration)
+
+
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -33,6 +39,7 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] CreateUserDTO model)
     {
+        
         var user = new User
         {
             UserName = model.Email,
@@ -77,6 +84,7 @@ public class UserController : ControllerBase
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
             };
 
@@ -87,6 +95,7 @@ public class UserController : ControllerBase
         {
             return Unauthorized();
         }
+   
     }
 
     [AllowAnonymous]

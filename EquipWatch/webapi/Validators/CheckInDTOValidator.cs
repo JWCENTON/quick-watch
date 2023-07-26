@@ -1,13 +1,13 @@
 ﻿using DTO.CheckInDTOs;
 using FluentValidation;
 
-namespace DTO.Validators;
+namespace webapi.Validators;
 
 public abstract class BaseCheckInDTOValidator<T> : AbstractValidator<T> where T : BaseCheckInDTO
 {
     protected BaseCheckInDTOValidator()
     {
-        RuleFor(dto => dto.EmployId).SetValidator(new EmployIdValidator());
+        RuleFor(dto => dto.UserId).SetValidator(new UserIdValidator());
 
         RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
 
@@ -32,9 +32,9 @@ public class UpdateCheckInDTOValidator : AbstractValidator<UpdateCheckInDTO>
 {
     public UpdateCheckInDTOValidator()
     {
-        RuleFor(dto => dto.EmployId)
-            .SetValidator(new EmployIdValidator()!)
-            .When(dto => dto.EmployId != null);
+        RuleFor(dto => dto.UserId)
+            .SetValidator(new UserIdValidator()!)
+            .When(dto => dto.UserId != null);
 
         RuleFor(dto => dto.EquipmentId)
             .SetValidator(new EquipmentIdValidator()!)

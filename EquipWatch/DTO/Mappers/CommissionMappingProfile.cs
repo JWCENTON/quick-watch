@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Commission.Models.Commission;
 using DTO.CommissionDTOs;
 
 namespace DTO.Mappers;
@@ -17,5 +18,6 @@ public class CommissionMappingProfile : Profile
             .ForAllMembers(opt => opt
                 .Condition((src, dest, srcMember) => srcMember != null));
 
+        CreateMap<Domain.Commission.Models.Commission.Commission, PartialCommissionDTO>().ReverseMap();
     }
 }

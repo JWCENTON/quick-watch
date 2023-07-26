@@ -1,6 +1,7 @@
 ﻿using DTO.ClientDTOs;
-using DTO.Validators;
 using FluentValidation;
+
+namespace webapi.Validators;
 
 public abstract class BaseClientDTOValidator<T> : AbstractValidator<T> where T : BaseClientDTO
 {
@@ -139,4 +140,3 @@ internal class ClientContactAddressValidator : AbstractValidator<string>
             .WithMessage("Contact address cannot exceed 50 characters.");
     }
 }
-

@@ -1,11 +1,18 @@
 using System.Diagnostics;
+using System.Security.Claims;
+ using System.Diagnostics;
 using AutoMapper;
+using Domain.CheckIn.Models;
 using Domain.CheckOut.Models;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Authorization;
+using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
 using webapi.uow;
+using webapi.Validators;
+using System.Linq;
 
 namespace webapi.Controllers;
 
@@ -13,18 +20,21 @@ namespace webapi.Controllers;
 [ApiController, Route("api/[controller]")]
 public class EquipmentController : ControllerBase
 {
+    private readonly UserManager<User> _userManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly CreateEquipmentDTOValidator _createValidator;
     private readonly UpdateEquipmentDTOValidator _updateValidator;
+    private readonly LocationEquipmentDTOValidator _locationValidator;
 
-    public EquipmentController(IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator, UpdateEquipmentDTOValidator updateValidator)
+    public EquipmentController(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator, UpdateEquipmentDTOValidator updateValidator, LocationEquipmentDTOValidator locationValidator)
     {
+        _userManager = userManager;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
-
+        _locationValidator = locationValidator;
     }
 
     [HttpGet]
@@ -108,32 +118,79 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpPatch("{id}/checkout")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Checkout(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
     {
-        var equipment = await _unitOfWork.Equipments.GetAsync(id);
-
-        if (equipment.IsCheckedOut) { return BadRequest(); }
-
-        equipment.IsCheckedOut = true;
-        equipment.Location = locationDto.Location;
-        await _unitOfWork.Equipments.UpdateAsync(equipment);
-
-        var checkout = new CheckOut
+        var result = await _locationValidator.ValidateAsync(locationDto);
+        if (result.IsValid)
         {
-            Id = Guid.NewGuid(),
-            Equipment = equipment,
-            //TODO attach employee
-            Time = DateTime.Now
-        };
+            var equipment = await _unitOfWork.Equipments.GetAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (equipment.IsCheckedOut || userId == null) { return BadRequest(); }
+            equipment.IsCheckedOut = true;
+            equipment.Location = locationDto.Location;
+            await _unitOfWork.Equipments.UpdateAsync(equipment);
 
-        await _unitOfWork.CheckOuts.CreateAsync(checkout);
+            var checkout = new CheckOut
+            {
+                Id = Guid.NewGuid(),
+                Equipment = equipment,
+                UserId = userId,
+                Time = DateTime.Now
+            };
 
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CheckOuts.CreateAsync(checkout);
 
-        return Ok();
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok();
+        }
+        throw new ArgumentException(result.Errors.First().ErrorMessage);
     }
 
+    [HttpPatch("{id}/checkin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> CheckIn(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
+    {
+        var result = await _locationValidator.ValidateAsync(locationDto);
+        if (result.IsValid)
+        {
+            var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Debug.WriteLine("hello");
+            if (!equipment.IsCheckedOut || userId == null) { return BadRequest(); }
+
+            equipment.IsCheckedOut = false;
+            equipment.Location = locationDto.Location;
+            await _unitOfWork.Equipments.UpdateAsync(equipment);
+
+            var checkIn = new CheckIn
+            {
+                Id = Guid.NewGuid(),
+                Equipment = equipment,
+                UserId = userId,
+                Time = DateTime.Now
+            };
+
+            await _unitOfWork.CheckIns.CreateAsync(checkIn);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok();
+        }
+        throw new ArgumentException(result.Errors.First().ErrorMessage);
+    }
 
     //[HttpDelete("{id}")]
     //public async Task<IActionResult> Delete(Guid id)
