@@ -6,10 +6,10 @@ namespace DAL.Repositories.Equipment
     {
         private readonly DatabaseContext _context;
 
-        public EquipmentRepository(DatabaseContext context)
+        public EquipmentRepository(DatabaseContext context, IdentityContext identityContext)
         {
             _context = context;
-            Seed.IfDbEmptyAddNewItems(context);
+            Seed.IfDbEmptyAddNewItems(context, identityContext);
         }
 
         public async Task<List<Domain.Equipment.Models.Equipment>> GetAllAsync()

@@ -6,10 +6,10 @@ public class CommissionRepository : ICommissionRepository
 {
     private readonly DatabaseContext _context;
 
-    public CommissionRepository(DatabaseContext context)
+    public CommissionRepository(DatabaseContext context, IdentityContext identityContext)
     {
         _context = context;
-        Seed.IfDbEmptyAddNewItems(context);
+        Seed.IfDbEmptyAddNewItems(context, identityContext);
     }
 
     public async Task<List<Domain.Commission.Models.Commission.Commission>> GetAllAsync()

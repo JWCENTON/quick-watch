@@ -23,6 +23,7 @@ public class ExceptionHandlerMiddleware : AbstractExceptionHandlerMiddleware
             case UnauthorizedAccessException:
                 code = HttpStatusCode.Unauthorized;
                 break;
+            case ArgumentException:
             case InvalidOperationException:
                 code = HttpStatusCode.BadRequest;
                 break;
