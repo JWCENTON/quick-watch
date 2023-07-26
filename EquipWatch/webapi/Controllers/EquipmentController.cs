@@ -168,6 +168,7 @@ public class EquipmentController : ControllerBase
             var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Debug.WriteLine("hello");
             if (!equipment.IsCheckedOut || userId == null) { return BadRequest(); }
 
             equipment.IsCheckedOut = false;
