@@ -14,13 +14,17 @@ import { useAuth } from '../authProvider/AuthContext';
 
 export default function EquipmentDetailView({ detailsData }) {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [showCheckinModal, setShowCheckinModal] = useState(false);
     const navigate = useNavigate();
     const { token } = useAuth();
 
     const handleCheckoutModalClose = () => setShowCheckoutModal(false);
     const handleCheckoutModalShow = () => setShowCheckoutModal(true);
 
-    async function handleFormSubmit(event) {
+    const handleCheckinModalClose = () => setShowCheckinModal(false);
+    const handleCheckinModalShow = () => setShowCheckinModal(true);
+
+    async function handleCheckoutFormSubmit(event) {
         event.preventDefault();
         let formLocation = event.target.location.value;
 
@@ -37,7 +41,27 @@ export default function EquipmentDetailView({ detailsData }) {
             body: raw
         });
 
-        navigate("/equipment/" + detailsData.id);
+        navigate("/equipment");
+    }
+
+    async function handleCheckinFormSubmit(event) {
+        event.preventDefault();
+        let formLocation = event.target.location.value;
+
+        let raw = JSON.stringify({
+            "location": formLocation
+        });
+
+        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkin', {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: raw
+        });
+
+        navigate("/equipment");
     }
 
     async function DeleteEquipment() {
