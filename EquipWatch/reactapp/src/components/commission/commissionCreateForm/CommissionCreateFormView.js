@@ -32,17 +32,18 @@ export default function CommissionCreateFormView() {
             "location": formLocation,
             "description": formDescription,
             "scope": formScope,
-            "companyId": "08db8c4f-47e7-4a22-8216-e1e16e7e9958"
-            
+            "companyId": "08db8dad-76cc-4174-87e4-c529682dd54c", 
+            "startTime": dateRange[0].startDate,
+            "endTime": dateRange[0].endDate
         });
 
-        const response = await fetch('https://localhost:7007/api/equipment', {
+        const response = await fetch('https://localhost:7007/api/commission', {
             method: "POST", 
             headers: { "Content-Type": "application/json"},
             body: raw
         });
 
-        navigate("/equipment");
+        navigate("/commissions");
     }
     async function GetData(token) {
         const headers = {
@@ -57,7 +58,7 @@ export default function CommissionCreateFormView() {
         setOptions(data);
     }
 
-    useEffect(() => { GetData(token) })
+    useEffect(() => { GetData(token) }, [])
 
     return (
         <div >
