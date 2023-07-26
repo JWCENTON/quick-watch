@@ -10,7 +10,6 @@ export default function ClientCreateFormView() {
     const navigate = useNavigate();
     const { token } = useAuth();
 	const [errorMessage, setErrorMessage] = useState('');
-	const [formSubmitted, setFormSubmitted] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -52,12 +51,9 @@ export default function ClientCreateFormView() {
 			const errorJson = await response.json();
 			setErrorMessage(errorJson.Message);
 		} else {
-			setFormSubmitted(true);
-		}
-		};
-        if (formSubmitted) {
 			navigate('/clients');
 		}
+		};
     }
 
     return (
