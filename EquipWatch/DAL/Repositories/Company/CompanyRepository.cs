@@ -23,6 +23,12 @@ public class CompanyRepository : ICompanyRepository
         return company ?? throw new KeyNotFoundException("Company With given Id was not found");
     }
 
+    public async Task<Domain.Company.Models.Company> GetAsync()
+    {
+        var company = await _context.Company.FirstOrDefaultAsync();
+        return company ?? throw new KeyNotFoundException("No company created yet");
+    }
+
     public async Task CreateAsync(Domain.Company.Models.Company entity)
     {
         throw new NotImplementedException();
