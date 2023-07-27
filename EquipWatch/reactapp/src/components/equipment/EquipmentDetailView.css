@@ -1,0 +1,87 @@
+.equipment-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #DBE2EF; 
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 20px;
+    width: 100%;
+}
+
+.details-section {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.commission-section {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.button-section {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.star {
+    color: gold;
+    font-size: 20px;
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.edit-btn, .remove-btn, .checkout-btn, .checkin-btn, .add-commission-btn {
+    color: #F9F7F7;
+    border-color: #112D4E;
+    background-color: #112D4E;
+}
+
+    .edit-btn:hover, .remove-btn:hover, .add-commission-btn:hover {
+        background-color: #3F72AF;
+        color: #F9F7F7;
+    }
+
+.checkout-btn, .checkin-btn, .add-commission-btn {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.checkout-btn, .add-commission-btn {
+    margin-top: 30px;
+}
+
+.add-commission-btn {
+    margin-bottom: 30px;
+}
+
+.myAndAllSwitch {
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: #DBE2EF;
+}
