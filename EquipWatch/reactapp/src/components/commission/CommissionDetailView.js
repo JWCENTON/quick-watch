@@ -53,14 +53,14 @@ export default function CommissionDetailView({ detailsData }) {
                         <br/>
                         <h3>Equipment</h3>
                         <div className="cardsContainer">
-                            {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((item, index) => (<UniversalCard key={index} data={item} dataType='commission'></UniversalCard>))}
+                            {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((item, index) => (<UniversalCard key={index} data={item} dataType='equipment'></UniversalCard>))}
                         </div>
                         <Button onClick={handleEquipmentShow}>Add Equipment</Button>
                         <br />
                         <br />
                         <h3>Workers</h3>
                         <div className="cardsContainer">
-                            {workers == null ? <p>Loading Workers...</p> : workers == null ? <p>No Workers Assigned</p> : workers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>)) }
+                            {workers == null ? <p>Loading Workers...</p> : workers.length === 0 ? <p>No Workers Assigned</p> : workers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>)) }
                         </div>
                         <Button onClick={handleWorkerShow}>Add Worker</Button>
 

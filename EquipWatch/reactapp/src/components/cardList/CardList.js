@@ -67,7 +67,18 @@ function CardList() {
         }
         const response = await fetch(url, { headers });
         const data = await response.json();
-        setCards(data);
+		let modifiedData;
+		
+		if (location.pathname === '/equipment') {
+			modifiedData = data.map(({ id, ...rest }) => ({
+			  ...rest,
+			  isCheckedOut: rest.isCheckedOut ? 'Checked Out' : 'Not Checked Out'
+			}));
+		} else {
+			modifiedData = data.map(({ id, ...rest }) => rest);
+		}
+		
+        setCards(modifiedData);
     }
 
     return (
