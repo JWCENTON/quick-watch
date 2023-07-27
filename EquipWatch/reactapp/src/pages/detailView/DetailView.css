@@ -1,21 +1,21 @@
-.equipment-details {
+.details-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #DBE2EF; 
-    padding: 20px;
+    background-color: #DBE2EF;
+    padding: 0 20px 20px 20px;
     border-radius: 10px;
 }
 
 .details-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 2fr;
     grid-template-rows: auto auto;
     grid-gap: 20px;
     width: 100%;
 }
 
-.details-section {
+.section-left {
     grid-column: 1;
     grid-row: 1;
     background-color: #FFFFFF;
@@ -23,13 +23,18 @@
     border-radius: 10px;
 }
 
-.commission-section {
+.section-right {
     grid-column: 2;
     grid-row: 1;
     align-self: start;
     background-color: #FFFFFF;
     padding: 20px;
     border-radius: 10px;
+}
+
+.star {
+    color: gold;
+    font-size: 20px;
 }
 
 .button-section {
@@ -40,12 +45,6 @@
     margin-top: 20px;
 }
 
-.star {
-    color: gold;
-    font-size: 20px;
-}
-
-/* Button Styles */
 button {
     padding: 10px 20px;
     border-radius: 5px;
@@ -55,28 +54,23 @@ button {
     transition: all 0.3s ease;
 }
 
-.edit-btn, .remove-btn, .checkout-btn, .checkin-btn, .add-commission-btn {
+.detail-view-btn {
     color: #F9F7F7;
     border-color: #112D4E;
     background-color: #112D4E;
+    width: 15vw;
+    max-width: 200px;
+    margin: 10px 5px;
 }
 
-    .edit-btn:hover, .remove-btn:hover, .add-commission-btn:hover {
-        background-color: #3F72AF;
-        color: #F9F7F7;
-    }
-
-.checkout-btn, .checkin-btn, .add-commission-btn {
-    width: 100%;
-    margin-bottom: 10px;
+.detail-view-btn:hover {
+    background-color: #3F72AF;
+    color: #F9F7F7;
 }
 
-.checkout-btn, .add-commission-btn {
-    margin-top: 30px;
-}
-
-.add-commission-btn {
-    margin-bottom: 30px;
+.details-header {
+    margin-top: 1vh;
+    margin-bottom: 2vh;
 }
 
 .myAndAllSwitch {
@@ -84,4 +78,24 @@ button {
     margin-left: 5px;
     margin-right: 5px;
     background-color: #DBE2EF;
+}
+
+.myAndAllSwitch-section {
+    width: 100%;
+}
+
+.details-grid p {
+    margin: 0.5vh 1vw;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: smaller;
+    }
+
+    .detail-view-btn {
+        font-size: 12px;
+        max-width: 120px;
+        width: 20vw;
+    }
 }

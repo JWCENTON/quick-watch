@@ -7,6 +7,7 @@ import CompanyDetailView from '../../components/company/CompanyDetailView';
 import EmployeeDetailView from '../../components/employee/EmployeeDetailView';
 import CommissionDetailView from '../../components/commission/CommissionDetailView';
 import { useAuth } from '../../components/authProvider/AuthContext';
+import './DetailView.css';
 
 export default function DetailView() {
     const { id, dataType } = useParams();

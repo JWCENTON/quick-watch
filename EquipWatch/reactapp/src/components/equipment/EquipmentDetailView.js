@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext';
-import './EquipmentDetailView.css';
 
 export default function EquipmentDetailView({ detailsData }) {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -68,34 +67,37 @@ export default function EquipmentDetailView({ detailsData }) {
     }
 
     return (
-        <div className="equipment-details">
-            <div className="myAndAllSwitch"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
+        <div className="details-section">
+            <div className="myAndAllSwitch-section"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
             {detailsData === null ? (
                 <p>Loading...</p>
             ) : (
-                    <div className="details-grid">
-                        
-                    <div className="details-section">
-                        <h2>Equipment Details</h2>
+                <div className="details-grid">
+                    <div className="section-left">
+                            <h4 className="details-header">Equipment Details</h4>
                         <p>Serial number: {detailsData.serialNumber}</p>
                         <p>Location: {detailsData.location}</p>
                         <p>Condition:
                             {[...Array(detailsData.condition)].map((e, i) => <span className="star" key={i}>&#9733;</span>)}
-                        </p>
+                            </p>
+                        <div className="button-section">
+                            <Button className="detail-view-btn">Edit</Button>
+                            <Button className="detail-view-btn" onClick={DeleteEquipment}>Remove</Button>
+                        </div>
                     </div>
-                        <div className="commission-section">
-                        <h3>Assigned Commission</h3>
-                        <Button className="add-commission-btn">Add Commission</Button>
-                        <h3>Assigned Employee</h3>
+                    <div className="section-right">
+                        <h4 className="details-header">Assigned Commission</h4>
+                        <div className="button-section">
+                            <Button className="detail-view-btn">Add Commission</Button>
+                        </div>
+                        <h4 className="details-header">Assigned Employee</h4>
+                        <div className="button-section">
+                            <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
+                            <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In</Button>
+                        </div>
+                    </div>
 
-                        <Button className="checkout-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
-                        <Button className="checkin-btn" onClick={handleCheckinModalShow}>Checkin</Button>
-                    </div>
-
-                    <div className="button-section">
-                        <Button className="edit-btn">Edit</Button>
-                        <Button className="remove-btn" onClick={DeleteEquipment}>Remove</Button>
-                    </div>
+                    
 
                     <Modal show={showCheckoutModal} onHide={handleCheckoutModalClose}>
                         <Modal.Header closeButton>
@@ -115,7 +117,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
                     <Modal show={showCheckinModal} onHide={handleCheckinModalClose}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Checkin Equipment</Modal.Title>
+                            <Modal.Title>Check in Equipment</Modal.Title>
                         </Modal.Header>
                         <form onSubmit={handleCheckinFormSubmit}>
                             <Modal.Body>
@@ -124,7 +126,7 @@ export default function EquipmentDetailView({ detailsData }) {
                                 <input type="text" id="inlocation" name="location" />
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button type="submit">Checkin</Button>
+                                <Button type="submit">Check in</Button>
                             </Modal.Footer>
                         </form>
                     </Modal>
