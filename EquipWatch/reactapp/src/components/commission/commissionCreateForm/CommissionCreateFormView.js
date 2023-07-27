@@ -61,7 +61,8 @@ export default function CommissionCreateFormView() {
 			const errorJson = await response.json();
 			setErrorMessage(errorJson.Message);
 		} else {
-			navigate("/commissions");
+			const commissionData = await response.json();
+			navigate("/commission/" + commissionData.id);
 		}
 		};
     }

@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using webapi.uow;
 using webapi.Validators;
 using System.Linq;
+using Domain.Commission.Models.Commission;
+using DTO.CommissionDTOs;
 
 namespace webapi.Controllers;
 
@@ -66,7 +68,7 @@ public class EquipmentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<CreateEquipmentDTO>> CreateEquipment([FromBody] CreateEquipmentDTO equipmentDto)
+    public async Task<ActionResult<FullEquipmentDTO>> CreateEquipment([FromBody] CreateEquipmentDTO equipmentDto)
     {
         var result = await _createValidator.ValidateAsync(equipmentDto);
         if (result.IsValid){
@@ -76,7 +78,8 @@ public class EquipmentController : ControllerBase
 
             equipment.Id = Guid.NewGuid();
             await _unitOfWork.Equipments.CreateAsync(equipment);
-            return CreatedAtAction(nameof(Get), new { id = equipment.Id }, _mapper.Map<FullEquipmentDTO>(equipment));
+            var fullEquipmentDto = _mapper.Map<FullEquipmentDTO>(equipment);
+            return CreatedAtAction(nameof(Get), new { id = fullEquipmentDto.Id }, fullEquipmentDto);
         }
         throw new ArgumentException(result.Errors.First().ErrorMessage);
     }
