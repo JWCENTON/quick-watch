@@ -138,7 +138,7 @@ public class UserController : ControllerBase
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         var resetLink = Url.Action("ResetPassword", "User", new { userId = user.Id, token }, Request.Scheme);
 
-        // TODO: Send the password reset link to the user's email
+        await _emailService.SendPasswordResetLinkAsync(user, resetLink);
 
         return Ok();
     }
