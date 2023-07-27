@@ -107,7 +107,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
     return (
         <div >
-            {detailsData === null ? (
+            {detailsData === null || isCheckedOut === undefined ? (
                 <p>Loading...</p>
             ) : (
                 <div>
