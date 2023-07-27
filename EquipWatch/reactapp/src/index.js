@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { SidebarProvider } from './contexts/SidebarContext';
@@ -15,6 +16,7 @@ import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
 import CreateForm from './pages/createForm/CreateForm';
 import ForgotPassword from './components/forgotPassword/ForgotPassword';
+import ResetPassword from './components/resetPassword/ResetPassword';
 
 
 const router = createBrowserRouter([
@@ -26,6 +28,7 @@ const router = createBrowserRouter([
             { path: "main", element: <MainPage /> },
             { path: "register", element: <Registration /> },
             { path: "forgotpassword", element: <ForgotPassword /> },
+            { path: "resetPassword", element: <ResetPassword /> },
             { path: "clients", element: <CardList /> },
             { path: "companies", element: <CardList /> },
             { path: "equipment", element: <CardList /> },
@@ -39,10 +42,11 @@ const router = createBrowserRouter([
 ]);
 
 const root = document.getElementById('root');
-createRoot(root).render(
+ReactDOM.render(
     <React.StrictMode>
         <SidebarProvider>
             <RouterProvider router={router} />
         </ SidebarProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
+    root
 );

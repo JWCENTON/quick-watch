@@ -14,6 +14,7 @@ import CreateForm from './pages/createForm/CreateForm';
 import Registration from './components/userRegistration/UserRegistration';
 import ErrorPage from './pages/error/error-page';
 import ForgotPassword from './components/forgotPassword/ForgotPassword';
+import ResetPassword from './components/resetPassword/ResetPassword';
 import './App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/" element={<Login />} />
                     <Route path="/register" element={<Registration />} />
                     <Route path="/forgotpassword" element={<ForgotPassword />} />
+                    <Route path="/resetPassword" element={<ResetPassword />} />
 
                     <Route path="/main" element={<MainPage />}>
                         <Route path="/main" element={<MainPage />} />    

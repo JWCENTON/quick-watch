@@ -17,6 +17,7 @@
     <Folder Include="src\components\authProvider\" />
     <Folder Include="src\components\layout\" />
     <Folder Include="src\components\forgotPassword\" />
+    <Folder Include="src\components\resetPassword\" />
     <Folder Include="src\components\privateRoute\" />
     <Folder Include="src\components\userRegistration\" />
     <Folder Include="src\contexts\" />

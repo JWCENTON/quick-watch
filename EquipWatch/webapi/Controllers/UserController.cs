@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Web;
 
 namespace webapi.Controllers;
 
@@ -144,6 +145,15 @@ public class UserController : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpGet("resetPassword")]
+    public IActionResult RedirectResetPassword(string userId, string token)
+    {
+        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword"; //?userId={userId}&token={HttpUtility.UrlEncode(token)}
+
+        return Redirect(resetPasswordPageUrl);
+    }
+
+    [AllowAnonymous]
     [HttpPost("resetPassword")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
     {
@@ -154,14 +164,16 @@ public class UserController : ControllerBase
             return NotFound("User not found");
         }
 
-        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+        var result = await _userManager.ResetPasswordAsync(user, HttpUtility.UrlDecode(model.Token), model.NewPassword);
 
         if (result.Succeeded)
         {
-            return Ok();
+            return Ok(new { message = "Password reset successful" });
         }
-
-        return BadRequest(result.Errors);
+        else
+        {
+            return BadRequest(new { message = "Failed to reset password", errors = result.Errors });
+        }
     }
 
     private string GenerateJwtToken(IEnumerable<Claim> claims)

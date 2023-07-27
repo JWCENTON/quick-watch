@@ -1,35 +1,40 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-function ForgotPassword() {
-    const [email, setEmail] = useState('');
+function ResetPassword() {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const userId = searchParams.get('userId');
+    const token = searchParams.get('token');
+    const [newPassword, setNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
-    const handleForgotPassword = async (e) => {
+    const handleResetPassword = async (e) => {
         e.preventDefault();
-
         try {
             setLoading(true);
             setError('');
 
-            const response = await fetch('https://localhost:7007/api/User/forgotPassword', {
+            const response = await fetch('https://localhost:7007/api/User/resetPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email,
+                    userId,
+                    token,
+                    newPassword,
                 }),
             });
 
             if (response.ok) {
-                setMessage('Password reset link was sent');
+                setMessage('Password reset successful');
             } else {
                 const errorData = await response.json();
-                setError(errorData.Message || 'An error occurred. Please try again later.');
+                setError(errorData.message || 'An error occurred. Please try again later.');
             }
 
             setLoading(false);
@@ -37,23 +42,26 @@ function ForgotPassword() {
             setLoading(false);
             setError('An error occurred. Please try again later.');
         }
-
     };
 
     return (
-        <div className="forgot-password-page">
-            <h2>Forgot Password</h2>
-            <form onSubmit={handleForgotPassword}>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <div>
+            <h2>Reset Password</h2>
+            <form onSubmit={handleResetPassword}>
+                <input
+                    type="password"
+                    placeholder="New Password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                />
                 <Button type="submit" variant="outline-primary" disabled={loading}>
-                    Send Reset Link
+                    Reset Password
                 </Button>
             </form>
             {message && <p className="success-message">{message}</p>}
             {error && <p className="error-message">{error}</p>}
-            <Link to="/">Back to Login</Link>
         </div>
     );
 }
 
-export default ForgotPassword;
+export default ResetPassword;
