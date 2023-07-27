@@ -27,7 +27,13 @@ export default function CommissionDetailView({ detailsData }) {
         }
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "GET", headers });
         let data = await response.json();
-        setEquipment(data);
+		const modifiedData = data.map(item => {
+		  return {
+			...item,
+			isCheckedOut: item.isCheckedOut ? 'Checked Out' : 'Not Checked Out'
+		  };
+		});
+        setEquipment(modifiedData);
 
         response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "GET", headers });
         data = await response.json();
@@ -53,7 +59,7 @@ export default function CommissionDetailView({ detailsData }) {
                         <br/>
                         <h3>Equipment</h3>
                         <div className="cardsContainer">
-                            {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((item, index) => (<UniversalCard key={index} data={item} dataType='equipment'></UniversalCard>))}
+                            {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
                         </div>
                         <Button onClick={handleEquipmentShow}>Add Equipment</Button>
                         <br />

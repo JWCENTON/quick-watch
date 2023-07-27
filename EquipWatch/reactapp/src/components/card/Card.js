@@ -4,17 +4,16 @@ import { Link } from 'react-router-dom';
 import './Card.css';
 
 function UniversalCard({ data, dataType }) {
+	 const filteredData = Object.entries(data).filter(([key]) => key !== 'id');
     return (
         <Link to={`/${dataType}/${data.id}`}>
             <Card className="card">
-                {
-                    Object.keys(data).map((key, index) => (
-                        <div className='cardColumn' key={index}>
-                            <Card.Title className='card-title'>{key}</Card.Title>
-                            <Card.Text>{data[key]}</Card.Text>
-                        </div>
-                    ))
-                }
+                {filteredData.map(([key, value]) => (
+				<div className='cardColumn' key={key}>
+				<Card.Title className='card-title'>{key}</Card.Title>
+				<Card.Text>{value}</Card.Text>
+          </div>
+        ))}
             </Card>
         </Link>
     );
