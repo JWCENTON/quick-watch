@@ -26,14 +26,14 @@ public class Seed
                 Name = "something",
                 OwnerId = identityContext.Users.First().Id
             };
-            var Company2 = new Company
-            {
-                Id = new Guid(),
-                Name = "someasdasdthing",
-                OwnerId = identityContext.Users.First().Id
-            };
+            //var Company2 = new Company
+            //{
+            //    Id = new Guid(),
+            //    Name = "someasdasdthing",
+            //    OwnerId = identityContext.Users.First().Id
+            //};
             context.Company.Add(Company1);
-            context.Company.Add(Company2);
+            //context.Company.Add(Company2);
 
             //var employee1 = new Employee()
             //{
@@ -143,18 +143,18 @@ public class Seed
                 FirstName = "someone",
                 Id = new Guid(),
                 LastName = "some",
-                PhoneNumber = "+43234232423",
+                PhoneNumber = "234232423",
                 ContactAddress = "ABBA"
             };
             var Client2 = new Client
             {
-                Company = Company2,
-                CompanyId = Company2.Id,
+                Company = Company1,
+                CompanyId = Company1.Id,
                 Email = "some@somasdasde.com",
                 FirstName = "soasdasmeone",
                 Id = new Guid(),
                 LastName = "soasdasdme",
-                PhoneNumber = "+43234344232423",
+                PhoneNumber = "344232423",
                 ContactAddress = "BABA"
             };
             context.Client.Add(Client1);
@@ -177,8 +177,8 @@ public class Seed
             {
                 Client = Client2,
                 ClientId = Client2.Id,
-                Company = Company2,
-                CompanyId = Company2.Id,
+                Company = Company1,
+                CompanyId = Company1.Id,
                 Description = "description2",
                 EndTime = DateTime.Now,
                 Id = new Guid(),
@@ -189,8 +189,8 @@ public class Seed
             context.Commissions.Add(commission1);
             context.Commissions.Add(commission2);
             equipment1.Company = Company1;
-            equipment2.Company = Company2;
-            equipment3.Company = Company2;
+            equipment2.Company = Company1;
+            equipment3.Company = Company1;
             equipment4.Company = Company1;
             context.Equipment.Add(equipment1);
             context.Equipment.Add(equipment2);
@@ -243,8 +243,8 @@ public class Seed
             var invite2 = new Invite()
             {
                 UserId = identityContext.Users.First().Id,
-                Company = Company2,
-                CompanyId = Company2.Id,
+                Company = Company1,
+                CompanyId = Company1.Id,
                 Id = new Guid(),
                 CreatedAt = DateTime.Now,
                 Status = Status.Sent

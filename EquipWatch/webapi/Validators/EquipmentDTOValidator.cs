@@ -14,8 +14,8 @@ public abstract class BaseEquipmentDTOValidator<T> : AbstractValidator<T> where 
         RuleFor(dto => dto.Condition)
             .NotNull()
             .WithMessage("Condition cannot be empty.")
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Condition cannot be less than 0.")
+            .GreaterThanOrEqualTo(1)
+            .WithMessage("Condition cannot be less than 1.")
             .LessThanOrEqualTo(5)
             .WithMessage("Condition cannot be higher than 5.");
     }
