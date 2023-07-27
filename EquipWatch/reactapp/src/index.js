@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { SidebarProvider } from './contexts/SidebarContext';
@@ -28,7 +27,7 @@ const router = createBrowserRouter([
             { path: "main", element: <MainPage /> },
             { path: "register", element: <Registration /> },
             { path: "forgotpassword", element: <ForgotPassword /> },
-            { path: "resetPassword", element: <ResetPassword /> },
+            { path: "resetPassword/:userId/:token", element: <ResetPassword /> },
             { path: "clients", element: <CardList /> },
             { path: "companies", element: <CardList /> },
             { path: "equipment", element: <CardList /> },
@@ -42,11 +41,10 @@ const router = createBrowserRouter([
 ]);
 
 const root = document.getElementById('root');
-ReactDOM.render(
+createRoot(root).render(
     <React.StrictMode>
         <SidebarProvider>
             <RouterProvider router={router} />
         </ SidebarProvider>
-    </React.StrictMode>,
-    root
+    </React.StrictMode>
 );

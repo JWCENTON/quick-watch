@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 function ResetPassword() {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const userId = searchParams.get('userId');
-    const token = searchParams.get('token');
+    const { userId, token } = useParams();
     const [newPassword, setNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -14,6 +11,7 @@ function ResetPassword() {
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
+        console.log(`token ${token} and userId ${userId}`);
         try {
             setLoading(true);
             setError('');
@@ -25,8 +23,9 @@ function ResetPassword() {
                 },
                 body: JSON.stringify({
                     userId,
-                    token,
+                    token: encodeURIComponent(token),
                     newPassword,
+                    PasswordResetToken: encodeURIComponent(token),
                 }),
             });
 
@@ -46,20 +45,28 @@ function ResetPassword() {
 
     return (
         <div>
-            <h2>Reset Password</h2>
-            <form onSubmit={handleResetPassword}>
-                <input
-                    type="password"
-                    placeholder="New Password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                />
-                <Button type="submit" variant="outline-primary" disabled={loading}>
-                    Reset Password
-                </Button>
-            </form>
-            {message && <p className="success-message">{message}</p>}
-            {error && <p className="error-message">{error}</p>}
+            {message ? (
+                <div>
+                    <h2>{message}</h2>
+                    <Link to="/">Go to Login Page</Link>
+                </div>
+            ) : (
+                <div>
+                    <h2>Reset Password</h2>
+                    <form onSubmit={handleResetPassword}>
+                        <input
+                            type="password"
+                            placeholder="New Password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                        <Button type="submit" variant="outline-primary" disabled={loading}>
+                            Reset Password
+                        </Button>
+                    </form>
+                    {error && <p className="error-message">{error}</p>}
+                </div>
+            )}
         </div>
     );
 }

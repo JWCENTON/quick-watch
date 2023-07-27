@@ -148,7 +148,7 @@ public class UserController : ControllerBase
     [HttpGet("resetPassword")]
     public IActionResult RedirectResetPassword(string userId, string token)
     {
-        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword"; //?userId={userId}&token={HttpUtility.UrlEncode(token)}
+        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword/{userId}/{HttpUtility.UrlEncode(token)}"; //?userId={userId}&token={HttpUtility.UrlEncode(token)}
 
         return Redirect(resetPasswordPageUrl);
     }
