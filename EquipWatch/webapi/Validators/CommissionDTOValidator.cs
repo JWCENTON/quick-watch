@@ -27,8 +27,8 @@ public abstract class BaseCommissionDTOValidator<T> : AbstractValidator<T> where
         RuleFor(dto => dto.EndTime)
             .NotNull()
             .WithMessage("End time cannot be empty.")
-            .GreaterThan(dto => dto.StartTime)
-            .WithMessage("End time must be after start time.");
+            .GreaterThanOrEqualTo(dto => dto.StartTime)
+            .WithMessage("End time must be same or after start time.");
     }
 }
 

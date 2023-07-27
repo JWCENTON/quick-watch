@@ -51,7 +51,8 @@ export default function ClientCreateFormView() {
 			const errorJson = await response.json();
 			setErrorMessage(errorJson.Message);
 		} else {
-			navigate('/clients');
+			const clientData = await response.json();
+			navigate('/client/' + clientData.id);
 		}
 		};
     }
