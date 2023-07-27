@@ -14,6 +14,7 @@ import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
 import CreateForm from './pages/createForm/CreateForm';
+import ForgotPassword from './components/forgotPassword/ForgotPassword';
 
 
 const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
         children: [
             { path: "main", element: <MainPage /> },
             { path: "register", element: <Registration /> },
+            { path: "forgotpassword", element: <ForgotPassword /> },
             { path: "clients", element: <CardList /> },
             { path: "companies", element: <CardList /> },
             { path: "equipment", element: <CardList /> },

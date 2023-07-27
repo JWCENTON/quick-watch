@@ -13,6 +13,7 @@ import EditView from './pages/editView/EditView';
 import CreateForm from './pages/createForm/CreateForm';
 import Registration from './components/userRegistration/UserRegistration';
 import ErrorPage from './pages/error/error-page';
+import ForgotPassword from './components/forgotPassword/ForgotPassword';
 import './App.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/register" element={<Registration />} />
+                    <Route path="/forgotpassword" element={<ForgotPassword />} />
 
                     <Route path="/main" element={<MainPage />}>
                         <Route path="/main" element={<MainPage />} />    
