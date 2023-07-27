@@ -50,7 +50,8 @@ export default function EquipmentCreateFormView() {
 			const errorJson = await response.json();
 			setErrorMessage(errorJson.Message);
 		} else {
-			navigate("/equipment");
+			const equipmentData = await response.json();
+			navigate("/equipment/" + equipmentData.id);
 		}
 		};
     }

@@ -5,6 +5,7 @@ using DTO.CommissionDTOs;
 using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
 using webapi.Validators;
@@ -131,6 +132,29 @@ namespace webapi.Controllers
             await _unitOfWork.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("{id}/equipment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<List<PartialEquipmentDTO>> GetEquipment(Guid id)
+        {
+            var equipment = await _unitOfWork.BookedEquipment.GetCommissionEquipmentAsync(id);
+            return equipment.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
+        }
+
+
+        [HttpGet("{id}/employees")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<List<PartialUserDTO>> GetEmployees(Guid id)
+        {
+            var employees = await _unitOfWork.WorksOn.GetCommissionEmployeesAsync(id);
+            return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
         }
     }
 }

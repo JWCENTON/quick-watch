@@ -18,6 +18,10 @@ public class CommissionMappingProfile : Profile
             .ForAllMembers(opt => opt
                 .Condition((src, dest, srcMember) => srcMember != null));
 
-        CreateMap<Domain.Commission.Models.Commission.Commission, PartialCommissionDTO>().ReverseMap();
+        CreateMap<Domain.Commission.Models.Commission.Commission, PartialCommissionDTO>()
+            .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime.ToString("dd-MM-yyyy HH:mm")))
+            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime.ToString("dd-MM-yyyy HH:mm")));
+
+        CreateMap<PartialCommissionDTO, Domain.Commission.Models.Commission.Commission>();
     }
 }
