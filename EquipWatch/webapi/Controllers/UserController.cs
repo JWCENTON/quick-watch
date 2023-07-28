@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Web;
 
 namespace webapi.Controllers;
 
@@ -121,6 +122,57 @@ public class UserController : ControllerBase
         else
         {
             return BadRequest("Failed to confirm email");
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpPost("forgotPassword")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO model)
+    {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var resetLink = Url.Action("ResetPassword", "User", new { userId = user.Id, token }, Request.Scheme);
+
+        await _emailService.SendPasswordResetLinkAsync(user, resetLink);
+
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpGet("resetPassword")]
+    public IActionResult RedirectResetPassword(string userId, string token)
+    {
+        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword/{userId}/{HttpUtility.UrlEncode(token)}"; //?userId={userId}&token={HttpUtility.UrlEncode(token)}
+
+        return Redirect(resetPasswordPageUrl);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("resetPassword")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, HttpUtility.UrlDecode(model.Token), model.NewPassword);
+
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Password reset successful" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Failed to reset password", errors = result.Errors });
         }
     }
 

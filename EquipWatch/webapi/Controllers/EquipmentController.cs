@@ -134,7 +134,8 @@ public class EquipmentController : ControllerBase
         {
             var equipment = await _unitOfWork.Equipments.GetAsync(id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (equipment.IsCheckedOut || userId == null) { return BadRequest(); }
+            if (userId == null) { throw new ArgumentException("You need login to create checkout"); }
+            if (equipment.IsCheckedOut) { throw new ArgumentException("Equipment is already checked out"); }
             equipment.IsCheckedOut = true;
             equipment.Location = locationDto.Location;
             await _unitOfWork.Equipments.UpdateAsync(equipment);
@@ -171,8 +172,10 @@ public class EquipmentController : ControllerBase
             var equipment = await _unitOfWork.Equipments.GetAsync(id);
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Debug.WriteLine("hello");
-            if (!equipment.IsCheckedOut || userId == null) { return BadRequest(); }
+            if (userId == null) 
+            { throw new ArgumentException("You need login to create checkout"); }
+            if (!equipment.IsCheckedOut) 
+            { throw new ArgumentException("Equipment is already checked in"); }
 
             equipment.IsCheckedOut = false;
             equipment.Location = locationDto.Location;

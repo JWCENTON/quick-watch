@@ -26,7 +26,13 @@ export default function CommissionDetailView({ detailsData }) {
         }
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "GET", headers });
         let data = await response.json();
-        setEquipment(data);
+		const modifiedData = data.map(item => {
+		  return {
+			...item,
+			isCheckedOut: item.isCheckedOut ? 'Checked Out' : 'Not Checked Out'
+		  };
+		});
+        setEquipment(modifiedData);
 
         response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "GET", headers });
         data = await response.json();
