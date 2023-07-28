@@ -74,7 +74,7 @@ export default function CommissionDetailView({ detailsData }) {
                         <div className="section-right">
                             <h4 className="details-header">Equipment</h4>
                             <div className="cardsContainer">
-                                {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((item, index) => (<UniversalCard key={index} data={item} dataType='commission'></UniversalCard>))}
+                                {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
