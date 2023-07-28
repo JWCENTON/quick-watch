@@ -106,7 +106,7 @@ export default function CommissionCreateFormView() {
                     <Form.Control type="text" id="scope" name="scope" placeholder="Scope" />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label for="dates">Dates: </Form.Label>
+                    <Form.Label for="dates">Dates: </Form.Label><br/>
                     <DateRangePicker
                         ranges={dateRange}
                         onChange={item => setDateRange([item.selection])}

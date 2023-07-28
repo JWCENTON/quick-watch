@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import UniversalCard from '../card/Card';
-import './CommissionDetailView.css';
 import { useAuth } from '../authProvider/AuthContext';
 
 export default function CommissionDetailView({ detailsData }) {
@@ -47,28 +46,40 @@ export default function CommissionDetailView({ detailsData }) {
     }, [detailsData]);
 
     return (
-        <div>
+        <div className="details-section">
+            <div className="myAndAllSwitch-section">
+                <a className="myAndAllSwitch" href="/commissions" >My Commissions</a> | <a className="myAndAllSwitch" href="/commissions" >All Commissions</a>
+            </div>
             {detailsData === null ? (
                 <p>Loading...</p>
             ) : (
-                    <div>
-                        <h2>Commission Details</h2>
+                <div>
+                    <div className="section-justified">
+                        <h4 className="details-header">Commission Details</h4>
                         <p>Location: {detailsData.location}</p>
                         <p>Description: {detailsData.description}</p>
                         <p>Scope: {detailsData.scope}</p>
-                        <br/>
-                        <h3>Equipment</h3>
-                        <div className="cardsContainer">
-                            {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
+                    </div>
+                    <div className="details-grid">
+                        
+                        <div className="section-left">
+                            <h4 className="details-header">Workers</h4>
+                            <div className="cardsContainer">
+                                {workers == null ? <p>Loading Workers...</p> : workers == null ? <p>No Workers Assigned</p> : workers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>))}
+                            </div>
+                            <div className="button-section">
+                                <Button className="detail-view-btn" onClick={handleWorkerShow}>Add Worker</Button>
+                            </div>
                         </div>
-                        <Button onClick={handleEquipmentShow}>Add Equipment</Button>
-                        <br />
-                        <br />
-                        <h3>Workers</h3>
-                        <div className="cardsContainer">
-                            {workers == null ? <p>Loading Workers...</p> : workers.length === 0 ? <p>No Workers Assigned</p> : workers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>)) }
+                        <div className="section-right">
+                            <h4 className="details-header">Equipment</h4>
+                            <div className="cardsContainer">
+                                {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
+                            </div>
+                            <div className="button-section">
+                                <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
+                            </div>
                         </div>
-                        <Button onClick={handleWorkerShow}>Add Worker</Button>
 
                         <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
                             <Modal.Header closeButton>
@@ -90,8 +101,10 @@ export default function CommissionDetailView({ detailsData }) {
                                     <input type="text" id="inlocation" name="location" />
                                 </Modal.Body>
                         </Modal>
+                        </div>
                 </div>
             )}
-        </div>
+                    </div>
+
     );
 };
