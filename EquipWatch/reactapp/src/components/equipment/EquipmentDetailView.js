@@ -74,7 +74,7 @@ export default function EquipmentDetailView({ detailsData }) {
             ) : (
                 <div className="details-grid">
                     <div className="section-left">
-                            <h4 className="details-header">Equipment Details</h4>
+                        <h4 className="details-header">Equipment Details</h4>
                         <p>Serial number: {detailsData.serialNumber}</p>
                         <p>Location: {detailsData.location}</p>
                         <p>Condition:

@@ -23,6 +23,13 @@
     border-radius: 10px;
 }
 
+.section-justified {
+    background-color: #FFFFFF;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
 .section-right {
     grid-column: 2;
     grid-row: 1;
