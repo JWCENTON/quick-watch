@@ -14,6 +14,8 @@ public class UserMappingProfile : Profile
 
         CreateMap<Domain.User.Models.User, LoginUserDTO>().ReverseMap();
 
+        CreateMap<Domain.User.Models.User, PartialUserDTO>().ReverseMap();
+
         CreateMap<Domain.User.Models.User, UpdateUserDTO>();
 
 

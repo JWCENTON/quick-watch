@@ -19,6 +19,7 @@ export default function CommissionCreateFormView() {
             key: "selection"
         }
     ]);
+	const [errorMessage, setErrorMessage] = useState('');
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -26,24 +27,44 @@ export default function CommissionCreateFormView() {
         let formLocation = event.target.location.value;
         let formDescription = event.target.description.value;
         let formScope = event.target.scope.value;
+		
+		let companyResponse = await fetch('https://localhost:7007/api/company', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        });
+		if (companyResponse.ok) {
+			const companyData = await companyResponse.json();
+
+			const companyId = companyData.id;
 
         let raw = JSON.stringify({
             "clientId": formClient,
             "location": formLocation,
             "description": formDescription,
             "scope": formScope,
-            "companyId": "08db8dad-76cc-4174-87e4-c529682dd54c", 
+            "companyId": companyId, 
             "startTime": dateRange[0].startDate,
             "endTime": dateRange[0].endDate
         });
-
+		
         const response = await fetch('https://localhost:7007/api/commission', {
             method: "POST", 
-            headers: { "Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json",
+			'Authorization': `Bearer ${token}`},
             body: raw
         });
 
-        navigate("/commissions");
+		if (response.status === 400){
+			const errorJson = await response.json();
+			setErrorMessage(errorJson.Message);
+		} else {
+			const commissionData = await response.json();
+			navigate("/commission/" + commissionData.id);
+		}
+		};
     }
     async function GetData(token) {
         const headers = {
@@ -53,7 +74,9 @@ export default function CommissionCreateFormView() {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        const response = await fetch('https://localhost:7007/api/client', { headers });
+        const response = await fetch('https://localhost:7007/api/client', 
+			{ headers: {'Authorization': `Bearer ${token}`}
+			});
         const data = await response.json();
         setOptions(data);
     }
@@ -62,6 +85,7 @@ export default function CommissionCreateFormView() {
 
     return (
         <div >
+			{errorMessage && <div className="error-message">{errorMessage}</div>}
             <Form onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label for="client">Client: </Form.Label>

@@ -9,6 +9,7 @@ import { useAuth } from '../../authProvider/AuthContext';
 export default function ClientCreateFormView() {
     const navigate = useNavigate();
     const { token } = useAuth();
+	const [errorMessage, setErrorMessage] = useState('');
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -17,6 +18,17 @@ export default function ClientCreateFormView() {
         let formEmail = event.target.email.value;
         let formPhoneNubmer = event.target.phoneNumber.value;
         let formAddress = event.target.address.value;
+		let companyResponse = await fetch('https://localhost:7007/api/company', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        });
+		if (companyResponse.ok) {
+			const companyData = await companyResponse.json();
+
+			const companyId = companyData.id;
 
         let raw = JSON.stringify({
             "firstName": formFirstName,
@@ -24,7 +36,7 @@ export default function ClientCreateFormView() {
             "email": formEmail,
             "phoneNumber": formPhoneNubmer,
             "contactAddress": formAddress,
-            "companyId": "08db8d19-9af1-4672-8929-920221b5bace"
+            "companyId": companyId
         });
 
         const response = await fetch('https://localhost:7007/api/client', {
@@ -35,12 +47,19 @@ export default function ClientCreateFormView() {
             },
             body: raw
         });
-
-        navigate("/clients");
+		if (response.status === 400){
+			const errorJson = await response.json();
+			setErrorMessage(errorJson.Message);
+		} else {
+			const clientData = await response.json();
+			navigate('/client/' + clientData.id);
+		}
+		};
     }
 
     return (
         <div >
+			{errorMessage && <div className="error-message">{errorMessage}</div>}
             <form onSubmit={ handleSubmit }>
                 <label for="firstName">First Name: </label>
                 <br/>

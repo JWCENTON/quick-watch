@@ -22,25 +22,25 @@ public class Seed
         {
             var Company1 = new Company
             {
-                Id = new Guid(),
-                Name = "something",
+                Id = Guid.NewGuid(),
+                Name = "FogWizards",
                 OwnerId = identityContext.Users.First().Id
             };
-            var Company2 = new Company
-            {
-                Id = new Guid(),
-                Name = "someasdasdthing",
-                OwnerId = identityContext.Users.First().Id
-            };
+            //var Company2 = new Company
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Name = "someasdasdthing",
+            //    OwnerId = identityContext.Users.First().Id
+            //};
             context.Company.Add(Company1);
-            context.Company.Add(Company2);
+            //context.Company.Add(Company2);
 
             //var employee1 = new Employee()
             //{
             //    Company = Company1,
             //    CompanyId = Company1.Id,
             //    UserId = identityContext.Users.First().Id,
-            //    Id = new Guid(),
+            //    Id = Guid.NewGuid(),
             //    Role = Role.Engineer
             //};
             //var employee2 = new Employee()
@@ -48,7 +48,7 @@ public class Seed
             //    Company = Company2,
             //    CompanyId = Company2.Id,
             //    UserId = identityContext.Users.First().Id,
-            //    Id = new Guid(),
+            //    Id = Guid.NewGuid(),
             //    Role = Role.Engineer
             //};
             //context.Employees.Add(employee1);
@@ -57,36 +57,36 @@ public class Seed
             var equipment1 = new Equipment
             {
                 Id = Guid.NewGuid(),
-                SerialNumber = "123",
+                SerialNumber = "4725375345",
                 Category = "Fog machine",
-                Location = "my house",
+                Location = "Storage Room 3",
                 Condition = 4,
                 IsCheckedOut = false
             };
             var equipment2 = new Equipment
             {
                 Id = Guid.NewGuid(),
-                SerialNumber = "133",
+                SerialNumber = "7638263963",
                 Category = "Fog machine",
-                Location = "my house",
+                Location = "Event Center",
                 Condition = 3,
-                IsCheckedOut = false
+                IsCheckedOut = true
             };
             var equipment3 = new Equipment
             {
                 Id = Guid.NewGuid(),
-                SerialNumber = "14235",
+                SerialNumber = "6253791364",
                 Category = "Fog machine",
-                Location = "my house",
+                Location = "Stage B",
                 Condition = 5,
                 IsCheckedOut = true
             };
             var equipment4 = new Equipment
             {
                 Id = Guid.NewGuid(),
-                SerialNumber = "11234",
+                SerialNumber = "7462684743",
                 Category = "Fog machine",
-                Location = "my house",
+                Location = "Warehouse 2",
                 Condition = 1,
                 IsCheckedOut = false
             };
@@ -96,7 +96,7 @@ public class Seed
                 UserId = identityContext.Users.First().Id,
                 Equipment = equipment1,
                 EquipmentId = equipment1.Id,
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Time = DateTime.Now
 
             };
@@ -105,7 +105,7 @@ public class Seed
                 UserId = identityContext.Users.First().Id,
                 Equipment = equipment2,
                 EquipmentId = equipment2.Id,
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Time = DateTime.Now
 
             };
@@ -115,7 +115,7 @@ public class Seed
                 UserId = identityContext.Users.First().Id,
                 Equipment = equipment1,
                 EquipmentId = equipment1.Id,
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Time = DateTime.Now
 
             };
@@ -124,7 +124,7 @@ public class Seed
                 UserId = identityContext.Users.First().Id,
                 Equipment = equipment2,
                 EquipmentId = equipment2.Id,
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Time = DateTime.Now
             };
             context.CheckIns.Add(checkIn1);
@@ -139,26 +139,62 @@ public class Seed
             {
                 Company = Company1,
                 CompanyId = Company1.Id,
-                Email = "some@some.com",
-                FirstName = "someone",
-                Id = new Guid(),
-                LastName = "some",
-                PhoneNumber = "+43234232423",
-                ContactAddress = "ABBA"
+                Email = "monika.wojciechowska@example.com",
+                FirstName = "Monika",
+                Id = Guid.NewGuid(),
+                LastName = "Wojciechowska",
+                PhoneNumber = "686745321",
+                ContactAddress = "ul. Mickiewicza 12, Wrocław 50-001, Poland"
             };
             var Client2 = new Client
             {
-                Company = Company2,
-                CompanyId = Company2.Id,
-                Email = "some@somasdasde.com",
-                FirstName = "soasdasmeone",
-                Id = new Guid(),
-                LastName = "soasdasdme",
-                PhoneNumber = "+43234344232423",
-                ContactAddress = "BABA"
+                Company = Company1,
+                CompanyId = Company1.Id,
+                Email = "piotr.nowak@example.net",
+                FirstName = "Piotr",
+                Id = Guid.NewGuid(),
+                LastName = "Nowak",
+                PhoneNumber = "734512890",
+                ContactAddress = "ul. Wielka 7, Kraków 30-001, Poland"
+            };
+            var Client3 = new Client
+            {
+                Company = Company1,
+                CompanyId = Company1.Id,
+                Email = "anna.kowalska@example.com",
+                FirstName = "Anna",
+                Id = Guid.NewGuid(),
+                LastName = "Kowalska",
+                PhoneNumber = "512345678",
+                ContactAddress = "ul. Nowa 15, Warszawa 02-123, Poland"
+            };
+            var Client4 = new Client
+            {
+                Company = Company1,
+                CompanyId = Company1.Id,
+                Email = "adam.mazur@example.net",
+                FirstName = "Adam",
+                Id = Guid.NewGuid(),
+                LastName = "Mazur",
+                PhoneNumber = "667823409",
+                ContactAddress = "ul. Leśna 3, Poznań 61-001, Poland"
+            };
+            var Client5 = new Client
+            {
+                Company = Company1,
+                CompanyId = Company1.Id,
+                Email = "katarzyna.wisniewska@example.com",
+                FirstName = "Katarzyna",
+                Id = Guid.NewGuid(),
+                LastName = "Wiśniewska",
+                PhoneNumber = "567809234",
+                ContactAddress = "ul. Słoneczna 9, Gdańsk 80-001, Poland"
             };
             context.Client.Add(Client1);
             context.Client.Add(Client2);
+            context.Client.Add(Client3);
+            context.Client.Add(Client4);
+            context.Client.Add(Client5);
 
             var commission1 = new Commission()
             {
@@ -166,31 +202,31 @@ public class Seed
                 ClientId = Client1.Id,
                 Company = Company1,
                 CompanyId = Company1.Id,
-                Description = "description",
-                EndTime = DateTime.Now,
-                Id = new Guid(),
-                Location = "location",
-                Scope = "scope",
-                StartTime = DateTime.Now
+                Description = "Outdoor Halloween Party",
+                EndTime = DateTime.Now.AddDays(3),
+                Id = Guid.NewGuid(),
+                Location = "Central Park, New York City",
+                Scope = "Fog machine rental and setup for spooky ambiance",
+                StartTime = DateTime.Now.AddDays(1)
             };
             var commission2 = new Commission()
             {
                 Client = Client2,
                 ClientId = Client2.Id,
-                Company = Company2,
-                CompanyId = Company2.Id,
-                Description = "description2",
-                EndTime = DateTime.Now,
-                Id = new Guid(),
-                Location = "location2",
-                Scope = "scope2",
-                StartTime = DateTime.Now
+                Company = Company1,
+                CompanyId = Company1.Id,
+                Description = "Indoor Theatrical Production",
+                EndTime = DateTime.Now.AddDays(16),
+                Id = Guid.NewGuid(),
+                Location = "City Theatre, 123 Main Street",
+                Scope = "Fog machine rental for special effects during the play",
+                StartTime = DateTime.Now.AddDays(10)
             };
             context.Commissions.Add(commission1);
             context.Commissions.Add(commission2);
             equipment1.Company = Company1;
-            equipment2.Company = Company2;
-            equipment3.Company = Company2;
+            equipment2.Company = Company1;
+            equipment3.Company = Company1;
             equipment4.Company = Company1;
             context.Equipment.Add(equipment1);
             context.Equipment.Add(equipment2);
@@ -199,7 +235,7 @@ public class Seed
 
             var book1 = new BookedEquipment()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Commission = commission1,
                 CommissionId = commission1.Id,
                 Equipment = equipment1,
@@ -217,14 +253,14 @@ public class Seed
 
             var work1 = new WorksOn()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Commission = commission1,
                 CommissionId = commission1.Id,
                 UserId = identityContext.Users.First().Id
             };
             var work2 = new WorksOn()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Commission = commission2,
                 CommissionId = commission2.Id,
                 UserId = identityContext.Users.First().Id
@@ -236,16 +272,16 @@ public class Seed
                 UserId = identityContext.Users.First().Id,
                 Company = Company1,
                 CompanyId = Company1.Id,
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 CreatedAt = DateTime.Now,
                 Status = Status.Sent
             };
             var invite2 = new Invite()
             {
                 UserId = identityContext.Users.First().Id,
-                Company = Company2,
-                CompanyId = Company2.Id,
-                Id = new Guid(),
+                Company = Company1,
+                CompanyId = Company1.Id,
+                Id = Guid.NewGuid(),
                 CreatedAt = DateTime.Now,
                 Status = Status.Sent
             };

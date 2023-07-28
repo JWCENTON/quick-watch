@@ -10,6 +10,6 @@ public record BaseCommissionDTO
     public string Location { get; init; }
     public string Description { get; init; }
     public string Scope { get; init; }
-    public DateTime StartTime { get; init; }
-    public DateTime EndTime { get; init; }
+    public DateTime? StartTime { get; init; }
+    public DateTime? EndTime { get; init; }
 };

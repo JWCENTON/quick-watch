@@ -7,6 +7,9 @@ using Domain.Client.Models;
 using webapi.uow;
 using Domain.Company.Models;
 using webapi.Validators;
+using DTO.CommissionDTOs;
+using Domain.Equipment.Models;
+using DTO.EquipmentDTOs;
 
 namespace webapi.Controllers;
 
@@ -56,7 +59,7 @@ public class ClientController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<Client> CreateClient([FromBody] CreateClientDTO clientDto)
+    public async Task<ActionResult<FullClientDTO>> CreateClient([FromBody] CreateClientDTO clientDto)
     {
         var result = await _createValidator.ValidateAsync(clientDto);
         if (result.IsValid)
@@ -68,7 +71,8 @@ public class ClientController : ControllerBase
             client.Id = Guid.NewGuid();
 
             await _unitOfWork.Clients.CreateAsync(client);
-            return client;
+            var fullClientDto = _mapper.Map<FullClientDTO>(client);
+            return CreatedAtAction(nameof(GetClient), new { id = fullClientDto.Id }, fullClientDto);
         }
         throw new ArgumentException(result.Errors.First().ErrorMessage);
     }

@@ -11,11 +11,13 @@ public abstract class BaseEquipmentDTOValidator<T> : AbstractValidator<T> where 
         
         RuleFor(dto => dto.Location).SetValidator(new EquipmentLocationValidator());
 
+        RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
+
         RuleFor(dto => dto.Condition)
             .NotNull()
             .WithMessage("Condition cannot be empty.")
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Condition cannot be less than 0.")
+            .GreaterThanOrEqualTo(1)
+            .WithMessage("Condition cannot be less than 1.")
             .LessThanOrEqualTo(5)
             .WithMessage("Condition cannot be higher than 5.");
     }
@@ -25,8 +27,6 @@ public class CreateEquipmentDTOValidator : BaseEquipmentDTOValidator<CreateEquip
 {
     public CreateEquipmentDTOValidator()
     {
-        RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
-        
         RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
     }
 }
@@ -37,8 +37,6 @@ public class FullEquipmentDTOValidator : BaseEquipmentDTOValidator<FullEquipment
     {
         RuleFor(dto => dto.Id).SetValidator(new EquipmentIdValidator());
 
-        RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
-        
         RuleFor(dto => dto.CompanyId).SetValidator(new CompanyIdValidator());
     }
 }
@@ -48,8 +46,6 @@ public class PartialEquipmentDTOValidator : BaseEquipmentDTOValidator<PartialEqu
     public PartialEquipmentDTOValidator()
     {
         RuleFor(dto => dto.Id).SetValidator(new EquipmentIdValidator());
-
-        RuleFor(dto => dto.SerialNumber).SetValidator(new EquipmentSerialNumberValidator());
     }
 }
 

@@ -11,7 +11,7 @@ using webapi.Validators;
 
 namespace webapi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController, Route("api/[controller]")]
     public class CompanyController : ControllerBase
     {
@@ -38,9 +38,9 @@ namespace webapi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Company>> GetAllCompanies()
+        public async Task<Company> Get()
         {
-            return await _unitOfWork.Companies.GetAllAsync();
+            return await _unitOfWork.Companies.GetAsync();
         }
 
         [HttpPost]

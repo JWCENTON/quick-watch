@@ -4,5 +4,5 @@ namespace DTO.EquipmentDTOs;
 
 public record UpdateEquipmentLocationDTO()
 {
-    public string Location { get; set; }
+    public string? Location { get; set; }
 }
