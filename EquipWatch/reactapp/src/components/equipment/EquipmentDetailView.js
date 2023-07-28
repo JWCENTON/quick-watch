@@ -108,7 +108,7 @@ export default function EquipmentDetailView({ detailsData }) {
                         <h4 className="details-header">Equipment Details</h4>
                         {/*<p>Equipment name: </p>*/}
                         <p>Serial number: {detailsData.serialNumber}</p>
-                        <p>Location: {detailsData.location}</p>
+                        <p>Location: {location}</p>
                         <p>Condition:
                             {[...Array(detailsData.condition)].map((e, i) => <span className="star" key={i}>&#9733;</span>)}
                         </p>
