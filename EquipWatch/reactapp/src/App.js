@@ -27,7 +27,7 @@ function App() {
                     <Route path="/forgotpassword" element={<ForgotPassword />} />
                     <Route path="/resetPassword/:userId/:token" element={<ResetPassword />} />
 
-                    <Route path="/main" element={<MainPage />}>
+                    <Route path="/main" element={<PrivateRoute />}>
                         <Route path="/main" element={<MainPage />} />    
                     </Route>
                     <Route path="/companies" element={<PrivateRoute />}>

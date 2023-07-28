@@ -41,6 +41,7 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<IEmailService, EmailService>();
 
         services.AddAutoMapper(Assembly.Load("DTO"));
+
         return services;
     }
 }

@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Services;
-using webapi.uow;
-using webapi.Validators;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,18 +18,14 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
     private readonly IConfiguration _configuration;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork,
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager,
         IEmailService emailService, IConfiguration configuration)
-
-
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _unitOfWork = unitOfWork;
         _emailService = emailService;
         _configuration = configuration;
     }
@@ -148,7 +142,7 @@ public class UserController : ControllerBase
     [HttpGet("resetPassword")]
     public IActionResult RedirectResetPassword(string userId, string token)
     {
-        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword/{userId}/{HttpUtility.UrlEncode(token)}"; //?userId={userId}&token={HttpUtility.UrlEncode(token)}
+        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword/{userId}/{HttpUtility.UrlEncode(token)}";
 
         return Redirect(resetPasswordPageUrl);
     }
@@ -190,5 +184,4 @@ public class UserController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
 }

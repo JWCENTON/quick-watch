@@ -15,7 +15,6 @@ module.exports = function (app) {
         },
     });
 
-    // Use the proxy middleware
     app.use(apiProxy);
 };
 
