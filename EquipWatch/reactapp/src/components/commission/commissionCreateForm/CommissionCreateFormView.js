@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Button, Form} from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, ListGroup } from 'react-bootstrap';
 import UniversalCard from '../card/Card';
 import './CommissionDetailView.css';
 import { useAuth } from '../authProvider/AuthContext';
@@ -7,6 +7,8 @@ import { useAuth } from '../authProvider/AuthContext';
 export default function CommissionDetailView({ detailsData }) {
     const [equipment, setEquipment] = useState(null);
     const [workers, setWorkers] = useState(null);
+    const [allEquipment, setAllEquipment] = useState(null);
+    const [allWorkers, setAllWorkers] = useState(null);
     const [showEquipmentModal, setShowEquipmentModal] = useState(false);
     const [showWorkerModal, setShowWorkerModal] = useState(false);
     const { token } = useAuth();
@@ -34,6 +36,40 @@ export default function CommissionDetailView({ detailsData }) {
         setWorkers(data);
     }
 
+    async function GetEquipmentModalData(token) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        let response = await fetch(`https://localhost:7007/api/equipment`, { method: "GET", headers });
+        let data = await response.json();
+        setAllEquipment(data);
+    }
+
+    async function GetEmployeeModalData(token) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        let response = await fetch(`https://localhost:7007/api/user`, { method: "GET", headers });
+        let data = await response.json();
+        setAllWorkers(data);
+    }
+
+    useEffect(() => {
+        GetEquipmentModalData(token)
+    }, [showEquipmentModal]);
+
+    useEffect(() => {
+        GetEmployeeModalData(token)
+    }, [showWorkerModal]);
+
     useEffect(() => {
         if (detailsData != null) {
             GetData(token);
@@ -60,7 +96,7 @@ export default function CommissionDetailView({ detailsData }) {
                         <br />
                         <h3>Workers</h3>
                         <div className="cardsContainer">
-                            {workers == null ? <p>Loading Workers...</p> : workers == null ? <p>No Workers Assigned</p> : workers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>)) }
+                            {workers == null ? <p>Loading Workers...</p> : workers == null ? <p>No Workers Assigned</p> : workers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='user'></UniversalCard>)) }
                         </div>
                         <Button onClick={handleWorkerShow}>Add Worker</Button>
 
@@ -69,19 +105,19 @@ export default function CommissionDetailView({ detailsData }) {
                                 <Modal.Title>Add Equipment</Modal.Title>
                             </Modal.Header>
                                 <Modal.Body>
-                                    <label for="inlocation">Location:</label>
-                                    <br />
-                                    <input type="text" id="inlocation" name="location" />
+                                <ListGroup>
+                                    {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((item, index) => (<ListGroup.Item value={item.id}><span>SN: {item.serialNumber} </span><span>Category: {item.category}</span></ListGroup.Item>))}
+                                </ListGroup>
                                 </Modal.Body>
                         </Modal>
                         <Modal show={showWorkerModal} onHide={handleWorkerClose}>
                             <Modal.Header closeButton>
                                 <Modal.Title>Add Worker</Modal.Title>
                             </Modal.Header>
-                                <Modal.Body>
-                                    <label for="inlocation">Location:</label>
-                                    <br />
-                                    <input type="text" id="inlocation" name="location" />
+                            <Modal.Body>
+                                <ListGroup>
+                                    {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id}><p>{worker.userName}</p></ListGroup.Item>))}
+                                </ListGroup>
                                 </Modal.Body>
                         </Modal>
                 </div>
