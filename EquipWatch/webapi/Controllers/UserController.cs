@@ -170,6 +170,53 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize]
+    [HttpGet("getUserInfo")]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var userInfo = new BaseUserDTO
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email
+        };
+
+        return Ok(userInfo);
+    }
+
+    [Authorize]
+    [HttpPut("updateUserInfo")]
+    public async Task<IActionResult> UpdateUserInfo([FromBody] BaseUserDTO model)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        user.FirstName = model.FirstName;
+        user.LastName = model.LastName;
+        user.Email = model.Email;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "User information updated successfully" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Failed to update user information", errors = result.Errors });
+        }
+    }
+
     private string GenerateJwtToken(IEnumerable<Claim> claims)
     {
         var secretKey = _configuration[key: "JwtSettings:SecretKey"];
