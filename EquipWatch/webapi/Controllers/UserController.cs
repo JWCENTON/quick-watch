@@ -217,6 +217,29 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize]
+    [HttpPost("changePassword")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO model)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Password changed successfully" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Failed to change password", errors = result.Errors });
+        }
+    }
+
     private string GenerateJwtToken(IEnumerable<Claim> claims)
     {
         var secretKey = _configuration[key: "JwtSettings:SecretKey"];
