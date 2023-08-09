@@ -60,14 +60,7 @@ function PersonalInfo() {
 
     const handleSave = async () => {
         try {
-            const response = await fetch('https://localhost:7007/api/User/updateUserInfo', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify(userInfo),
-            });
+            const response = await updateUserInfo();
 
             if (response.ok) {
                 setEditing(false);
@@ -79,23 +72,24 @@ function PersonalInfo() {
         }
     };
 
+    const updateUserInfo = async () => {
+        return await fetch('https://localhost:7007/api/User/updateUserInfo', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(userInfo),
+        });
+    };
+
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('https://localhost:7007/api/User/changePassword', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify(passwordData),
-            });
+            const response = await changePassword();
 
             if (response.ok) {
-                setPasswordData({
-                    currentPassword: '',
-                    newPassword: '',
-                });
+                clearPasswordFields();
                 displaySuccessMessage('Password has been changed successfully');
             } else {
                 displayErrorMessage('Failed to change password');
@@ -103,6 +97,24 @@ function PersonalInfo() {
         } catch (error) {
             displayErrorMessage('Failed to change password', error);
         }
+    };
+
+    const changePassword = async () => {
+        return await fetch('https://localhost:7007/api/User/changePassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(passwordData),
+        });
+    };
+
+    const clearPasswordFields = () => {
+        setPasswordData({
+            currentPassword: '',
+            newPassword: '',
+        });
     };
 
     const handleInputChange = (e) => {
@@ -121,81 +133,89 @@ function PersonalInfo() {
         }));
     };
 
+    const renderEditForm = () => (
+        <div>
+            <label htmlFor="firstName">First Name:</label>
+            <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={userInfo.firstName}
+                onChange={handleInputChange}
+            />
+            <br />
+            <label htmlFor="lastName">Last Name:</label>
+            <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={userInfo.lastName}
+                onChange={handleInputChange}
+            />
+            <br />
+            <label htmlFor="email">Contact Email:</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                value={userInfo.email}
+                onChange={handleInputChange}
+            />
+            <br />
+            <Button onClick={handleSave} variant="primary">
+                Save
+            </Button>
+        </div>
+    );
+
+    const renderUserInfo = () => (
+        <div>
+            <p>
+                <strong>First Name:</strong> {userInfo.firstName}
+            </p>
+            <p>
+                <strong>Last Name:</strong> {userInfo.lastName}
+            </p>
+            <p>
+                <strong>Contact Email:</strong> {userInfo.email}
+            </p>
+            <Button onClick={handleEdit} variant="secondary">
+                Edit
+            </Button>
+            <form onSubmit={handlePasswordChange}>
+                <label htmlFor="currentPassword">Current Password:</label>
+                <input
+                    type="password"
+                    id="currentPassword"
+                    name="currentPassword"
+                    value={passwordData.currentPassword}
+                    onChange={handlePasswordInputChange}
+                />
+                <br />
+                <label htmlFor="newPassword">New Password:</label>
+                <input
+                    type="password"
+                    id="newPassword"
+                    name="newPassword"
+                    value={passwordData.newPassword}
+                    onChange={handlePasswordInputChange}
+                />
+                <br />
+                <Button type="submit" variant="danger">
+                    Change Password
+                </Button>
+            </form>
+        </div>
+    );
+
     return (
         <div className="background-color wrapper">
             <h3>Personal Information</h3>
             <br />
             {editing ? (
-                <div>
-                    <label htmlFor="firstName">First Name:</label>
-                    <input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        value={userInfo.firstName}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <label htmlFor="lastName">Last Name:</label>
-                    <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        value={userInfo.lastName}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <label htmlFor="email">Contact Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={userInfo.email}
-                        onChange={handleInputChange}
-                    />
-                    <br />
-                    <Button onClick={handleSave} variant="primary">
-                        Save
-                    </Button>
-                </div>
+                renderEditForm()
             ) : (
-                <div>
-                    <p>
-                        <strong>First Name:</strong> {userInfo.firstName}
-                    </p>
-                    <p>
-                        <strong>Last Name:</strong> {userInfo.lastName}
-                    </p>
-                    <p>
-                        <strong>Contact Email:</strong> {userInfo.email}
-                    </p>
-                    <Button onClick={handleEdit} variant="secondary">
-                        Edit
-                    </Button>
-                    <form onSubmit={handlePasswordChange}>
-                        <label htmlFor="currentPassword">Current Password:</label>
-                        <input
-                            type="password"
-                            id="currentPassword"
-                            name="currentPassword"
-                            value={passwordData.currentPassword}
-                            onChange={handlePasswordInputChange}
-                        />
-                        <br />
-                        <label htmlFor="newPassword">New Password:</label>
-                        <input
-                            type="password"
-                            id="newPassword"
-                            name="newPassword"
-                            value={passwordData.newPassword}
-                            onChange={handlePasswordInputChange}
-                        />
-                        <br />
-                        <Button type="submit" variant="danger">
-                            Change Password
-                        </Button>
-                    </form>
-                </div>
+                renderUserInfo()
             )}
             {error && <p className="error-message">{error}</p>}
             {successMsg && <p className="success-message">{successMsg}</p>}
