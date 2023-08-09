@@ -193,7 +193,7 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpPut("updateUserInfo")]
-    public async Task<IActionResult> UpdateUserInfo([FromBody] BaseUserDTO model)
+    public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserCredentialsDTO model)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = await _userManager.FindByIdAsync(userId);

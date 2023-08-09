@@ -1,18 +1,191 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './PersonalInfo.css';
-import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 function PersonalInfo() {
+    const [userInfo, setUserInfo] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+    });
+    const [editing, setEditing] = useState(false);
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+    });
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
+
+    const fetchUserInfo = async () => {
+        try {
+            const response = await fetch('https://localhost:7007/api/User/getUserInfo', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUserInfo(data);
+            } else {
+                // Handle error
+                console.error('Failed to fetch user information');
+            }
+        } catch (error) {
+            // Handle error
+            console.error('Failed to fetch user information', error);
+        }
+    };
+
+    const handleEdit = () => {
+        setEditing(true);
+    };
+
+    const handleSave = async () => {
+        try {
+            const response = await fetch('https://localhost:7007/api/User/updateUserInfo', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(userInfo),
+            });
+
+            if (response.ok) {
+                setEditing(false);
+            } else {
+                // Handle error
+                console.error('Failed to update user information');
+            }
+        } catch (error) {
+            // Handle error
+            console.error('Failed to update user information', error);
+        }
+    };
+
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('https://localhost:7007/api/User/changePassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(passwordData),
+            });
+
+            if (response.ok) {
+                // Password changed successfully
+                setPasswordData({
+                    currentPassword: '',
+                    newPassword: '',
+                });
+            } else {
+                // Handle error
+                console.error('Failed to change password');
+            }
+        } catch (error) {
+            // Handle error
+            console.error('Failed to change password', error);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUserInfo((prevUserInfo) => ({
+            ...prevUserInfo,
+            [name]: value,
+        }));
+    };
+
+    const handlePasswordInputChange = (e) => {
+        const { name, value } = e.target;
+        setPasswordData((prevPasswordData) => ({
+            ...prevPasswordData,
+            [name]: value,
+        }));
+    };
+
     return (
         <div className="background-color wrapper">
             <h3>Personal Information</h3>
-            <br/>
-            <p><strong>First Name:</strong> Placeholder First Name</p>
-            <p><strong>Last Name:</strong> Placeholder Last Name</p>
-            <p><strong>Email:</strong> Placeholder Email</p>
             <br />
-            <button type="button" className="info-button">Show Equipment</button>
-            <button type="button" className="info-button">Show Commissions</button>
+            {editing ? (
+                <div>
+                    <label htmlFor="firstName">First Name:</label>
+                    <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={userInfo.firstName}
+                        onChange={handleInputChange}
+                    />
+                    <br />
+                    <label htmlFor="lastName">Last Name:</label>
+                    <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={userInfo.lastName}
+                        onChange={handleInputChange}
+                    />
+                    <br />
+                    <label htmlFor="email">Contact Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={userInfo.email}
+                        onChange={handleInputChange}
+                    />
+                    <br />
+                    <Button onClick={handleSave} variant="primary">
+                        Save
+                    </Button>
+                </div>
+            ) : (
+                <div>
+                    <p>
+                        <strong>First Name:</strong> {userInfo.firstName}
+                    </p>
+                    <p>
+                        <strong>Last Name:</strong> {userInfo.lastName}
+                    </p>
+                    <p>
+                        <strong>Contact Email:</strong> {userInfo.email}
+                    </p>
+                    <Button onClick={handleEdit} variant="secondary">
+                        Edit
+                    </Button>
+                    <form onSubmit={handlePasswordChange}>
+                        <label htmlFor="currentPassword">Current Password:</label>
+                        <input
+                            type="password"
+                            id="currentPassword"
+                            name="currentPassword"
+                            value={passwordData.currentPassword}
+                            onChange={handlePasswordInputChange}
+                        />
+                        <br />
+                        <label htmlFor="newPassword">New Password:</label>
+                        <input
+                            type="password"
+                            id="newPassword"
+                            name="newPassword"
+                            value={passwordData.newPassword}
+                            onChange={handlePasswordInputChange}
+                        />
+                        <br />
+                        <Button type="submit" variant="danger">
+                            Change Password
+                        </Button>
+                    </form>
+                </div>
+            )}
         </div>
     );
 }
