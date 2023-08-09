@@ -13,6 +13,23 @@ function PersonalInfo() {
         currentPassword: '',
         newPassword: '',
     });
+    const [error, setError] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
+
+    const clearMessages = () => {
+        setSuccessMsg('');
+        setError('');
+    };
+
+    const displaySuccessMessage = (message) => {
+        setSuccessMsg(message);
+        setTimeout(clearMessages, 5000);
+    };
+
+    const displayErrorMessage = (message) => {
+        setError(message);
+        setTimeout(clearMessages, 5000);
+    };
 
     useEffect(() => {
         fetchUserInfo();
@@ -30,12 +47,10 @@ function PersonalInfo() {
                 const data = await response.json();
                 setUserInfo(data);
             } else {
-                // Handle error
-                console.error('Failed to fetch user information');
+                displayErrorMessage('Failed to fetch user information');
             }
         } catch (error) {
-            // Handle error
-            console.error('Failed to fetch user information', error);
+            displayErrorMessage('Failed to fetch user information', error);
         }
     };
 
@@ -57,12 +72,10 @@ function PersonalInfo() {
             if (response.ok) {
                 setEditing(false);
             } else {
-                // Handle error
-                console.error('Failed to update user information');
+                displayErrorMessage('Failed to update user information');
             }
         } catch (error) {
-            // Handle error
-            console.error('Failed to update user information', error);
+            displayErrorMessage('Failed to update user information', error);
         }
     };
 
@@ -79,18 +92,16 @@ function PersonalInfo() {
             });
 
             if (response.ok) {
-                // Password changed successfully
                 setPasswordData({
                     currentPassword: '',
                     newPassword: '',
                 });
+                displaySuccessMessage('Password has been changed successfully');
             } else {
-                // Handle error
-                console.error('Failed to change password');
+                displayErrorMessage('Failed to change password');
             }
         } catch (error) {
-            // Handle error
-            console.error('Failed to change password', error);
+            displayErrorMessage('Failed to change password', error);
         }
     };
 
@@ -186,6 +197,8 @@ function PersonalInfo() {
                     </form>
                 </div>
             )}
+            {error && <p className="error-message">{error}</p>}
+            {successMsg && <p className="success-message">{successMsg}</p>}
         </div>
     );
 }
