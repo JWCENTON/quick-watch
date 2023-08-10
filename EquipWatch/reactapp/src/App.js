@@ -11,9 +11,9 @@ import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
 import DetailView from './pages/detailView/DetailView';
 import EditView from './pages/editView/EditView';
 import CreateForm from './pages/createForm/CreateForm';
-import Registration from './components/userRegistration/UserRegistration';
+import Registration from './pages/registration/Registration';
 import ErrorPage from './pages/error/error-page';
-import ForgotPassword from './components/forgotPassword/ForgotPassword';
+import ForgotPasswordPage from './pages/passwordReset/ForgotPasswordPage';
 import ResetPassword from './components/resetPassword/ResetPassword';
 import './App.css';
 
@@ -24,7 +24,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/register" element={<Registration />} />
-                    <Route path="/forgotpassword" element={<ForgotPassword />} />
+                    <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
                     <Route path="/resetPassword/:userId/:token" element={<ResetPassword />} />
 
                     <Route path="/main" element={<PrivateRoute />}>
