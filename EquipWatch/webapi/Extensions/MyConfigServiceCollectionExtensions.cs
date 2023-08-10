@@ -39,6 +39,7 @@ public static class MyConfigServiceCollectionExtensions
         services.AddValidatorsFromAssembly(Assembly.Load("webapi"));
 
         services.AddTransient<IEmailService, EmailService>();
+        services.AddScoped<IUserServices, UserServices>();
 
         services.AddAutoMapper(Assembly.Load("DTO"));
 
