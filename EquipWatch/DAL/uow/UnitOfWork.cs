@@ -15,16 +15,16 @@ namespace webapi.uow
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DatabaseContext _context;
-        private IBookedEquipmentRepository _bookedEquipmentService;
-        private ICheckInRepository _checkInService;
-        private ICheckOutRepository _checkOutService;
-        private IClientRepository _clientService;
-        private ICommissionRepository _commissionService;
-        private ICompanyRepository _companyService;
-        private IEmployeeRepository _employeeService;
-        private IEquipmentRepository _equipmentService;
-        private IInviteRepository _inviteService;
-        private IWorksOnRepository _worksOnService;
+        private IBookedEquipmentRepository _bookedEquipmentRepository;
+        private ICheckInRepository _checkInRepository;
+        private ICheckOutRepository _checkOutRepository;
+        private IClientRepository _clientRepository;
+        private ICommissionRepository _commissionRepository;
+        private ICompanyRepository _companyRepository;
+        private IEmployeeRepository _employeeRepository;
+        private IEquipmentRepository _equipmentRepository;
+        private IInviteRepository _inviteRepository;
+        private IWorksOnRepository _worksOnRepository;
         private readonly IdentityContext _identityContext;
 
         public UnitOfWork(DatabaseContext context, IdentityContext identityContext)
@@ -33,25 +33,25 @@ namespace webapi.uow
             _identityContext = identityContext;
         }
 
-        public IBookedEquipmentRepository BookedEquipment => _bookedEquipmentService ??= new BookedEquipmentRepository(_context, _identityContext);
+        public IBookedEquipmentRepository BookedEquipment => _bookedEquipmentRepository ??= new BookedEquipmentRepository(_context, _identityContext);
 
-        public ICheckInRepository CheckIns => _checkInService ??= new CheckInRepository(_context, _identityContext);
+        public ICheckInRepository CheckIns => _checkInRepository ??= new CheckInRepository(_context, _identityContext);
 
-        public ICheckOutRepository CheckOuts => _checkOutService ??= new CheckOutRepository(_context, _identityContext);
+        public ICheckOutRepository CheckOuts => _checkOutRepository ??= new CheckOutRepository(_context, _identityContext);
 
-        public IClientRepository Clients => _clientService ??= new ClientRepository(_context, _identityContext);
+        public IClientRepository Clients => _clientRepository ??= new ClientRepository(_context, _identityContext);
 
-        public ICommissionRepository Commissions => _commissionService ??= new CommissionRepository(_context, _identityContext);
+        public ICommissionRepository Commissions => _commissionRepository ??= new CommissionRepository(_context, _identityContext);
 
-        public ICompanyRepository Companies => _companyService ??= new CompanyRepository(_context, _identityContext);
+        public ICompanyRepository Companies => _companyRepository ??= new CompanyRepository(_context, _identityContext);
 
-        public IEmployeeRepository Employees => _employeeService ??= new EmployeeRepository(_context, _identityContext);
+        public IEmployeeRepository Employees => _employeeRepository ??= new EmployeeRepository(_context, _identityContext);
 
-        public IEquipmentRepository Equipments => _equipmentService ??= new EquipmentRepository(_context, _identityContext);
+        public IEquipmentRepository Equipments => _equipmentRepository ??= new EquipmentRepository(_context, _identityContext);
 
-        public IInviteRepository Invites => _inviteService ??= new InviteRepository(_context, _identityContext);
+        public IInviteRepository Invites => _inviteRepository ??= new InviteRepository(_context, _identityContext);
 
-        public IWorksOnRepository WorksOn => _worksOnService ??= new WorksOnRepository(_context, _identityContext);
+        public IWorksOnRepository WorksOn => _worksOnRepository ??= new WorksOnRepository(_context, _identityContext);
 
 
         public void SaveChanges()

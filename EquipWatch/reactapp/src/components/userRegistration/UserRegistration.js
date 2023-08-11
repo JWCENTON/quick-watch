@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import './UserRegistration.css';
 
@@ -101,6 +101,7 @@ function Registration() {
                     Register
                 </Button>
             </form>
+            <Link to="/">Back to Login</Link>
         </div>
     );
 }
