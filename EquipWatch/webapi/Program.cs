@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using webapi.Extensions;
 using webapi.Middleware;
+using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = new ConfigurationBuilder()
@@ -24,6 +25,13 @@ builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySql
 
 
 builder.Services.Configure<EmailContext>(configuration.GetSection("Email"));
+
+// required to test Email Services
+builder.Services.AddSingleton<ISmtpClientWrapper>(provider =>
+{
+    var emailContext = configuration.GetSection("Email").Get<EmailContext>();
+    return new SmtpClientWrapper(emailContext.Smtp, emailContext.Port, emailContext.Username, emailContext.Password);
+});
 
 // Set up Serilog logger
 Log.Logger = new LoggerConfiguration()
