@@ -124,7 +124,17 @@ export default function CommissionDetailView({ detailsData }) {
                                         {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((item, index) => (<ListGroup.Item value={item.id}><span>SN: {item.serialNumber} </span><span>Category: {item.category}</span></ListGroup.Item>))}
                                     </ListGroup>
                                 </Modal.Body>
-                            </Modal>
+                                </Modal>
+                                <Modal show={showWorkerModal} onHide={handleWorkerClose}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Add Worker</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <ListGroup>
+                                            {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id}><p>{worker.userName}</p></ListGroup.Item>))}
+                                        </ListGroup>
+                                    </Modal.Body>
+                                </Modal>
                         </div>
                     </div>
                 </div>
