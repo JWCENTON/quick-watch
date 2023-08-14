@@ -5,6 +5,7 @@ using DTO.CommissionDTOs;
 using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Domain.BookedEquipment.Models;
 using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
@@ -145,6 +146,31 @@ namespace webapi.Controllers
             return equipment.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
         }
 
+        [HttpPost("{id}/equipment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddEquipment(Guid id, [FromBody] CommissionEquipmentAddDTO data)
+        {
+            var commission = await _unitOfWork.Commissions.GetAsync(id);
+            var equipmentId = Guid.Parse(data.EquipmentId);
+            var equipment = await _unitOfWork.Equipments.GetAsync(equipmentId);
+            var startDate = commission.StartTime;
+            var endDate = commission.EndTime;
+
+            var booking = new BookedEquipment()
+            {
+                Commission = commission,
+                CommissionId = commission.Id,
+                Equipment = equipment,
+                EquipmentId = equipmentId
+            };
+
+            await _unitOfWork.BookedEquipment.CreateAsync(booking);
+
+            return Ok();
+        }
 
         [HttpGet("{id}/employees")]
         [ProducesResponseType(StatusCodes.Status200OK)]
