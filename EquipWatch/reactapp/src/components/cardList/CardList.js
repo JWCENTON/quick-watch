@@ -70,7 +70,7 @@ function CardList() {
 		if (location.pathname === '/equipment') {
 		  return {
 			...item,
-			isCheckedOut: item.isCheckedOut ? 'Checked Out' : 'Not Checked Out'
+			available: item.available ? 'Checked Out' : 'Not Checked Out'
 		  };
 		} else {
 		  return item;

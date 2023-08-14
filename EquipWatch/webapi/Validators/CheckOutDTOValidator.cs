@@ -15,7 +15,7 @@ public abstract class BaseCheckOutDTOValidator<T> : AbstractValidator<T> where T
 }
 public class CreateCheckOutDTOValidator : BaseCheckOutDTOValidator<CreateCheckOutDTO>
 {
-    protected CreateCheckOutDTOValidator()
+    public CreateCheckOutDTOValidator()
     {
         RuleFor(dto => dto.ArriveTime)
             .Null()

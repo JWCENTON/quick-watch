@@ -7,7 +7,7 @@ import { useAuth } from '../authProvider/AuthContext';
 export default function EquipmentDetailView({ detailsData }) {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [showCheckinModal, setShowCheckinModal] = useState(false);
-	const [isCheckedOut, setIsCheckedOut] = useState(false);
+	const [isAvailable, setIsAvailable] = useState(false);
 	const [location, setLocation] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -20,12 +20,12 @@ export default function EquipmentDetailView({ detailsData }) {
     }, [showCheckoutModal, showCheckinModal]);
 	useEffect(() => {
 		if (detailsData) {
-			setIsCheckedOut(detailsData.isCheckedOut);
+			setIsAvailable(detailsData.available);
 			setLocation(detailsData.location);
 		}
 	}, [detailsData]);
 	
-	useEffect(() => {}, [isCheckedOut], [location]);
+	useEffect(() => {}, [isAvailable], [location]);
 
     const handleCheckoutModalClose = () => {setShowCheckoutModal(false); setErrorMessage('');};
     const handleCheckoutModalShow = () => setShowCheckoutModal(true);
@@ -54,7 +54,7 @@ export default function EquipmentDetailView({ detailsData }) {
 			setErrorMessage(errorJson.Message);
 		} else if (response.ok) {
 			setLocation(formLocation)
-			setIsCheckedOut(true);
+			setIsAvailable(true);
             setShowCheckoutModal(false);
             setUpdatedLocation(formLocation);
         }
@@ -80,7 +80,7 @@ export default function EquipmentDetailView({ detailsData }) {
 			const errorJson = await response.json();
 			setErrorMessage(errorJson.Message);
 		} else if (response.ok) {
-			setIsCheckedOut(false);
+			setIsAvailable(false);
 			setLocation(formLocation)
             setShowCheckinModal(false);
             setUpdatedLocation(formLocation);
@@ -96,11 +96,11 @@ export default function EquipmentDetailView({ detailsData }) {
         });
         navigate("/equipment");
     }
-
+	
     return (
         <div className="details-section">
             <div className="myAndAllSwitch-section"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
-            {detailsData === null || isCheckedOut === undefined ? (
+			{detailsData === null || isAvailable === undefined ? (
                 <p>Loading...</p>
             ) : (
                 <div className="details-grid">
@@ -128,7 +128,7 @@ export default function EquipmentDetailView({ detailsData }) {
                         </div>
                         <h4 className="details-header">Assigned Employee</h4>
                             <div className="button-section">
-                                {!isCheckedOut ? (
+                                {!isAvailable ? (
                             <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
                                 ) : (
                             <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In</Button>

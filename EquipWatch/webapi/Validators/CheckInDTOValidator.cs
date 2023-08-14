@@ -14,7 +14,7 @@ public abstract class BaseCheckInDTOValidator<T> : AbstractValidator<T> where T 
 }
 public class CreateCheckInDTOValidator : BaseCheckInDTOValidator<CreateCheckInDTO>
 {
-    protected CreateCheckInDTOValidator()
+    public CreateCheckInDTOValidator()
     {
         RuleFor(dto => dto.ArriveTime)
             .Null()
