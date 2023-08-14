@@ -3,5 +3,5 @@
 public record PartialEquipmentDTO : BaseEquipmentDTO
 {
     public string Id { get; init; }
-    public bool IsCheckedOut { get; init; }
+    public bool Available { get; init; }
 }

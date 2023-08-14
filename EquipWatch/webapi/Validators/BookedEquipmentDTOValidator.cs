@@ -9,7 +9,7 @@ public abstract class BaseBookedEquipmentDTOValidator<T> : AbstractValidator<T> 
     {
         RuleFor(dto => dto.CommissionId).SetValidator(new CommissionIdValidator());
 
-        RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
+        RuleFor(dto => dto.CheckOutId).SetValidator(new CheckOutIdDTOValidator());
     }
 }
 public class CreateBookedEquipmentDTOValidator : BaseBookedEquipmentDTOValidator<CreateBookedEquipmentDTO>

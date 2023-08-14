@@ -40,7 +40,7 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
     public Task<List<Domain.Equipment.Models.Equipment>> GetCommissionEquipmentAsync(Guid commissionId)
     {
         var bookings = _context.BookedEquipments.Where(booking => booking.CommissionId == commissionId);
-        var equipment = bookings.Select(booking => booking.Equipment);
+        var equipment = bookings.Select(booking => booking.CheckOut.Equipment);
         return equipment.ToListAsync();
     }
 }

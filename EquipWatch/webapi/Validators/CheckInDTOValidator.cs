@@ -10,14 +10,16 @@ public abstract class BaseCheckInDTOValidator<T> : AbstractValidator<T> where T 
         RuleFor(dto => dto.UserId).SetValidator(new UserIdValidator());
 
         RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
-
-        RuleFor(dto => dto.Time)
-            .NotEmpty()
-            .WithMessage("Check-in time cannot be empty.");
     }
 }
 public class CreateCheckInDTOValidator : BaseCheckInDTOValidator<CreateCheckInDTO>
 {
+    protected CreateCheckInDTOValidator()
+    {
+        RuleFor(dto => dto.ArriveTime)
+            .Null()
+            .WithMessage("Check-in arrive time cannot be specified while creating.");
+    }
 }
 
 public class FullCheckInDTOValidator : BaseCheckInDTOValidator<FullCheckInDTO>

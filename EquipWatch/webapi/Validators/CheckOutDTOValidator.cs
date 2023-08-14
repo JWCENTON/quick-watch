@@ -11,13 +11,16 @@ public abstract class BaseCheckOutDTOValidator<T> : AbstractValidator<T> where T
 
         RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
 
-        RuleFor(dto => dto.Time)
-            .NotEmpty()
-            .WithMessage("Check-out time cannot be empty.");
     }
 }
 public class CreateCheckOutDTOValidator : BaseCheckOutDTOValidator<CreateCheckOutDTO>
 {
+    protected CreateCheckOutDTOValidator()
+    {
+        RuleFor(dto => dto.ArriveTime)
+            .Null()
+            .WithMessage("Check-out arrive time cannot be specified while creating.");
+    }
 }
 
 public class FullCheckOutDTOValidator : BaseCheckOutDTOValidator<FullCheckOutDTO>

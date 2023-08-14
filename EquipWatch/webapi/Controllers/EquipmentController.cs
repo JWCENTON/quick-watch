@@ -135,8 +135,8 @@ public class EquipmentController : ControllerBase
             var equipment = await _unitOfWork.Equipments.GetAsync(id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) { throw new ArgumentException("You need login to create checkout"); }
-            if (equipment.IsCheckedOut) { throw new ArgumentException("Equipment is already checked out"); }
-            equipment.IsCheckedOut = true;
+            if (!equipment.Available) { throw new ArgumentException("Equipment is already checked out"); }
+            equipment.Available = false;
             equipment.Location = locationDto.Location;
             await _unitOfWork.Equipments.UpdateAsync(equipment);
 
@@ -145,7 +145,7 @@ public class EquipmentController : ControllerBase
                 Id = Guid.NewGuid(),
                 Equipment = equipment,
                 UserId = userId,
-                Time = DateTime.Now
+                CreationTime = DateTime.Now
             };
 
             await _unitOfWork.CheckOuts.CreateAsync(checkout);
@@ -174,10 +174,10 @@ public class EquipmentController : ControllerBase
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) 
             { throw new ArgumentException("You need login to create checkout"); }
-            if (!equipment.IsCheckedOut) 
+            if (equipment.Available) 
             { throw new ArgumentException("Equipment is already checked in"); }
 
-            equipment.IsCheckedOut = false;
+            equipment.Available = true;
             equipment.Location = locationDto.Location;
             await _unitOfWork.Equipments.UpdateAsync(equipment);
 
@@ -186,7 +186,7 @@ public class EquipmentController : ControllerBase
                 Id = Guid.NewGuid(),
                 Equipment = equipment,
                 UserId = userId,
-                Time = DateTime.Now
+                CreationTime = DateTime.Now
             };
 
             await _unitOfWork.CheckIns.CreateAsync(checkIn);
