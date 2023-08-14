@@ -1,4 +1,3 @@
-
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using DAL;
@@ -9,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using webapi.Extensions;
 using webapi.Middleware;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = new ConfigurationBuilder()

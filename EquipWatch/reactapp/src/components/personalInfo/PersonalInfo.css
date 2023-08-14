@@ -68,3 +68,7 @@ a:hover {
     color: #3F72AF;
     border: 1px solid #3F72AF;
 }
+
+.success-message {
+    color: green;
+}

@@ -4,14 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Services;
-using webapi.uow;
-using webapi.Validators;
 using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using DTO.EquipmentDTOs;
+using System.Web;
 using AutoMapper;
+using webapi.uow;
 
 namespace webapi.Controllers;
 
@@ -24,37 +20,30 @@ public class UserController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
-    private readonly IConfiguration _configuration;
+    private readonly IUserServices _userServices;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, IUnitOfWork unitOfWork,
-        IEmailService emailService, IConfiguration configuration)
-
-
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager,
+        IEmailService emailService, IUserServices userServices, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _emailService = emailService;
-        _configuration = configuration;
+        _userServices = userServices;
     }
 
     [AllowAnonymous]
     [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Register([FromBody] CreateUserDTO model)
     {
-        
-        var user = new User
-        {
-            UserName = model.Email,
-            Email = model.Email,
-            FirstName = model.FirstName,
-            LastName = model.LastName
-        };
-
-        var result = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
-
-        if (result.Succeeded)
+        var user = _userServices.MatchModelToNewUser(model);
+        var userCreationResult = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
+        if (userCreationResult.Succeeded)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
@@ -64,15 +53,19 @@ public class UserController : ControllerBase
             return Ok();
         }
 
-        return BadRequest(result.Errors);
+        return BadRequest(userCreationResult.Errors);
     }
 
     [AllowAnonymous]
     [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
-
         if (user != null)
         {
             if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -82,28 +75,23 @@ public class UserController : ControllerBase
         }
 
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
-
         if (result.Succeeded)
         {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName),
-            };
-
-            var token = GenerateJwtToken(claims);
+            var claims = _userServices.GenerateClaims(user);
+            var token = _userServices.GenerateJwtToken(claims);
             return Ok(new { token });
         }
-        else
-        {
-            return Unauthorized();
-        }
-   
+
+        return Unauthorized();
     }
 
     [AllowAnonymous]
     [HttpGet("ConfirmEmail")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ConfirmEmail(string userId, string token)
     {
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
@@ -128,19 +116,142 @@ public class UserController : ControllerBase
         }
     }
 
-    private string GenerateJwtToken(IEnumerable<Claim> claims)
+    [AllowAnonymous]
+    [HttpPost("forgotPassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO model)
     {
-        var secretKey = _configuration[key: "JwtSettings:SecretKey"];
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(
-            issuer: "equip-watch",
-            audience: "your-audience",
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(12), 
-            signingCredentials: credentials);
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var resetLink = Url.Action("ResetPassword", "User", new { userId = user.Id, token }, Request.Scheme);
+
+        await _emailService.SendPasswordResetLinkAsync(user, resetLink);
+
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpGet("resetPassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public IActionResult RedirectResetPassword(string userId, string token)
+    {
+        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword/{userId}/{HttpUtility.UrlEncode(token)}";
+
+        return Redirect(resetPasswordPageUrl);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("resetPassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, HttpUtility.UrlDecode(model.Token), model.NewPassword);
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Password reset successful" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Failed to reset password", errors = result.Errors });
+        }
+    }
+
+    [Authorize]
+    [HttpGet("getUserInfo")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        return Ok(user);
+    }
+
+    [Authorize]
+    [HttpPut("updateUserInfo")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserCredentialsDTO model)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        _userServices.MatchModelToExistingUser(user, model);
+        var result = await _userManager.UpdateAsync(user);
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "User information updated successfully" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Failed to update user information", errors = result.Errors });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("changePassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO model)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Password changed successfully" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Failed to change password", errors = result.Errors });
+        }
     }
 
     [Authorize]

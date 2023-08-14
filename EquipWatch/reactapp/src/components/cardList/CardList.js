@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import UniversalCard from '../card/Card';
-import './CardList.css';
 import { useAuth } from '../authProvider/AuthContext';
 
 function CardList() {
@@ -67,16 +66,31 @@ function CardList() {
         }
         const response = await fetch(url, { headers });
         const data = await response.json();
-        setCards(data);
+		const modifiedData = data.map(item => {
+		if (location.pathname === '/equipment') {
+		  return {
+			...item,
+			isCheckedOut: item.isCheckedOut ? 'Checked Out' : 'Not Checked Out'
+		  };
+		} else {
+		  return item;
+		}
+		});
+		
+		setCards(modifiedData);
     }
 
     return (
         <div className="cardSection">
             <a className="myAndAllSwitch" href="/" >My {displayedCategory}</a> | <a className="myAndAllSwitch" href="/" >All {displayedCategory}</a>
             <div className="cardsContainer">
-                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (<UniversalCard key={index} data={card} dataType={itemType}></UniversalCard>))}
+                {cards == null ? <p>Loading...</p> : cards.map((card, index) => (
+        <UniversalCard key={index} data={card} dataType={itemType} />
+		))}
             </div>
-            <Button as={Link} to={`/${itemType}/create`}>Add New</Button>
+            <div className="btn-section">
+                <Button as={Link} to={`/${itemType}/create`} className="btn-addcard">Add New</Button>
+            </div>
         </div>
     );
 }

@@ -23,5 +23,11 @@ public class UserMappingProfile : Profile
             .ForAllMembers(opt => opt
                 .Condition((src, dest, srcMember) => srcMember != null));
 
+        CreateMap<Domain.User.Models.User, ForgotPasswordDTO>().ReverseMap();
+
+        CreateMap<ResetPasswordDTO, Domain.User.Models.User>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.PasswordResetToken, opt => opt.MapFrom(src => src.Token))
+            .ReverseMap();
     }
 }
