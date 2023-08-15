@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, Modal, ListGroup } from 'react-bootstrap';
+import { useNavigate } from 'react-router'
 import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
 
@@ -10,6 +11,7 @@ export default function CommissionDetailView({ detailsData }) {
     const [allWorkers, setAllWorkers] = useState(null);
     const [showEquipmentModal, setShowEquipmentModal] = useState(false);
     const [showWorkerModal, setShowWorkerModal] = useState(false);
+    const navigate = useNavigate()
     const { token } = useAuth();
 
     const handleEquipmentClose = () => setShowEquipmentModal(false);
@@ -65,6 +67,23 @@ export default function CommissionDetailView({ detailsData }) {
         let response = await fetch(`https://localhost:7007/api/user`, { method: "GET", headers });
         let data = await response.json();
         setAllWorkers(data);
+    }
+
+    async function AddEmployee(event) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        let raw = JSON.stringify({
+            "employeeId": event.target.value
+        });
+
+        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "POST", headers: headers, body: raw });
+        let data = await response.json();
     }
 
     useEffect(() => {
@@ -131,7 +150,7 @@ export default function CommissionDetailView({ detailsData }) {
                                     </Modal.Header>
                                     <Modal.Body>
                                         <ListGroup>
-                                            {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id}><p>{worker.userName}</p></ListGroup.Item>))}
+                                            {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id} onClick={AddEmployee}><p>{worker.userName}</p></ListGroup.Item>))}
                                         </ListGroup>
                                     </Modal.Body>
                                 </Modal>

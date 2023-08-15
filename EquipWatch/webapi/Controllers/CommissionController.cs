@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Domain.Company.Models;
 using Domain.Equipment.Models;
 using DTO.CommissionDTOs;
@@ -6,10 +7,13 @@ using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Domain.BookedEquipment.Models;
+using Domain.WorksOn.Models;
 using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
 using webapi.Validators;
+using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace webapi.Controllers
 {
@@ -182,5 +186,34 @@ namespace webapi.Controllers
             var employees = await _unitOfWork.WorksOn.GetCommissionEmployeesAsync(id);
             return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
         }
+
+        [HttpPost("{id}/employees")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddEmployee(Guid id, [FromBody] CommissionEmployeeAddDTO data)
+        {
+            Debug.WriteLine("hello");
+            var commission = await _unitOfWork.Commissions.GetAsync(id);
+            //var employeeId = Guid.Parse(data.EmployeeId);
+            //var employee = await _unitOfWork.Equipments.GetAsync(employeeId);
+            //var startDate = commission.StartTime;
+            //var endDate = commission.EndTime;
+
+            var worksOn = new WorksOn()
+            {
+                Commission = commission,
+                CommissionId = commission.Id,
+                UserId = data.EmployeeId,
+            };
+
+            await _unitOfWork.WorksOn.CreateAsync(worksOn);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok();
+        }
+
     }
 }
