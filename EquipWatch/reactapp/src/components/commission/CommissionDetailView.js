@@ -86,6 +86,23 @@ export default function CommissionDetailView({ detailsData }) {
         let data = await response.json();
     }
 
+    async function AddEquipment(event) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        let raw = JSON.stringify({
+            "equipmentId": event.target.value
+        });
+
+        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "POST", headers: headers, body: raw });
+        let data = await response.json();
+    }
+
     useEffect(() => {
         GetEquipmentModalData(token)
     }, [showEquipmentModal]);
@@ -140,7 +157,7 @@ export default function CommissionDetailView({ detailsData }) {
                                 </Modal.Header>
                                 <Modal.Body>
                                     <ListGroup>
-                                        {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((item, index) => (<ListGroup.Item value={item.id}><span>SN: {item.serialNumber} </span><span>Category: {item.category}</span></ListGroup.Item>))}
+                                            {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((item, index) => (<ListGroup.Item value={item.id} onClick={AddEquipment}><span>SN: {item.serialNumber} </span><span>Category: {item.category}</span></ListGroup.Item>))}
                                     </ListGroup>
                                 </Modal.Body>
                                 </Modal>
