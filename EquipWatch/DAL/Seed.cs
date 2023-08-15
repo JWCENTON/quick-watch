@@ -281,6 +281,7 @@ public class Seed
             book1.CheckOut = checkOut1;
             checkOut1.Equipment.Available = false;
             checkOut1.Equipment.InWarehouse = false;
+            checkOut1.Equipment.Location = book1.Commission.Location;
             checkOut1.ArriveTime = checkOut1.CreationTime.AddHours(12);
 
             context.CheckOuts.Add(checkOut2);
@@ -288,6 +289,7 @@ public class Seed
             book2.CheckOut = checkOut2;
             checkOut2.Equipment.Available = false;
             checkOut2.Equipment.InWarehouse = false;
+            checkOut2.Equipment.Location = book2.Commission.Location;
             checkOut2.ArriveTime = checkOut2.CreationTime.AddHours(5);
 
             var checkOut3 = new CheckOut()
@@ -312,6 +314,7 @@ public class Seed
             context.CheckOuts.Add(checkOut3);
             checkOut3.Equipment.Available = false;
             checkOut3.Equipment.InWarehouse = false;
+            checkOut3.Equipment.Location = book3.Commission.Location;
             checkOut3.ArriveTime = checkOut3.CreationTime.AddHours(2);
 
             var checkOut4 = new CheckOut()
@@ -335,6 +338,7 @@ public class Seed
             context.CheckOuts.Add(checkOut4);
             checkOut4.Equipment.Available = false;
             checkOut4.Equipment.InWarehouse = false;
+            checkOut4.Equipment.Location = book4.Commission.Location;
             checkOut4.ArriveTime = checkOut4.CreationTime.AddHours(2);
 
 
@@ -369,16 +373,20 @@ public class Seed
             checkIn1.Equipment.Available = true;
             checkIn1.ArriveTime = checkIn1.CreationTime.AddHours(2);
             checkIn1.Equipment.InWarehouse = true;
+            checkIn1.Equipment.Location = "warehouse 1";
 
             context.CheckIns.Add(checkIn2);
             checkIn2.Equipment.Available = true;
-            checkIn1.ArriveTime = checkIn2.CreationTime.AddHours(5);
+            checkIn2.ArriveTime = checkIn2.CreationTime.AddHours(5);
             checkIn2.Equipment.InWarehouse = true;
+            checkIn2.Equipment.Location = "warehouse 2";
 
             context.CheckIns.Add(checkIn3);
             checkIn3.Equipment.Available = true;
-            checkIn1.ArriveTime = checkIn3.CreationTime.AddHours(1);
-            checkIn3.Equipment.InWarehouse = true;
+            checkIn3.Equipment.Location = "on the way to warehouse 3";
+            //checkIn3.ArriveTime = checkIn3.CreationTime.AddHours(1);
+            //checkIn3.Equipment.InWarehouse = true;
+            //checkIn3.Equipment.Location = "warehouse 3";
 
 
             var invite1 = new Invite()
