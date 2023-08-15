@@ -3,6 +3,8 @@ import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext';
+import QRCode from "react-qr-code";
+//import { Wrapper, Trigger } from 'react-download-svg';
 
 export default function EquipmentDetailView({ detailsData }) {
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -116,7 +118,9 @@ export default function EquipmentDetailView({ detailsData }) {
                         <div className="button-section">
                             <Button className="detail-view-btn">Edit</Button>
                             <Button className="detail-view-btn" onClick={DeleteEquipment}>Remove</Button>
-                        </div>
+                            </div>
+                            <h4 className="details-header">QR Code</h4>
+                            <QRCode value={window.location.href}></QRCode>
                     </div>
                     <div className="section-right">
                         <h4 className="details-header">Assigned Commission</h4>
@@ -135,7 +139,6 @@ export default function EquipmentDetailView({ detailsData }) {
                                     )}
                             </div>
                     </div>
-
                     
 
                     <Modal show={showCheckoutModal} onHide={handleCheckoutModalClose}>
