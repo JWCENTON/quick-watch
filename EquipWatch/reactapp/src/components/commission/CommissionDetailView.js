@@ -70,6 +70,7 @@ export default function CommissionDetailView({ detailsData }) {
     }
 
     async function AddEmployee(event) {
+        let target = event.currentTarget;
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -79,14 +80,16 @@ export default function CommissionDetailView({ detailsData }) {
         }
 
         let raw = JSON.stringify({
-            "employeeId": `${event.target.value}`
+            "employeeId": `${target.getAttribute('value') }`
         });
 
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "POST", headers: headers, body: raw });
-        let data = await response.json();
+
+        navigate(0);
     }
 
     async function AddEquipment(event) {
+        let target = event.currentTarget;
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -96,11 +99,12 @@ export default function CommissionDetailView({ detailsData }) {
         }
 
         let raw = JSON.stringify({
-            "equipmentId": `${event.target.value}`
+            "equipmentId": `${target.getAttribute('value')}`
         });
 
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "POST", headers: headers, body: raw });
-        let data = await response.json();
+
+        navigate(0);
     }
 
     useEffect(() => {

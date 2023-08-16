@@ -27,7 +27,8 @@ public class WorksOnRepository : IWorksOnRepository
 
     public Task CreateAsync(Domain.WorksOn.Models.WorksOn entity)
     {
-        throw new NotImplementedException();
+        _context.WorksOn.AddAsync(entity);
+        return Task.CompletedTask;
     }
 
     public Task UpdateAsync(Domain.WorksOn.Models.WorksOn entity)

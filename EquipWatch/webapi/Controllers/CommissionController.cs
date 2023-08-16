@@ -203,6 +203,7 @@ namespace webapi.Controllers
 
             var worksOn = new WorksOn()
             {
+                Id = Guid.NewGuid(),
                 Commission = commission,
                 CommissionId = commission.Id,
                 UserId = data.EmployeeId,
