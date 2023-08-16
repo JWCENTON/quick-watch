@@ -196,10 +196,6 @@ namespace webapi.Controllers
         {
             Debug.WriteLine("hello");
             var commission = await _unitOfWork.Commissions.GetAsync(id);
-            //var employeeId = Guid.Parse(data.EmployeeId);
-            //var employee = await _unitOfWork.Equipments.GetAsync(employeeId);
-            //var startDate = commission.StartTime;
-            //var endDate = commission.EndTime;
 
             var worksOn = new WorksOn()
             {
