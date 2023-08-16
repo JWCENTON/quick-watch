@@ -79,7 +79,7 @@ export default function CommissionDetailView({ detailsData }) {
         }
 
         let raw = JSON.stringify({
-            "employeeId": event.target.value
+            "employeeId": `${event.target.value}`
         });
 
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "POST", headers: headers, body: raw });
@@ -96,7 +96,7 @@ export default function CommissionDetailView({ detailsData }) {
         }
 
         let raw = JSON.stringify({
-            "equipmentId": event.target.value
+            "equipmentId": `${event.target.value}`
         });
 
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "POST", headers: headers, body: raw });
