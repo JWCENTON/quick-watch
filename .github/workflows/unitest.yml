@@ -23,4 +23,4 @@ jobs:
       run: dotnet restore
 
     - name: Build and run unit tests
-      run: dotnet test EquipWatch.UnitTests.csproj
+      run: dotnet test ./EquipWatch/EquipWatch.sln
