@@ -19,7 +19,7 @@ jobs:
         dotnet-version: '7.0'
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore EquipWatch/EquipWatch.sln
 
     - name: Build and run unit tests
-      run: dotnet test ./EquipWatch/EquipWatch.sln
+      run: dotnet test EquipWatch/EquipWatch.sln
