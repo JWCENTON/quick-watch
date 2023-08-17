@@ -165,6 +165,7 @@ namespace webapi.Controllers
 
             var booking = new BookedEquipment()
             {
+                Id = Guid.NewGuid(),
                 Commission = commission,
                 CommissionId = commission.Id,
                 Equipment = equipment,
@@ -194,7 +195,6 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddEmployee(Guid id, [FromBody] CommissionEmployeeAddDTO data)
         {
-            Debug.WriteLine("hello");
             var commission = await _unitOfWork.Commissions.GetAsync(id);
 
             var worksOn = new WorksOn()

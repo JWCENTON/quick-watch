@@ -104,7 +104,7 @@ export default function CommissionDetailView({ detailsData }) {
 
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "POST", headers: headers, body: raw });
 
-        navigate(0);
+        //navigate(0);
     }
 
     useEffect(() => {
