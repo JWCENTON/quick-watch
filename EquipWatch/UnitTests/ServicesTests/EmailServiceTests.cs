@@ -46,7 +46,7 @@ public class EmailServiceTests
             LastName = "Doe",
             Email = "RysiekPtysiek2@outlook.com"
         };
-        var confirmationLink = "https://example.test.com/test_reset";
+        var confirmationLink = "https://example.test.com/test_confirmation_email";
 
         _smtpClientMock.Setup(client => client.SendMailAsync(It.IsAny<MailMessage>()))
             .Returns(Task.CompletedTask);
@@ -69,7 +69,7 @@ public class EmailServiceTests
             LastName = "Smith",
             Email = "RysiekPtysiek2@outlook.com"
         };
-        var resetLink = "https://example.test.com/test_reset";
+        var resetLink = "https://example.test.com/test_reset_email";
 
         _smtpClientMock.Setup(client => client.SendMailAsync(It.IsAny<MailMessage>()))
             .Returns(Task.CompletedTask);
