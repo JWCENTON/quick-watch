@@ -57,9 +57,9 @@ namespace webapi.uow
 
         public IWorksOnRepository WorksOn => _worksOnRepository ??= new WorksOnRepository(_context, _identityContext);
 
-        public IEquipmentInUseRepository EquipmentInUse => _equipmentInUseService ??= new EquipmentInUseRepository(_context, _identityContext);
+        public IEquipmentInUseRepository EquipmentInUse => _equipmentInUseRepository ??= new EquipmentInUseRepository(_context, _identityContext);
 
-        public IReservationRepository Reservation => _reservationService ??= new ReservationRepository(_context, _identityContext);
+        public IReservationRepository Reservation => _reservationRepository ??= new ReservationRepository(_context, _identityContext);
 
         public void SaveChanges()
         {
