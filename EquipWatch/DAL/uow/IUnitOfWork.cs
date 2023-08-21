@@ -6,7 +6,9 @@ using DAL.Repositories.Commission;
 using DAL.Repositories.Company;
 using DAL.Repositories.Employee;
 using DAL.Repositories.Equipment;
+using DAL.Repositories.EquipmentInUse;
 using DAL.Repositories.Invite;
+using DAL.Repositories.Reservation;
 using DAL.Repositories.WorksOn;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,8 @@ namespace webapi.uow
         IEquipmentRepository Equipments { get; }
         IInviteRepository Invites { get; }
         IWorksOnRepository WorksOn { get; }
+        IReservationRepository Reservation { get; }
+        IEquipmentInUseRepository EquipmentInUse { get; }
         // Add other repositories as needed
 
         void SaveChanges();

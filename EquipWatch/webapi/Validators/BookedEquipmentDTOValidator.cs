@@ -9,11 +9,21 @@ public abstract class BaseBookedEquipmentDTOValidator<T> : AbstractValidator<T> 
     {
         RuleFor(dto => dto.CommissionId).SetValidator(new CommissionIdValidator());
 
-        RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
+        RuleFor(dto => dto.EquipmentInUseId).SetValidator(new CheckOutIdDTOValidator());
     }
 }
-public class CreateBookedEquipmentDTOValidator : BaseBookedEquipmentDTOValidator<CreateBookedEquipmentDTO>
+public class CreateBookedEquipmentDTOValidator : AbstractValidator<CreateBookedEquipmentDTO>
 {
+    public CreateBookedEquipmentDTOValidator()
+    {
+        RuleFor(dto => dto.CommissionId).NotEmpty().WithMessage("You have to select a commission.");
+        RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
+        RuleFor(dto => dto.EndTime)
+            .NotNull()
+            .WithMessage("You need to specify end date.")
+            .GreaterThanOrEqualTo(DateTime.Now)
+            .WithMessage("End time must cannot be in the past.");
+    }
 }
 
 public class FullBookedEquipmentDTOValidator : BaseBookedEquipmentDTOValidator<FullBookedEquipmentDTO>

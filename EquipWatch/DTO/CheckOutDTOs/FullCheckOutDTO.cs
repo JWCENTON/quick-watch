@@ -1,6 +1,4 @@
-﻿using DTO.EquipmentDTOs;
-
-namespace DTO.CheckOutDTOs;
+﻿namespace DTO.CheckOutDTOs;
 
 public record FullCheckOutDTO : BaseCheckOutDTO
 {

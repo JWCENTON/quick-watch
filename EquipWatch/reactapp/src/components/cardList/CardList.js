@@ -70,7 +70,10 @@ function CardList() {
 		if (location.pathname === '/equipment') {
 		  return {
 			...item,
-			isCheckedOut: item.isCheckedOut ? 'Checked Out' : 'Not Checked Out'
+			available: item.available ? <span className="unicode-mark">&#x2705;</span> : <span className="unicode-mark">&#x274C;</span>,
+			inWarehouse: item.inWarehouse ? <span className="unicode-mark">&#x2705;</span> : <span className="unicode-mark">&#x274C;</span>,
+		  condition: <span className="star">{`★`.repeat(item.condition)}<span className="dark-star">{`★`.repeat(5 - item.condition)}</span></span>
+			
 		  };
 		} else {
 		  return item;
