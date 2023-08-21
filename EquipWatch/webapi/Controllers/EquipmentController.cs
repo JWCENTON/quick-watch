@@ -1,20 +1,15 @@
-using System.Diagnostics;
-using System.Security.Claims;
- using System.Diagnostics;
 using AutoMapper;
 using Domain.CheckIn.Models;
 using Domain.CheckOut.Models;
-using Microsoft.AspNetCore.Mvc;
 using Domain.Equipment.Models;
+using Domain.User.Models;
 using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Authorization;
-using Domain.User.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using webapi.uow;
 using webapi.Validators;
-using System.Linq;
-using Domain.Commission.Models.Commission;
-using DTO.CommissionDTOs;
 
 namespace webapi.Controllers;
 
@@ -27,16 +22,18 @@ public class EquipmentController : ControllerBase
     private readonly IMapper _mapper;
     private readonly CreateEquipmentDTOValidator _createValidator;
     private readonly UpdateEquipmentDTOValidator _updateValidator;
-    private readonly LocationEquipmentDTOValidator _locationValidator;
 
-    public EquipmentController(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper, CreateEquipmentDTOValidator createValidator, UpdateEquipmentDTOValidator updateValidator, LocationEquipmentDTOValidator locationValidator)
+    public EquipmentController(UserManager<User> userManager,
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        CreateEquipmentDTOValidator createEquipmentValidator,
+        UpdateEquipmentDTOValidator updateEquipmentValidator)
     {
         _userManager = userManager;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _createValidator = createValidator;
-        _updateValidator = updateValidator;
-        _locationValidator = locationValidator;
+        _createValidator = createEquipmentValidator;
+        _updateValidator = updateEquipmentValidator;
     }
 
     [HttpGet]
@@ -77,6 +74,8 @@ public class EquipmentController : ControllerBase
             equipment.Company = await _unitOfWork.Companies.GetAsync(equipment.CompanyId);
 
             equipment.Id = Guid.NewGuid();
+            equipment.InWarehouse = true;
+            equipment.Available = true;
             await _unitOfWork.Equipments.CreateAsync(equipment);
             var fullEquipmentDto = _mapper.Map<FullEquipmentDTO>(equipment);
             return CreatedAtAction(nameof(Get), new { id = fullEquipmentDto.Id }, fullEquipmentDto);
@@ -120,95 +119,95 @@ public class EquipmentController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id}/checkout")]
+    [HttpPost("{equipmentId}/checkout")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Checkout(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
+    public async Task<IActionResult> Checkout(Guid equipmentId, [FromBody] bool warehouseDelivery)
     {
-        var result = await _locationValidator.ValidateAsync(locationDto);
-        if (result.IsValid)
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) 
+                     ?? throw new ArgumentException("You need login to create checkout");
+        var bookedEquipment = await _unitOfWork.BookedEquipment.GetCurrentBookForEquipmentWithDetailsAsync(equipmentId) 
+                              ?? throw new KeyNotFoundException("No ongoing bookings found for the specified equipment");
+        var equipment = bookedEquipment.EquipmentInUse.Equipment;
+        if (equipment.Location.Contains("On the way to ")) { throw new ArgumentException("Equipment is already checked out"); }
+        if (warehouseDelivery)
         {
-            var equipment = await _unitOfWork.Equipments.GetAsync(id);
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null) { throw new ArgumentException("You need login to create checkout"); }
-            if (equipment.IsCheckedOut) { throw new ArgumentException("Equipment is already checked out"); }
-            equipment.IsCheckedOut = true;
-            equipment.Location = locationDto.Location;
-            await _unitOfWork.Equipments.UpdateAsync(equipment);
-
-            var checkout = new CheckOut
-            {
-                Id = Guid.NewGuid(),
-                Equipment = equipment,
-                UserId = userId,
-                Time = DateTime.Now
-            };
-
-            await _unitOfWork.CheckOuts.CreateAsync(checkout);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok();
+            equipment.Location = "On the way to main warehouse";
+            bookedEquipment.EquipmentInUse.EndTime = DateTime.Now;
+            equipment.Available = true;
+            bookedEquipment.IsFinished = true;
         }
-        throw new ArgumentException(result.Errors.First().ErrorMessage);
+        else
+        {
+            equipment.Location = "On the way to " + bookedEquipment.Commission.Location;
+            equipment.InWarehouse = false;
+            equipment.Available = false;
+        }
+        await _unitOfWork.Equipments.UpdateAsync(equipment);
+        var checkout = new CheckOut
+        {
+            Id = Guid.NewGuid(),
+            Equipment = equipment,
+            EquipmentId = equipment.Id,
+            UserId = userId,
+            WarehouseDelivery = warehouseDelivery,
+            CreationTime = DateTime.Now
+        };
+        await _unitOfWork.BookedEquipment.UpdateAsync(bookedEquipment);
+        await _unitOfWork.CheckOuts.CreateAsync(checkout);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Ok();
     }
 
-    [HttpPatch("{id}/checkin")]
+    [HttpPost("{equipmentId}/checkin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CheckIn(Guid id, [FromBody] UpdateEquipmentLocationDTO locationDto)
+    public async Task<IActionResult> CheckIn(Guid equipmentId, [FromBody] bool warehouseDelivery)
     {
-        var result = await _locationValidator.ValidateAsync(locationDto);
-        if (result.IsValid)
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                     ?? throw new ArgumentException("You need login to create checkIn");
+        var equipment = await _unitOfWork.Equipments.GetAsync(equipmentId);
+        if (!equipment.Location.Contains("On the way to "))
         {
-            var equipment = await _unitOfWork.Equipments.GetAsync(id);
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null) 
-            { throw new ArgumentException("You need login to create checkout"); }
-            if (!equipment.IsCheckedOut) 
-            { throw new ArgumentException("Equipment is already checked in"); }
-
-            equipment.IsCheckedOut = false;
-            equipment.Location = locationDto.Location;
-            await _unitOfWork.Equipments.UpdateAsync(equipment);
-
-            var checkIn = new CheckIn
-            {
-                Id = Guid.NewGuid(),
-                Equipment = equipment,
-                UserId = userId,
-                Time = DateTime.Now
-            };
-
-            await _unitOfWork.CheckIns.CreateAsync(checkIn);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok();
+            throw new ArgumentException("Equipment is already checked in");
         }
-        throw new ArgumentException(result.Errors.First().ErrorMessage);
-    }
 
-    //[HttpDelete("{id}")]
-    //public async Task<IActionResult> Delete(Guid id)
-    //{
-    //    try
-    //    {
-    //        await _unitOfWork.Equipments.RemoveAsync(id);
-    //        return Ok();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return BadRequest(ex.Message);
-    //    }
-    //}
+        if (warehouseDelivery)
+        {
+            equipment.Location = "Main warehouse";
+            equipment.InWarehouse = true;
+        }
+        else
+        {
+            var bookedEquipment = await _unitOfWork.BookedEquipment.GetCurrentBookForEquipmentWithDetailsAsync(equipmentId)
+                                  ?? throw new KeyNotFoundException("No ongoing bookings found for the specified equipment");
+            equipment.Location = bookedEquipment.Commission.Location;
+        }
+
+        await _unitOfWork.Equipments.UpdateAsync(equipment);
+        var checkIn = new CheckIn
+        {
+            Id = Guid.NewGuid(),
+            Equipment = equipment,
+            EquipmentId = equipment.Id,
+            UserId = userId,
+            WarehouseDelivery = warehouseDelivery,
+            CreationTime = DateTime.Now
+        };
+        await _unitOfWork.CheckIns.CreateAsync(checkIn);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Ok();
+    }
 }

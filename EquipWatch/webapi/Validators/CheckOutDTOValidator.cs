@@ -11,9 +11,6 @@ public abstract class BaseCheckOutDTOValidator<T> : AbstractValidator<T> where T
 
         RuleFor(dto => dto.EquipmentId).SetValidator(new EquipmentIdValidator());
 
-        RuleFor(dto => dto.Time)
-            .NotEmpty()
-            .WithMessage("Check-out time cannot be empty.");
     }
 }
 public class CreateCheckOutDTOValidator : BaseCheckOutDTOValidator<CreateCheckOutDTO>

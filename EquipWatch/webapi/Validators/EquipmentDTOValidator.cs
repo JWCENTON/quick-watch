@@ -41,7 +41,7 @@ public class FullEquipmentDTOValidator : BaseEquipmentDTOValidator<FullEquipment
     }
 }
 
-public class PartialEquipmentDTOValidator : BaseEquipmentDTOValidator<PartialEquipmentDTO>
+public class PartialEquipmentDTOValidator : AbstractValidator<PartialEquipmentDTO>
 {
     public PartialEquipmentDTOValidator()
     {

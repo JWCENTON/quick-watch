@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.EquipmentInUse.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.BookedEquipment;
 
@@ -22,20 +23,21 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
         throw new NotImplementedException();
     }
 
-    public Task CreateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
+    public async Task CreateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
     {
         if (_context.BookedEquipments.Any(b =>
-                b.EquipmentId == entity.EquipmentId && b.CommissionId == entity.CommissionId))
+                b.EquipmentInUse.EquipmentId == entity.EquipmentInUse.EquipmentId && b.CommissionId == entity.CommissionId && !b.IsFinished))
         {
             throw new ArgumentException("Equipment is already assigned to this commission");
         }
-        _context.BookedEquipments.Add(entity);
-        return Task.CompletedTask;
+        await _context.BookedEquipments.AddAsync(entity);
+        await _context.SaveChangesAsync();
     }
 
-    public Task UpdateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
+    public async Task UpdateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
     {
-        throw new NotImplementedException();
+        _context.BookedEquipments.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public Task RemoveAsync(Guid id)
@@ -45,8 +47,33 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
 
     public Task<List<Domain.Equipment.Models.Equipment>> GetCommissionEquipmentAsync(Guid commissionId)
     {
-        var bookings = _context.BookedEquipments.Where(booking => booking.CommissionId == commissionId);
-        var equipment = bookings.Select(booking => booking.Equipment);
+        var bookings = _context.BookedEquipments.Where(booking => booking.CommissionId == commissionId && !booking.IsFinished);
+        var equipment = bookings.Select(booking => booking.EquipmentInUse.Equipment);
         return equipment.ToListAsync();
+    }
+
+    public async Task<Domain.BookedEquipment.Models.BookedEquipment> GetCurrentBookForEquipmentWithDetailsAsync(Guid equipmentId)
+    {
+        var book = await _context.BookedEquipments
+            .Include(b => b.EquipmentInUse).ThenInclude(e => e.Equipment)
+            .Include(b => b.Commission)
+            .FirstOrDefaultAsync(
+            book => 
+                book.EquipmentInUse.EquipmentId == equipmentId && 
+                book.IsFinished == false &&
+                book.EquipmentInUse.CreationTime < DateTime.Now);
+
+        return book!;
+    }
+
+    public async Task<Domain.BookedEquipment.Models.BookedEquipment> GetCurrentBookForEquipmentAsync(Guid equipmentId)
+    {
+        var book = await _context.BookedEquipments.FirstOrDefaultAsync(
+                book =>
+                    book.EquipmentInUse.EquipmentId == equipmentId &&
+                    book.IsFinished == false &&
+                    book.EquipmentInUse.CreationTime < DateTime.Now);
+
+        return book!;
     }
 }
