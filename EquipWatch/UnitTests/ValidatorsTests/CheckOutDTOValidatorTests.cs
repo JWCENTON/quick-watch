@@ -27,8 +27,7 @@ namespace EquipWatch.UnitTests.ValidatorsTests
             var dto = new CreateCheckOutDTO
             {
                 UserId = Guid.NewGuid().ToString(),
-                EquipmentId = Guid.NewGuid().ToString(),
-                Time = DateTime.Now
+                EquipmentId = Guid.NewGuid().ToString()
             };
 
             var result = _createValidator.TestValidate(dto);
@@ -42,7 +41,6 @@ namespace EquipWatch.UnitTests.ValidatorsTests
             {
                 UserId = Guid.NewGuid().ToString(),
                 EquipmentId = Guid.NewGuid().ToString(),
-                Time = DateTime.Now,
                 Id = Guid.NewGuid().ToString()
             };
 
