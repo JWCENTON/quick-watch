@@ -24,7 +24,8 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
 
     public Task CreateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
     {
-        throw new NotImplementedException();
+        _context.BookedEquipments.Add(entity);
+        return Task.CompletedTask;
     }
 
     public Task UpdateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
