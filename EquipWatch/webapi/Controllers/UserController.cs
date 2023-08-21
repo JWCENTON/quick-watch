@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Services;
 using System.Security.Claims;
 using System.Web;
+using AutoMapper;
+using webapi.uow;
 
 namespace webapi.Controllers;
 
@@ -15,14 +17,18 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
     private readonly IUserServices _userServices;
 
     public UserController(UserManager<User> userManager, SignInManager<User> signInManager,
-        IEmailService emailService, IUserServices userServices)
+        IEmailService emailService, IUserServices userServices, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _mapper = mapper;
+        _unitOfWork = unitOfWork;
         _emailService = emailService;
         _userServices = userServices;
     }
@@ -246,5 +252,17 @@ public class UserController : ControllerBase
         {
             return BadRequest(new { message = "Failed to change password", errors = result.Errors });
         }
+    }
+
+    [Authorize]
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<List<PartialUserDTO>> GetAll()
+    {
+        var data = _userManager.Users;
+        return data.Select(user => _mapper.Map<PartialUserDTO>(user)).ToList();
     }
 }
