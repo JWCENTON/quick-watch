@@ -196,11 +196,13 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<List<PartialUserDTO>> GetAvailableEmployees(Guid id)
         {
-            var assignments = _unitOfWork.WorksOn.GetAllAsync().Result.Where(assignment => assignment.CommissionId == id);
-            var assignedUsers = assignments.Select(assignment => assignment.UserId);
+            //var assignments = _unitOfWork.WorksOn.GetAllAsync().Result.Where(assignment => assignment.CommissionId == id);
+            //var assignedUsers = assignments.Select(assignment => assignment.UserId);
             var employees = _unitOfWork.Employees.GetAllAsync().Result;
-            var notAssigned = employees.Where(employee => assignedUsers.All(user => Guid.Parse(user) != employee.Id));
-            return notAssigned.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
+            //var notAssigned = employees.Where(employee => !assignedUsers.Any(user => Guid.Parse(user) == employee.Id));
+            //return notAssigned.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
+
+            return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
         }
 
         [HttpPost("{id}/employees")]
