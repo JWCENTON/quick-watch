@@ -1,14 +1,20 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Domain.Company.Models;
 using Domain.Equipment.Models;
 using DTO.CommissionDTOs;
 using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Domain.BookedEquipment.Models;
+using Domain.WorksOn.Models;
 using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 using webapi.uow;
 using webapi.Validators;
+using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace webapi.Controllers
 {
@@ -145,6 +151,32 @@ namespace webapi.Controllers
             return equipment.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
         }
 
+        [HttpPost("{id}/equipment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddEquipment(Guid id, [FromBody] CommissionEquipmentAddDTO data)
+        {
+            var commission = await _unitOfWork.Commissions.GetAsync(id);
+            var equipmentId = Guid.Parse(data.EquipmentId);
+            var equipment = await _unitOfWork.Equipments.GetAsync(equipmentId);
+            var startDate = commission.StartTime;
+            var endDate = commission.EndTime;
+
+            var booking = new BookedEquipment()
+            {
+                Id = Guid.NewGuid(),
+                Commission = commission,
+                CommissionId = commission.Id,
+                Equipment = equipment,
+                EquipmentId = equipmentId
+            };
+
+            await _unitOfWork.BookedEquipment.CreateAsync(booking);
+
+            return Ok();
+        }
 
         [HttpGet("{id}/employees")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -156,5 +188,46 @@ namespace webapi.Controllers
             var employees = await _unitOfWork.WorksOn.GetCommissionEmployeesAsync(id);
             return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
         }
+
+        [HttpGet("{id}/availableEmployees")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<List<PartialUserDTO>> GetAvailableEmployees(Guid id)
+        {
+            //var assignments = _unitOfWork.WorksOn.GetAllAsync().Result.Where(assignment => assignment.CommissionId == id);
+            //var assignedUsers = assignments.Select(assignment => assignment.UserId);
+            var employees = _unitOfWork.Employees.GetAllAsync().Result;
+            //var notAssigned = employees.Where(employee => !assignedUsers.Any(user => Guid.Parse(user) == employee.Id));
+            //return notAssigned.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
+
+            return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
+        }
+
+        [HttpPost("{id}/employees")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddEmployee(Guid id, [FromBody] CommissionEmployeeAddDTO data)
+        {
+            var commission = await _unitOfWork.Commissions.GetAsync(id);
+
+            var worksOn = new WorksOn()
+            {
+                Id = Guid.NewGuid(),
+                Commission = commission,
+                CommissionId = commission.Id,
+                UserId = data.EmployeeId,
+            };
+
+            await _unitOfWork.WorksOn.CreateAsync(worksOn);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok();
+        }
+
     }
 }

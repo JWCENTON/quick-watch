@@ -27,7 +27,12 @@ public class WorksOnRepository : IWorksOnRepository
 
     public Task CreateAsync(Domain.WorksOn.Models.WorksOn entity)
     {
-        throw new NotImplementedException();
+        if (_context.WorksOn.Any(w => w.UserId == entity.UserId && w.CommissionId == entity.CommissionId))
+        {
+            throw new ArgumentException("Worker is already assigned to this commission");
+        }
+        _context.WorksOn.AddAsync(entity);
+        return Task.CompletedTask;
     }
 
     public Task UpdateAsync(Domain.WorksOn.Models.WorksOn entity)
