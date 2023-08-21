@@ -6,6 +6,7 @@ using Domain.Commission.Models.Commission;
 using Domain.Company.Models;
 using Domain.Employee.Models;
 using Domain.Equipment.Models;
+using Domain.EquipmentInUse.Models;
 using Domain.Invite.Models;
 using Domain.Reservation.Models;
 using Domain.WorksOn.Models;
@@ -26,6 +27,7 @@ public class DatabaseContext : DbContext
     public DbSet<Invite> Invites { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<WorksOn> WorksOn { get; set; }
+    public DbSet<EquipmentInUse> EquipmentInUse { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
@@ -35,9 +37,9 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<BookedEquipment>()
-            .HasOne(b => b.CheckOut)
+            .HasOne(b => b.EquipmentInUse)
             .WithMany()
-            .HasForeignKey("CheckOutId")
+            .HasForeignKey("EquipmentInUseId")
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<BookedEquipment>()
@@ -50,6 +52,18 @@ public class DatabaseContext : DbContext
             .HasOne(b => b.Commission)
             .WithMany()
             .HasForeignKey("CommissionId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<EquipmentInUse>()
+            .HasOne(b => b.Equipment)
+            .WithMany()
+            .HasForeignKey("EquipmentId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Reservation>()
+            .HasOne(b => b.Equipment)
+            .WithMany()
+            .HasForeignKey("EquipmentId")
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CheckIn>()
@@ -106,11 +120,11 @@ public class DatabaseContext : DbContext
             .HasForeignKey("CompanyId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<Employee>()
-            .HasOne(e => e.Company)
-            .WithMany()
-            .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
+        //builder.Entity<Employee>()
+        //    .HasOne(e => e.Company)
+        //    .WithMany()
+        //    .HasForeignKey("CompanyId")
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(builder);
     }

@@ -6,21 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class updatedDesign : Migration
+    public partial class updatedDatabaseDesign : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_BookedEquipments_Equipment_EquipmentId",
-                table: "BookedEquipments");
-
-            migrationBuilder.DropIndex(
-                name: "IX_BookedEquipments_EquipmentId",
-                table: "BookedEquipments");
-
-            migrationBuilder.DropColumn(
-                name: "EquipmentId",
                 table: "BookedEquipments");
 
             migrationBuilder.RenameColumn(
@@ -31,12 +23,22 @@ namespace DAL.Migrations
             migrationBuilder.RenameColumn(
                 name: "Time",
                 table: "CheckOuts",
-                newName: "EndTime");
+                newName: "CreationTime");
 
             migrationBuilder.RenameColumn(
                 name: "Time",
                 table: "CheckIns",
                 newName: "CreationTime");
+
+            migrationBuilder.RenameColumn(
+                name: "EquipmentId",
+                table: "BookedEquipments",
+                newName: "EquipmentInUseId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_BookedEquipments_EquipmentId",
+                table: "BookedEquipments",
+                newName: "IX_BookedEquipments_EquipmentInUseId");
 
             migrationBuilder.AddColumn<bool>(
                 name: "Available",
@@ -52,33 +54,26 @@ namespace DAL.Migrations
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "ArriveTime",
+            migrationBuilder.AddColumn<bool>(
+                name: "WarehouseDelivery",
                 table: "CheckOuts",
-                type: "datetime(6)",
+                type: "tinyint(1)",
                 nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                defaultValue: false);
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "CreationTime",
-                table: "CheckOuts",
-                type: "datetime(6)",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "ArriveTime",
+            migrationBuilder.AddColumn<bool>(
+                name: "WarehouseDelivery",
                 table: "CheckIns",
-                type: "datetime(6)",
+                type: "tinyint(1)",
                 nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                defaultValue: false);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "CheckOutId",
+            migrationBuilder.AddColumn<bool>(
+                name: "IsFinished",
                 table: "BookedEquipments",
-                type: "char(36)",
-                nullable: true,
-                collation: "ascii_general_ci");
+                type: "tinyint(1)",
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.AddColumn<Guid>(
                 name: "ReservationId",
@@ -86,6 +81,29 @@ namespace DAL.Migrations
                 type: "char(36)",
                 nullable: true,
                 collation: "ascii_general_ci");
+
+            migrationBuilder.CreateTable(
+                name: "EquipmentInUse",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    EquipmentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    UserId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EquipmentInUse", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EquipmentInUse_Equipment_EquipmentId",
+                        column: x => x.EquipmentId,
+                        principalTable: "Equipment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Reservations",
@@ -112,14 +130,14 @@ namespace DAL.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookedEquipments_CheckOutId",
-                table: "BookedEquipments",
-                column: "CheckOutId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BookedEquipments_ReservationId",
                 table: "BookedEquipments",
                 column: "ReservationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EquipmentInUse_EquipmentId",
+                table: "EquipmentInUse",
+                column: "EquipmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_EquipmentId",
@@ -127,10 +145,10 @@ namespace DAL.Migrations
                 column: "EquipmentId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_BookedEquipments_CheckOuts_CheckOutId",
+                name: "FK_BookedEquipments_EquipmentInUse_EquipmentInUseId",
                 table: "BookedEquipments",
-                column: "CheckOutId",
-                principalTable: "CheckOuts",
+                column: "EquipmentInUseId",
+                principalTable: "EquipmentInUse",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
@@ -147,7 +165,7 @@ namespace DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_BookedEquipments_CheckOuts_CheckOutId",
+                name: "FK_BookedEquipments_EquipmentInUse_EquipmentInUseId",
                 table: "BookedEquipments");
 
             migrationBuilder.DropForeignKey(
@@ -155,11 +173,10 @@ namespace DAL.Migrations
                 table: "BookedEquipments");
 
             migrationBuilder.DropTable(
-                name: "Reservations");
+                name: "EquipmentInUse");
 
-            migrationBuilder.DropIndex(
-                name: "IX_BookedEquipments_CheckOutId",
-                table: "BookedEquipments");
+            migrationBuilder.DropTable(
+                name: "Reservations");
 
             migrationBuilder.DropIndex(
                 name: "IX_BookedEquipments_ReservationId",
@@ -174,19 +191,15 @@ namespace DAL.Migrations
                 table: "Commissions");
 
             migrationBuilder.DropColumn(
-                name: "ArriveTime",
+                name: "WarehouseDelivery",
                 table: "CheckOuts");
 
             migrationBuilder.DropColumn(
-                name: "CreationTime",
-                table: "CheckOuts");
-
-            migrationBuilder.DropColumn(
-                name: "ArriveTime",
+                name: "WarehouseDelivery",
                 table: "CheckIns");
 
             migrationBuilder.DropColumn(
-                name: "CheckOutId",
+                name: "IsFinished",
                 table: "BookedEquipments");
 
             migrationBuilder.DropColumn(
@@ -199,7 +212,7 @@ namespace DAL.Migrations
                 newName: "IsCheckedOut");
 
             migrationBuilder.RenameColumn(
-                name: "EndTime",
+                name: "CreationTime",
                 table: "CheckOuts",
                 newName: "Time");
 
@@ -208,18 +221,15 @@ namespace DAL.Migrations
                 table: "CheckIns",
                 newName: "Time");
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "EquipmentId",
+            migrationBuilder.RenameColumn(
+                name: "EquipmentInUseId",
                 table: "BookedEquipments",
-                type: "char(36)",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
-                collation: "ascii_general_ci");
+                newName: "EquipmentId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_BookedEquipments_EquipmentId",
+            migrationBuilder.RenameIndex(
+                name: "IX_BookedEquipments_EquipmentInUseId",
                 table: "BookedEquipments",
-                column: "EquipmentId");
+                newName: "IX_BookedEquipments_EquipmentId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_BookedEquipments_Equipment_EquipmentId",

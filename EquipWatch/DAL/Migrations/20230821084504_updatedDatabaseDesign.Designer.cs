@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230814031645_updatedDesign")]
-    partial class updatedDesign
+    [Migration("20230821084504_updatedDatabaseDesign")]
+    partial class updatedDatabaseDesign
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,20 +28,24 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("CheckOutId")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("CommissionId")
                         .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("EquipmentInUseId")
+                        .IsRequired()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<Guid?>("ReservationId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CheckOutId");
-
                     b.HasIndex("CommissionId");
+
+                    b.HasIndex("EquipmentInUseId");
 
                     b.HasIndex("ReservationId");
 
@@ -54,9 +58,6 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("ArriveTime")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
@@ -66,6 +67,9 @@ namespace DAL.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("WarehouseDelivery")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -80,13 +84,7 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("ArriveTime")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("EquipmentId")
@@ -95,6 +93,9 @@ namespace DAL.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("WarehouseDelivery")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -260,6 +261,32 @@ namespace DAL.Migrations
                     b.ToTable("Equipment");
                 });
 
+            modelBuilder.Entity("Domain.EquipmentInUse.Models.EquipmentInUse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("EquipmentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.ToTable("EquipmentInUse");
+                });
+
             modelBuilder.Entity("Domain.Invite.Models.Invite", b =>
                 {
                     b.Property<Guid>("Id")
@@ -337,14 +364,15 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.BookedEquipment.Models.BookedEquipment", b =>
                 {
-                    b.HasOne("Domain.CheckOut.Models.CheckOut", "CheckOut")
-                        .WithMany()
-                        .HasForeignKey("CheckOutId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Domain.Commission.Models.Commission.Commission", "Commission")
                         .WithMany()
                         .HasForeignKey("CommissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.EquipmentInUse.Models.EquipmentInUse", "EquipmentInUse")
+                        .WithMany()
+                        .HasForeignKey("EquipmentInUseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -353,9 +381,9 @@ namespace DAL.Migrations
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("CheckOut");
-
                     b.Navigation("Commission");
+
+                    b.Navigation("EquipmentInUse");
 
                     b.Navigation("Reservation");
                 });
@@ -432,6 +460,17 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Domain.EquipmentInUse.Models.EquipmentInUse", b =>
+                {
+                    b.HasOne("Domain.Equipment.Models.Equipment", "Equipment")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
                 });
 
             modelBuilder.Entity("Domain.Invite.Models.Invite", b =>

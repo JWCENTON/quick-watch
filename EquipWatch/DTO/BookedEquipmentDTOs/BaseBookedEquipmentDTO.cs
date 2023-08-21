@@ -2,7 +2,8 @@
 
 public record BaseBookedEquipmentDTO()
 {
-    public string? CheckOutId { get; init; }
+    public string? EquipmentInUseId { get; init; }
     public string CommissionId { get; init; }
     public string? ReservationId { get; init; }
+    public bool IsFinished { get; init; }
 };

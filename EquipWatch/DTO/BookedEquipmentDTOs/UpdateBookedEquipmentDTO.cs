@@ -5,7 +5,7 @@ namespace DTO.BookedEquipmentDTOs;
 
 public record UpdateBookedEquipmentDTO()
 {
-    public string? CheckOutId { get; init; }
+    public string? EquipmentInUseId { get; init; }
     public string? EquipmentId { get; init; }
     public string? CommissionId { get; init; }
 };

@@ -5,6 +5,7 @@ using Domain.Client.Models;
 using Domain.Commission.Models.Commission;
 using Domain.Company.Models;
 using Domain.Equipment.Models;
+using Domain.EquipmentInUse.Models;
 using Domain.Invite;
 using Domain.Invite.Models;
 using Domain.Reservation.Models;
@@ -58,7 +59,7 @@ public class Seed
                 Id = Guid.NewGuid(),
                 SerialNumber = "4725375345",
                 Category = "Fog machine",
-                Location = "Storage Room 3",
+                Location = "Main warehouse",
                 Condition = 4,
                 Available = true,
                 InWarehouse = true
@@ -68,7 +69,7 @@ public class Seed
                 Id = Guid.NewGuid(),
                 SerialNumber = "7638263963",
                 Category = "Fog machine",
-                Location = "Event Center",
+                Location = "Main warehouse",
                 Condition = 3,
                 Available = true,
                 InWarehouse = true
@@ -78,7 +79,7 @@ public class Seed
                 Id = Guid.NewGuid(),
                 SerialNumber = "6253791364",
                 Category = "Fog machine",
-                Location = "Stage B",
+                Location = "Main warehouse",
                 Condition = 5,
                 Available = true,
                 InWarehouse = true
@@ -88,19 +89,46 @@ public class Seed
                 Id = Guid.NewGuid(),
                 SerialNumber = "7462684743",
                 Category = "Fog machine",
-                Location = "Warehouse 2",
+                Location = "Main warehouse",
                 Condition = 1,
                 Available = true,
                 InWarehouse = true
             };
+
+            var equipment5 = new Equipment
+            {
+                Id = Guid.NewGuid(),
+                SerialNumber = "7462653743",
+                Category = "Fog machine",
+                Location = "Main warehouse",
+                Condition = 2,
+                Available = true,
+                InWarehouse = true
+            };
+
+            var equipment6 = new Equipment
+            {
+                Id = Guid.NewGuid(),
+                SerialNumber = "7463453243",
+                Category = "Fog machine",
+                Location = "Main warehouse",
+                Condition = 5,
+                Available = true,
+                InWarehouse = true
+            };
+
             equipment1.Company = company1;
             equipment2.Company = company1;
             equipment3.Company = company1;
             equipment4.Company = company1;
+            equipment5.Company = company1;
+            equipment6.Company = company1;
             context.Equipment.Add(equipment1);
             context.Equipment.Add(equipment2);
             context.Equipment.Add(equipment3);
             context.Equipment.Add(equipment4);
+            context.Equipment.Add(equipment5);
+            context.Equipment.Add(equipment6);
 
             var client1 = new Client
             {
@@ -173,9 +201,9 @@ public class Seed
                 Id = Guid.NewGuid(),
                 Location = "Central Park, New York City",
                 Scope = "Fog machine rental and setup for spooky ambiance",
-                CreationTime = DateTime.Now,
-                StartTime = DateTime.Now - TimeSpan.FromDays(25),
-                EndTime = DateTime.Now.AddDays(20)
+                CreationTime = DateTime.Now - TimeSpan.FromDays(12),
+                StartTime = DateTime.Now - TimeSpan.FromDays(10),
+                EndTime = DateTime.Now.AddDays(50)
             };
             var commission2 = new Commission()
             {
@@ -187,8 +215,8 @@ public class Seed
                 Id = Guid.NewGuid(),
                 Location = "City Theatre, 123 Main Street",
                 Scope = "Fog machine rental for special effects during the play",
-                CreationTime = DateTime.Now,
-                StartTime = DateTime.Now - TimeSpan.FromDays(30)
+                CreationTime = DateTime.Now - TimeSpan.FromDays(10),
+                StartTime = DateTime.Now - TimeSpan.FromDays(8)
             };
             context.Commissions.Add(commission1);
             context.Commissions.Add(commission2);
@@ -210,183 +238,480 @@ public class Seed
             context.WorksOn.Add(work1);
             context.WorksOn.Add(work2);
 
-
-            var reservation1 = new Reservation
+            ////////////
+            
+            var equipmentInUse1 = new EquipmentInUse()
             {
-                UserId = identityContext.Users.First().Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                EndTime = DateTime.Now.AddDays(10),
                 Equipment = equipment1,
-                EquipmentId = equipment2.Id,
-                Id = Guid.NewGuid(),
-                CreationTime = DateTime.Now - TimeSpan.FromDays(30),
-                StartDate = DateTime.Now - TimeSpan.FromDays(20),
-                EndDate = DateTime.Now - TimeSpan.FromDays(10)
+                EquipmentId = equipment1.Id,
+                UserId = identityContext.Users.First().Id
             };
-
-            var reservation2 = new Reservation
-            {
-                UserId = identityContext.Users.First().Id,
-                Equipment = equipment2,
-                EquipmentId = equipment2.Id,
-                Id = Guid.NewGuid(),
-                CreationTime = DateTime.Now - TimeSpan.FromDays(29),
-                StartDate = DateTime.Now - TimeSpan.FromDays(27),
-                EndDate = DateTime.Now - TimeSpan.FromDays(20),
-            };
-            context.Reservations.Add(reservation1);
-            context.Reservations.Add(reservation2);
 
             var book1 = new BookedEquipment()
             {
                 Id = Guid.NewGuid(),
                 Commission = commission1,
                 CommissionId = commission1.Id,
-                Reservation = reservation1,
-                ReservationId = reservation1.Id,
+                EquipmentInUse = equipmentInUse1,
+                EquipmentInUseId = equipmentInUse1.Id,
+                IsFinished = false
+            };
+
+            context.BookedEquipments.Add(book1);
+            
+            var checkOut1 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse1.Equipment,
+                EquipmentId = equipmentInUse1.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                WarehouseDelivery = false
+            };
+
+            var checkIn1 = new CheckIn()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse1.Equipment,
+                EquipmentId = equipmentInUse1.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddHours(2),
+                WarehouseDelivery = false
+            };
+
+            context.CheckOuts.Add(checkOut1);
+            checkOut1.Equipment.Available = false;
+            checkOut1.Equipment.InWarehouse = false;
+            checkOut1.Equipment.Location = "On the way to " + book1.Commission.Location;
+
+            context.CheckIns.Add(checkIn1);
+            checkIn1.Equipment.Location = book1.Commission.Location;
+
+            var warehouseCheckOut1 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse1.Equipment,
+                EquipmentId = equipmentInUse1.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddDays(10).AddHours(2),
+                WarehouseDelivery = true
+            };
+
+            var warehouseCheckIn1 = new CheckIn()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse1.Equipment,
+                EquipmentId = equipmentInUse1.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddDays(10).AddHours(4),
+                WarehouseDelivery = true
+            };
+
+            context.CheckOuts.Add(warehouseCheckOut1);
+            warehouseCheckOut1.Equipment.Available = true;
+            warehouseCheckOut1.Equipment.Location = "On the way to main warehouse";
+            book1.IsFinished = true;
+
+            context.CheckIns.Add(warehouseCheckIn1);
+            warehouseCheckIn1.Equipment.InWarehouse = true;
+            warehouseCheckIn1.Equipment.Location = "main warehouse";
+
+            ////////////
+
+            var equipmentInUse2 = new EquipmentInUse()
+            {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                EndTime = DateTime.Now.AddDays(15),
+                Equipment = equipment2,
+                EquipmentId = equipment2.Id,
+                UserId = identityContext.Users.First().Id
             };
 
             var book2 = new BookedEquipment()
             {
-                Commission = commission2,
-                CommissionId = commission2.Id,
-                Reservation = reservation2,
-                ReservationId = reservation2.Id,
+                Commission = commission1,
+                CommissionId = commission1.Id,
+                EquipmentInUse = equipmentInUse2,
+                EquipmentInUseId = equipmentInUse2.Id,
+                IsFinished = false
             };
 
-            context.BookedEquipments.Add(book1);
             context.BookedEquipments.Add(book2);
-
-
-            var checkOut1 = new CheckOut()
-            {
-                UserId = identityContext.Users.First().Id,
-                Equipment = equipment1,
-                EquipmentId = equipment1.Id,
-                Id = Guid.NewGuid(),
-                CreationTime = reservation1.StartDate,
-                EndTime = reservation1.EndDate
-            };
 
             var checkOut2 = new CheckOut()
             {
                 UserId = identityContext.Users.First().Id,
-                Equipment = equipment2,
-                EquipmentId = equipment2.Id,
+                Equipment = equipmentInUse2.Equipment,
+                EquipmentId = equipmentInUse2.Equipment.Id,
                 Id = Guid.NewGuid(),
-                CreationTime = reservation2.StartDate,
-                EndTime = reservation2.EndDate
+                CreationTime = DateTime.Now,
+                WarehouseDelivery = false
             };
 
-            context.CheckOuts.Add(checkOut1);
-            book1.CheckOutId = checkOut1.Id;
-            book1.CheckOut = checkOut1;
-            checkOut1.Equipment.Available = false;
-            checkOut1.Equipment.InWarehouse = false;
-            checkOut1.Equipment.Location = book1.Commission.Location;
-            checkOut1.ArriveTime = checkOut1.CreationTime.AddHours(12);
-
-            context.CheckOuts.Add(checkOut2);
-            book2.CheckOutId = checkOut2.Id;
-            book2.CheckOut = checkOut2;
-            checkOut2.Equipment.Available = false;
-            checkOut2.Equipment.InWarehouse = false;
-            checkOut2.Equipment.Location = book2.Commission.Location;
-            checkOut2.ArriveTime = checkOut2.CreationTime.AddHours(5);
-
-            var checkOut3 = new CheckOut()
+            var checkIn2 = new CheckIn()
             {
                 UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse2.Equipment,
+                EquipmentId = equipmentInUse2.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddHours(10),
+                WarehouseDelivery = false
+            };
+
+            context.CheckOuts.Add(checkOut2);
+            checkOut2.Equipment.Available = false;
+            checkOut2.Equipment.InWarehouse = false;
+            checkOut2.Equipment.Location = "On the way to " + book2.Commission.Location;
+
+            context.CheckIns.Add(checkIn2);
+            checkIn2.Equipment.Location = book2.Commission.Location;
+
+            var warehouseCheckOut2 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse2.Equipment,
+                EquipmentId = equipmentInUse2.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddDays(10).AddHours(2),
+                WarehouseDelivery = true
+            };
+
+            var warehouseCheckIn2 = new CheckIn()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse2.Equipment,
+                EquipmentId = equipmentInUse2.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddDays(10).AddHours(14),
+                WarehouseDelivery = true
+            };
+
+            context.CheckOuts.Add(warehouseCheckOut2);
+            warehouseCheckOut2.Equipment.Available = true;
+            warehouseCheckOut2.Equipment.Location = "On the way to main warehouse";
+            book2.IsFinished = true;
+
+            context.CheckIns.Add(warehouseCheckIn2);
+            warehouseCheckIn2.Equipment.InWarehouse = true;
+            warehouseCheckIn2.Equipment.Location = "main warehouse";
+
+            ////////////
+
+            var equipmentInUse3 = new EquipmentInUse()
+            {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Equipment = equipment3,
                 EquipmentId = equipment3.Id,
-                Id = Guid.NewGuid(),
-                CreationTime = DateTime.Now - TimeSpan.FromDays(20),
-                EndTime = DateTime.Now - TimeSpan.FromDays(13)
+                UserId = identityContext.Users.First().Id
             };
 
             var book3 = new BookedEquipment()
             {
-                Commission = commission2,
-                CommissionId = commission2.Id,
-                CheckOut = checkOut3,
-                CheckOutId = checkOut3.Id,
+                Commission = commission1,
+                CommissionId = commission1.Id,
+                EquipmentInUse = equipmentInUse3,
+                EquipmentInUseId = equipmentInUse3.Id,
+                IsFinished = false
             };
 
             context.BookedEquipments.Add(book3);
+
+            var checkOut3 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse3.Equipment,
+                EquipmentId = equipmentInUse3.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                WarehouseDelivery = false
+            };
+
+            var checkIn3 = new CheckIn()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse3.Equipment,
+                EquipmentId = equipmentInUse3.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddHours(4),
+                WarehouseDelivery = false
+            };
+
             context.CheckOuts.Add(checkOut3);
             checkOut3.Equipment.Available = false;
             checkOut3.Equipment.InWarehouse = false;
-            checkOut3.Equipment.Location = book3.Commission.Location;
-            checkOut3.ArriveTime = checkOut3.CreationTime.AddHours(2);
+            checkOut3.Equipment.Location = "On the way to " + book3.Commission.Location;
 
-            var checkOut4 = new CheckOut()
+            context.CheckIns.Add(checkIn3);
+            checkIn3.Equipment.Location = book3.Commission.Location;
+
+            ////////////
+            
+            var equipmentInUse4 = new EquipmentInUse()
             {
-                UserId = identityContext.Users.First().Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                EndTime = DateTime.Now.AddDays(20),
                 Equipment = equipment4,
                 EquipmentId = equipment4.Id,
-                Id = Guid.NewGuid(),
-                CreationTime = DateTime.Now - TimeSpan.FromDays(10)
+                UserId = identityContext.Users.First().Id
             };
 
             var book4 = new BookedEquipment()
             {
                 Commission = commission2,
                 CommissionId = commission2.Id,
-                CheckOut = checkOut4,
-                CheckOutId = checkOut4.Id,
+                EquipmentInUse = equipmentInUse4,
+                EquipmentInUseId = equipmentInUse4.Id,
+                IsFinished = false
             };
 
             context.BookedEquipments.Add(book4);
+
+            var checkOut4 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse4.Equipment,
+                EquipmentId = equipmentInUse4.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                WarehouseDelivery = false
+            };
+
+
             context.CheckOuts.Add(checkOut4);
             checkOut4.Equipment.Available = false;
             checkOut4.Equipment.InWarehouse = false;
-            checkOut4.Equipment.Location = book4.Commission.Location;
-            checkOut4.ArriveTime = checkOut4.CreationTime.AddHours(2);
+            checkOut4.Equipment.Location = "On the way to " + book4.Commission.Location;
+
+            ////////////
+
+            var equipmentInUse5 = new EquipmentInUse()
+            {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                Equipment = equipment5,
+                EquipmentId = equipment5.Id,
+                UserId = identityContext.Users.First().Id
+            };
+
+            var book5 = new BookedEquipment()
+            {
+                Commission = commission2,
+                CommissionId = commission2.Id,
+                EquipmentInUse = equipmentInUse5,
+                EquipmentInUseId = equipmentInUse5.Id,
+                IsFinished = false
+            };
+
+            context.BookedEquipments.Add(book5);
+
+            var checkOut5 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse5.Equipment,
+                EquipmentId = equipmentInUse5.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                WarehouseDelivery = false
+            };
+
+            var checkIn5 = new CheckIn()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse5.Equipment,
+                EquipmentId = equipmentInUse5.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddHours(4),
+                WarehouseDelivery = false
+            };
+
+            context.CheckOuts.Add(checkOut5);
+            checkOut5.Equipment.Available = false;
+            checkOut5.Equipment.InWarehouse = false;
+            checkOut5.Equipment.Location = "On the way to " + book5.Commission.Location;
+
+            context.CheckIns.Add(checkIn5);
+            checkIn5.Equipment.Location = book5.Commission.Location;
+
+            var warehouseCheckOut3 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse5.Equipment,
+                EquipmentId = equipmentInUse5.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddDays(15).AddHours(2),
+                WarehouseDelivery = true
+            };
+
+            context.CheckOuts.Add(warehouseCheckOut3);
+            warehouseCheckOut3.Equipment.Available = true;
+            warehouseCheckOut3.Equipment.Location = "On the way to main warehouse";
+            book5.IsFinished = true;
+
+            /////////
+
+            var equipmentInUse6 = new EquipmentInUse()
+            {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                Equipment = equipment6,
+                EquipmentId = equipment6.Id,
+                UserId = identityContext.Users.First().Id
+            };
+
+            var book6 = new BookedEquipment()
+            {
+                Commission = commission2,
+                CommissionId = commission2.Id,
+                EquipmentInUse = equipmentInUse6,
+                EquipmentInUseId = equipmentInUse6.Id,
+                IsFinished = false
+            };
+
+            context.BookedEquipments.Add(book6);
+
+            var checkOut6 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse6.Equipment,
+                EquipmentId = equipmentInUse6.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                WarehouseDelivery = false
+            };
+
+            var checkIn6 = new CheckIn()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse6.Equipment,
+                EquipmentId = equipmentInUse6.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddHours(4),
+                WarehouseDelivery = false
+            };
+
+            context.CheckOuts.Add(checkOut6);
+            checkOut6.Equipment.Available = false;
+            checkOut6.Equipment.InWarehouse = false;
+            checkOut6.Equipment.Location = "On the way to " + book6.Commission.Location;
+
+            context.CheckIns.Add(checkIn6);
+            checkIn6.Equipment.Location = book6.Commission.Location;
 
 
-
-            var checkIn1 = new CheckIn()
+            /////////
+            
+            var reservation1 = new Reservation
             {
                 UserId = identityContext.Users.First().Id,
                 Equipment = equipment1,
                 EquipmentId = equipment1.Id,
                 Id = Guid.NewGuid(),
-                CreationTime = checkOut1.EndTime
+                CreationTime = DateTime.Now,
+                StartDate = DateTime.Now.AddDays(11),
+                EndDate = DateTime.Now.AddDays(25)
             };
-            var checkIn2 = new CheckIn()
+
+            var book7 = new BookedEquipment()
+            {
+                Commission = commission1,
+                CommissionId = commission1.Id,
+                Reservation = reservation1,
+                ReservationId = reservation1.Id,
+                IsFinished = false
+            };
+
+            var equipmentInUse7 = new EquipmentInUse()
+            {
+                Id = Guid.NewGuid(),
+                CreationTime = reservation1.StartDate,
+                EndTime = reservation1.EndDate,
+                Equipment = reservation1.Equipment,
+                EquipmentId = reservation1.Equipment.Id,
+                UserId = identityContext.Users.First().Id
+            };
+
+            book7.EquipmentInUse = equipmentInUse7;
+            book7.EquipmentInUseId = equipmentInUse7.Id;
+
+            var checkOut7 = new CheckOut()
             {
                 UserId = identityContext.Users.First().Id,
-                Equipment = equipment2,
-                EquipmentId = equipment2.Id,
+                Equipment = equipmentInUse7.Equipment,
+                EquipmentId = equipmentInUse7.Equipment.Id,
                 Id = Guid.NewGuid(),
-                CreationTime = checkOut2.EndTime
+                CreationTime = equipmentInUse7.CreationTime,
+                WarehouseDelivery = false
             };
 
-            var checkIn3 = new CheckIn()
+            var checkIn7 = new CheckIn()
             {
                 UserId = identityContext.Users.First().Id,
-                Equipment = equipment3,
-                EquipmentId = equipment3.Id,
+                Equipment = equipmentInUse7.Equipment,
+                EquipmentId = equipmentInUse7.Equipment.Id,
                 Id = Guid.NewGuid(),
-                CreationTime = checkOut3.EndTime
+                CreationTime = equipmentInUse7.CreationTime.AddHours(10),
+                WarehouseDelivery = false
             };
 
-            context.CheckIns.Add(checkIn1);
-            checkIn1.Equipment.Available = true;
-            checkIn1.ArriveTime = checkIn1.CreationTime.AddHours(2);
-            checkIn1.Equipment.InWarehouse = true;
-            checkIn1.Equipment.Location = "warehouse 1";
+            context.CheckOuts.Add(checkOut7);
+            checkOut7.Equipment.Available = false;
+            checkOut7.Equipment.InWarehouse = false;
+            checkOut7.Equipment.Location = "On the way to " + book7.Commission.Location;
 
-            context.CheckIns.Add(checkIn2);
-            checkIn2.Equipment.Available = true;
-            checkIn2.ArriveTime = checkIn2.CreationTime.AddHours(5);
-            checkIn2.Equipment.InWarehouse = true;
-            checkIn2.Equipment.Location = "warehouse 2";
+            context.CheckIns.Add(checkIn7);
+            checkIn7.Equipment.Location = book7.Commission.Location;
 
-            context.CheckIns.Add(checkIn3);
-            checkIn3.Equipment.Available = true;
-            checkIn3.Equipment.Location = "on the way to warehouse 3";
-            //checkIn3.ArriveTime = checkIn3.CreationTime.AddHours(1);
-            //checkIn3.Equipment.InWarehouse = true;
-            //checkIn3.Equipment.Location = "warehouse 3";
+            var warehouseCheckOut7 = new CheckOut()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse7.Equipment,
+                EquipmentId = equipmentInUse7.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddDays(25).AddHours(2),
+                WarehouseDelivery = true
+            };
+
+            var warehouseCheckIn7 = new CheckIn()
+            {
+                UserId = identityContext.Users.First().Id,
+                Equipment = equipmentInUse7.Equipment,
+                EquipmentId = equipmentInUse7.Equipment.Id,
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now.AddDays(25).AddHours(10),
+                WarehouseDelivery = true
+            };
+
+            context.CheckOuts.Add(warehouseCheckOut7);
+            warehouseCheckOut7.Equipment.Available = true;
+            warehouseCheckOut7.Equipment.Location = "On the way to main warehouse";
+            book1.IsFinished = true;
+
+            context.CheckIns.Add(warehouseCheckIn7);
+            warehouseCheckIn7.Equipment.InWarehouse = true;
+            warehouseCheckIn7.Equipment.Location = "main warehouse";
+
+
+
+
+            //var reservation2 = new Reservation
+            //{
+            //    UserId = identityContext.Users.First().Id,
+            //    Equipment = equipment2,
+            //    EquipmentId = equipment2.Id,
+            //    Id = Guid.NewGuid(),
+            //    CreationTime = DateTime.Now - TimeSpan.FromDays(29),
+            //    StartDate = DateTime.Now - TimeSpan.FromDays(27),
+            //    EndDate = DateTime.Now - TimeSpan.FromDays(20),
+            //};
+            //context.Reservations.Add(reservation1);
+            //context.Reservations.Add(reservation2);
+
 
 
             var invite1 = new Invite()
