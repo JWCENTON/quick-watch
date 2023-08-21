@@ -186,6 +186,8 @@ namespace webapi.Controllers
 
             await _unitOfWork.BookedEquipment.CreateAsync(booking);
 
+            await _unitOfWork.SaveChangesAsync();
+
             return Ok();
         }
 
