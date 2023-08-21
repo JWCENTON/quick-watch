@@ -25,6 +25,11 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
 
     public async Task CreateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
     {
+        if (_context.BookedEquipments.Any(b =>
+                b.EquipmentInUse.EquipmentId == entity.EquipmentInUse.EquipmentId && b.CommissionId == entity.CommissionId && !b.IsFinished))
+        {
+            throw new ArgumentException("Equipment is already assigned to this commission");
+        }
         await _context.BookedEquipments.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
