@@ -14,12 +14,6 @@ public abstract class BaseCheckInDTOValidator<T> : AbstractValidator<T> where T 
 }
 public class CreateCheckInDTOValidator : BaseCheckInDTOValidator<CreateCheckInDTO>
 {
-    public CreateCheckInDTOValidator()
-    {
-        RuleFor(dto => dto.ArriveTime)
-            .Null()
-            .WithMessage("Check-in arrive time cannot be specified while creating.");
-    }
 }
 
 public class FullCheckInDTOValidator : BaseCheckInDTOValidator<FullCheckInDTO>

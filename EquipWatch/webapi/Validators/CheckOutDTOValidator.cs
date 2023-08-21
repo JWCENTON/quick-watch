@@ -15,12 +15,6 @@ public abstract class BaseCheckOutDTOValidator<T> : AbstractValidator<T> where T
 }
 public class CreateCheckOutDTOValidator : BaseCheckOutDTOValidator<CreateCheckOutDTO>
 {
-    public CreateCheckOutDTOValidator()
-    {
-        RuleFor(dto => dto.ArriveTime)
-            .Null()
-            .WithMessage("Check-out arrive time cannot be specified while creating.");
-    }
 }
 
 public class FullCheckOutDTOValidator : BaseCheckOutDTOValidator<FullCheckOutDTO>
