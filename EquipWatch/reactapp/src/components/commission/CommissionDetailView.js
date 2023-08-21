@@ -3,6 +3,8 @@ import { Button, Modal, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router'
 import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from 'react-datepicker';
 
 export default function CommissionDetailView({ detailsData }) {
     const [equipment, setEquipment] = useState(null);
@@ -11,10 +13,18 @@ export default function CommissionDetailView({ detailsData }) {
     const [allWorkers, setAllWorkers] = useState(null);
     const [showEquipmentModal, setShowEquipmentModal] = useState(false);
     const [showWorkerModal, setShowWorkerModal] = useState(false);
+    const [endDate, setEndDate] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [selectedEquipment, setselectedEquipment] = useState('');
     const navigate = useNavigate()
     const { token } = useAuth();
 
-    const handleEquipmentClose = () => setShowEquipmentModal(false);
+    const handleEquipmentClose = () => {
+        setShowEquipmentModal(false)
+        setErrorMessage('');
+        setselectedEquipment('');
+        setEndDate(null);
+    };
     const handleEquipmentShow = () => setShowEquipmentModal(true);
 
     const handleWorkerClose = () => setShowWorkerModal(false);
@@ -92,24 +102,28 @@ export default function CommissionDetailView({ detailsData }) {
         GetData(token);
     }
 
-    async function AddEquipment(event) {
-        let target = event.currentTarget;
-        const headers = {
-            'Content-Type': 'application/json',
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
+    async function handleBookingFormSubmit(event) {
+        event.preventDefault();
         let raw = JSON.stringify({
-            "equipmentId": `${target.getAttribute('value')}`
+            equipmentId: detailsData.id,
+            endTime: endDate ? endDate.toISOString() : null
         });
-
-        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "POST", headers: headers, body: raw });
-
-        setShowEquipmentModal(false);
-        GetData(token);
+        const response = await fetch('https://localhost:7007/api/bookequipment/', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: raw
+        });
+        if (response.status === 400) {
+            const errorJson = await response.json();
+            setErrorMessage(errorJson.Message);
+        } else if (response.ok) {
+            const result = await response.json();
+            setShowEquipmentModal(false);
+            //await updateDetails()
+        }
     }
 
     useEffect(() => {
@@ -169,10 +183,33 @@ export default function CommissionDetailView({ detailsData }) {
                                     <Modal.Title>Add Equipment</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
-                                    <ListGroup>
-                                            {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((item, index) => (<ListGroup.Item value={item.id} onClick={AddEquipment}><span>SN: {item.serialNumber} </span><span>Category: {item.category}</span></ListGroup.Item>))}
+                                        <ListGroup>
+                                            <label htmlFor="selectedCommission">Choose an Equipment:</label>
+                                            <select
+                                                id="selectedCommission"
+                                                value={selectedEquipment}
+                                                onChange={(e) => setselectedEquipment(e.target.value)}
+                                            >
+                                                <option value="">Select an equipment</option>
+                                                {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((equipment) => (
+                                                    <option key={equipment.id} value={equipment.id}>
+                                                        SN: {equipment.serialNumber}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <br />
+                                            <label htmlFor="endDate">Select an end date:</label>
+                                            <DatePicker
+                                                selected={endDate}
+                                                onChange={item => setEndDate(item)}
+                                                minDate={new Date()}
+                                                dateFormat="dd/MM/yyyy"
+                                            />
                                     </ListGroup>
-                                </Modal.Body>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button type="submit">Add Equipment</Button>
+                                    </Modal.Footer>
                                 </Modal>
                                 <Modal show={showWorkerModal} onHide={handleWorkerClose}>
                                     <Modal.Header closeButton>

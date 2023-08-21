@@ -302,6 +302,7 @@ export default function EquipmentDetailView({ detailsData }) {
                                         ))}
                                     </select>
                                     <br />
+                                    <br />
                                     <label htmlFor="endDate">Select an end date:</label>
                                     <br />
                                     <DatePicker
