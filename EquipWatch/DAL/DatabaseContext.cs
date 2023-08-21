@@ -6,7 +6,9 @@ using Domain.Commission.Models.Commission;
 using Domain.Company.Models;
 using Domain.Employee.Models;
 using Domain.Equipment.Models;
+using Domain.EquipmentInUse.Models;
 using Domain.Invite.Models;
+using Domain.Reservation.Models;
 using Domain.WorksOn.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +25,9 @@ public class DatabaseContext : DbContext
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Invite> Invites { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
     public DbSet<WorksOn> WorksOn { get; set; }
+    public DbSet<EquipmentInUse> EquipmentInUse { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
@@ -33,9 +37,15 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<BookedEquipment>()
-            .HasOne(b => b.Equipment)
+            .HasOne(b => b.EquipmentInUse)
             .WithMany()
-            .HasForeignKey("EquipmentId")
+            .HasForeignKey("EquipmentInUseId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<BookedEquipment>()
+            .HasOne(b => b.Reservation)
+            .WithMany()
+            .HasForeignKey("ReservationId")
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<BookedEquipment>()
@@ -44,17 +54,23 @@ public class DatabaseContext : DbContext
             .HasForeignKey("CommissionId")
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<EquipmentInUse>()
+            .HasOne(b => b.Equipment)
+            .WithMany()
+            .HasForeignKey("EquipmentId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Reservation>()
+            .HasOne(b => b.Equipment)
+            .WithMany()
+            .HasForeignKey("EquipmentId")
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Entity<CheckIn>()
             .HasOne(c => c.Equipment)
             .WithMany()
             .HasForeignKey("EquipmentId")
             .OnDelete(DeleteBehavior.Cascade);
-
-        //builder.Entity<CheckIn>()
-        //    .HasOne(c => c.User)
-        //    .WithMany()
-        //    .HasForeignKey("UserId")
-        //    .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<CheckOut>()
             .HasOne(c => c.Equipment)
@@ -62,23 +78,17 @@ public class DatabaseContext : DbContext
             .HasForeignKey("EquipmentId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        //builder.Entity<CheckOut>()
-        //    .HasOne(c => c.User)
-        //    .WithMany()
-        //    .HasForeignKey("UserId")
-        //    .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<Reservation>()
+            .HasOne(r => r.Equipment)
+            .WithMany()
+            .HasForeignKey("EquipmentId")
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<WorksOn>()
             .HasOne(w => w.Commission)
             .WithMany()
             .HasForeignKey("CommissionId")
             .OnDelete(DeleteBehavior.Cascade);
-
-        //builder.Entity<WorksOn>()
-        //    .HasOne(w => w.User)
-        //    .WithMany()
-        //    .HasForeignKey("UserId")
-        //    .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Client>()
             .HasOne(c => c.Company)
@@ -110,17 +120,12 @@ public class DatabaseContext : DbContext
             .HasForeignKey("CompanyId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Entity<Employee>()
-            .HasOne(e => e.Company)
-            .WithMany()
-            .HasForeignKey("CompanyId")
-            .OnDelete(DeleteBehavior.Cascade);
+        //builder.Entity<Employee>()
+        //    .HasOne(e => e.Company)
+        //    .WithMany()
+        //    .HasForeignKey("CompanyId")
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
     }
-
 }
-

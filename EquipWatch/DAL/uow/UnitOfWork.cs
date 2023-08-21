@@ -7,7 +7,9 @@ using DAL.Repositories.Commission;
 using DAL.Repositories.Company;
 using DAL.Repositories.Employee;
 using DAL.Repositories.Equipment;
+using DAL.Repositories.EquipmentInUse;
 using DAL.Repositories.Invite;
+using DAL.Repositories.Reservation;
 using DAL.Repositories.WorksOn;
 
 namespace webapi.uow
@@ -25,6 +27,8 @@ namespace webapi.uow
         private IEquipmentRepository _equipmentRepository;
         private IInviteRepository _inviteRepository;
         private IWorksOnRepository _worksOnRepository;
+        private IReservationRepository _reservationRepository;
+        private IEquipmentInUseRepository _equipmentInUseRepository;
         private readonly IdentityContext _identityContext;
 
         public UnitOfWork(DatabaseContext context, IdentityContext identityContext)
@@ -53,6 +57,9 @@ namespace webapi.uow
 
         public IWorksOnRepository WorksOn => _worksOnRepository ??= new WorksOnRepository(_context, _identityContext);
 
+        public IEquipmentInUseRepository EquipmentInUse => _equipmentInUseRepository ??= new EquipmentInUseRepository(_context, _identityContext);
+
+        public IReservationRepository Reservation => _reservationRepository ??= new ReservationRepository(_context, _identityContext);
 
         public void SaveChanges()
         {
