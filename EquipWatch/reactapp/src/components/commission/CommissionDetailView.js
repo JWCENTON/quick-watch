@@ -64,7 +64,7 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        let response = await fetch(`https://localhost:7007/api/user`, { method: "GET", headers });
+        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/availableEmployees`, { method: "GET", headers });
         let data = await response.json();
         setAllWorkers(data);
     }
@@ -109,11 +109,15 @@ export default function CommissionDetailView({ detailsData }) {
     }
 
     useEffect(() => {
-        GetEquipmentModalData(token)
-    }, [showEquipmentModal]);
+        if (detailsData != null) {
+            GetEquipmentModalData(token)
+        }
+    }, [detailsData, showEquipmentModal]);
 
     useEffect(() => {
-        GetEmployeeModalData(token)
+        if (detailsData != null) {
+            GetEmployeeModalData(token)
+        }
     }, [showWorkerModal]);
 
     useEffect(() => {

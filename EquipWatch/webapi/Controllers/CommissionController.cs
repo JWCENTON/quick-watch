@@ -14,6 +14,7 @@ using webapi.uow;
 using webapi.Validators;
 using Domain.User.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace webapi.Controllers
 {
@@ -186,6 +187,20 @@ namespace webapi.Controllers
         {
             var employees = await _unitOfWork.WorksOn.GetCommissionEmployeesAsync(id);
             return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
+        }
+
+        [HttpGet("{id}/availableEmployees")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<List<PartialUserDTO>> GetAvailableEmployees(Guid id)
+        {
+            var assignments = _unitOfWork.WorksOn.GetAllAsync().Result.Where(assignment => assignment.CommissionId == id);
+            var assignedUsers = assignments.Select(assignment => assignment.UserId);
+            var employees = _unitOfWork.Employees.GetAllAsync().Result;
+            var notAssigned = employees.Where(employee => assignedUsers.All(user => Guid.Parse(user) != employee.Id));
+            return notAssigned.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
         }
 
         [HttpPost("{id}/employees")]
