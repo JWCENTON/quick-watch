@@ -1,10 +1,9 @@
-﻿using DTO.CommissionDTOs;
-using DTO.EquipmentDTOs;
-
-namespace DTO.BookedEquipmentDTOs;
+﻿namespace DTO.BookedEquipmentDTOs;
 
 public record BaseBookedEquipmentDTO()
 {
-    public string EquipmentId { get; init; }
+    public string? EquipmentInUseId { get; init; }
     public string CommissionId { get; init; }
+    public string? ReservationId { get; init; }
+    public bool IsFinished { get; init; }
 };

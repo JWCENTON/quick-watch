@@ -19,8 +19,8 @@ public class CheckOutRepository : ICheckOutRepository
 
     public async Task<Domain.CheckOut.Models.CheckOut> GetAsync(Guid id)
     {
-        var client = await _context.CheckOuts.FirstOrDefaultAsync(c => c.Id == id);
-        return client ?? throw new KeyNotFoundException("CheckOut With given Id was not found");
+        var checkOut = await _context.CheckOuts.FirstOrDefaultAsync(c => c.Id == id);
+        return checkOut ?? throw new KeyNotFoundException("CheckOut With given Id was not found");
     }
 
     public async Task CreateAsync(Domain.CheckOut.Models.CheckOut entity)

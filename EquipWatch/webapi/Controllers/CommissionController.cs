@@ -7,6 +7,7 @@ using DTO.EquipmentDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Domain.BookedEquipment.Models;
+using Domain.EquipmentInUse.Models;
 using Domain.WorksOn.Models;
 using DTO.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ using webapi.Validators;
 using Domain.User.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace webapi.Controllers
 {
@@ -160,17 +162,26 @@ namespace webapi.Controllers
         {
             var commission = await _unitOfWork.Commissions.GetAsync(id);
             var equipmentId = Guid.Parse(data.EquipmentId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                         ?? throw new ArgumentException("You need login to add equipment to commission");
             var equipment = await _unitOfWork.Equipments.GetAsync(equipmentId);
-            var startDate = commission.StartTime;
-            var endDate = commission.EndTime;
+            var equipmentInUse = new EquipmentInUse()
+            {
+                CreationTime = DateTime.Now,
+                Id = Guid.NewGuid(),
+                EquipmentId = equipmentId,
+                Equipment = equipment,
+                UserId = userId
+            };
 
             var booking = new BookedEquipment()
             {
                 Id = Guid.NewGuid(),
                 Commission = commission,
                 CommissionId = commission.Id,
-                Equipment = equipment,
-                EquipmentId = equipmentId
+                EquipmentInUse = equipmentInUse,
+                EquipmentInUseId = equipmentInUse.Id,
+                IsFinished = false
             };
 
             await _unitOfWork.BookedEquipment.CreateAsync(booking);

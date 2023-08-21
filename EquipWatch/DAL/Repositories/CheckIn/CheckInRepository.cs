@@ -19,8 +19,8 @@ public class CheckInRepository : ICheckInRepository
 
     public async Task<Domain.CheckIn.Models.CheckIn> GetAsync(Guid id)
     {
-        var client = await _context.CheckIns.FirstOrDefaultAsync(c => c.Id == id);
-        return client ?? throw new KeyNotFoundException("CheckIn With given Id was not found");
+        var checkIn = await _context.CheckIns.FirstOrDefaultAsync(c => c.Id == id);
+        return checkIn ?? throw new KeyNotFoundException("CheckIn With given Id was not found");
     }
 
     public async Task CreateAsync(Domain.CheckIn.Models.CheckIn entity)

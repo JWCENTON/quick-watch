@@ -10,6 +10,7 @@
 	  <Folder Include="CheckIn\Models\" />
 	  <Folder Include="CheckOut\Models\" />
 	  <Folder Include="Invite\Models\" />
+	  <Folder Include="Reservation\Models\" />
 	  <Folder Include="WorksOn\Models\" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.7" />
   </ItemGroup>

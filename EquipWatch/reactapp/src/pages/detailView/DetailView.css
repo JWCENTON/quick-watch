@@ -44,6 +44,15 @@
     font-size: 20px;
 }
 
+.unicode-mark {
+    font-size: 20px;
+}
+
+.dark-star {
+    color: black;
+    font-size: 20px;
+}
+
 .button-section {
     grid-column: 1 / span 2;
     grid-row: 2;
