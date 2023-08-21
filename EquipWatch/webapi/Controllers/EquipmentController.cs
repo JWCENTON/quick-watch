@@ -22,21 +22,18 @@ public class EquipmentController : ControllerBase
     private readonly IMapper _mapper;
     private readonly CreateEquipmentDTOValidator _createValidator;
     private readonly UpdateEquipmentDTOValidator _updateValidator;
-    private readonly CreateBookedEquipmentDTOValidator _createBookValidator;
 
     public EquipmentController(UserManager<User> userManager,
         IUnitOfWork unitOfWork,
         IMapper mapper,
         CreateEquipmentDTOValidator createEquipmentValidator,
-        UpdateEquipmentDTOValidator updateEquipmentValidator,
-        CreateBookedEquipmentDTOValidator createBookValidator)
+        UpdateEquipmentDTOValidator updateEquipmentValidator)
     {
         _userManager = userManager;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _createValidator = createEquipmentValidator;
         _updateValidator = updateEquipmentValidator;
-        _createBookValidator = createBookValidator;
     }
 
     [HttpGet]
@@ -213,51 +210,4 @@ public class EquipmentController : ControllerBase
 
         return Ok();
     }
-
-    //    var result = await _locationValidator.ValidateAsync(locationDto);
-    //    if (result.IsValid)
-    //    {
-    //        var equipment = await _unitOfWork.Equipments.GetAsync(EquipmentId);
-
-    //        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    //        if (userId == null) 
-    //        { throw new ArgumentException("You need login to create checkout"); }
-    //        if (equipment.Available) 
-    //        { throw new ArgumentException("Equipment is already checked in"); }
-
-    //        equipment.Available = true;
-    //        equipment.Location = locationDto.Location;
-    //        await _unitOfWork.Equipments.UpdateAsync(equipment);
-
-    //        var checkIn = new CheckIn
-    //        {
-    //            Id = Guid.NewGuid(),
-    //            Equipment = equipment,
-    //            EquipmentId = equipment.Id,
-    //            UserId = userId,
-    //            CreationTime = DateTime.Now
-    //        };
-
-    //        await _unitOfWork.CheckIns.CreateAsync(checkIn);
-
-    //        await _unitOfWork.SaveChangesAsync();
-
-    //        return Ok();
-    //    }
-    //    throw new ArgumentException(result.Errors.First().ErrorMessage);
-    //}
-
-    //[HttpDelete("{id}")]
-    //public async Task<IActionResult> Delete(Guid id)
-    //{
-    //    try
-    //    {
-    //        await _unitOfWork.Equipments.RemoveAsync(id);
-    //        return Ok();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return BadRequest(ex.Message);
-    //    }
-    //}
 }
