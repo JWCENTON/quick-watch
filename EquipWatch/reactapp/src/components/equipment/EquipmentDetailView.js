@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext';
 import UniversalCard from '../card/Card';
-import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import Select from "react-select";
 import QRCode from "react-qr-code";
 //import { Wrapper, Trigger } from 'react-download-svg';
 
@@ -16,8 +16,9 @@ export default function EquipmentDetailView({ detailsData }) {
     const [showBookingModal, setShowBookingModal] = useState(false);
     const [isAvailable, setIsAvailable] = useState(false);
     const [inWarehouse, setInWarehouse] = useState(false);
-	const [location, setLocation] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
+    const [location, setLocation] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [succesfullMessage, setSuccesfullMessage] = useState('');
     const navigate = useNavigate();
     const { token } = useAuth();
     const [commissionList, setCommissionList] = useState([]);
@@ -28,7 +29,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
 
 
-	useEffect(() => {
+    useEffect(() => {
         if (detailsData) {
             setDetails(detailsData)
             setIsAvailable(detailsData.available);
@@ -49,8 +50,8 @@ export default function EquipmentDetailView({ detailsData }) {
             if (currentCommission !== null) {
                 getCommissionDetails();
             }
-		}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [detailsData, token]);
 
 
@@ -64,8 +65,11 @@ export default function EquipmentDetailView({ detailsData }) {
 
     useEffect(() => { }, [isAvailable, location]);
 
-    const handleCheckoutModalClose = () => {setShowCheckoutModal(false); setErrorMessage('');};
-    const handleCheckoutModalShow = () => setShowCheckoutModal(true);
+    const handleCheckoutModalClose = () => { setShowCheckoutModal(false); setErrorMessage(''); };
+    const handleCheckoutModalShow = () => {
+        setSuccesfullMessage('')
+        setShowCheckoutModal(true)
+    };
 
     const handleBookingModalClose = () => {
         setShowBookingModal(false);
@@ -73,10 +77,21 @@ export default function EquipmentDetailView({ detailsData }) {
         setSelectedCommission('');
         setEndDate(null);
     };
-    const handleBookingModalShow = () => setShowBookingModal(true);
+    const handleBookingModalShow = () => {
+        setShowBookingModal(true);
+        setSuccesfullMessage('');
+    };
 
     const handleCheckinModalClose = () =>{ setShowCheckinModal(false); setErrorMessage('');};
-    const handleCheckinModalShow = () => setShowCheckinModal(true);
+    const handleCheckinModalShow = () => {
+        setSuccesfullMessage('');
+        setShowCheckinModal(true);
+    };
+
+
+    const handleCommissionChange = (selectedOption) => {
+        setSelectedCommission(selectedOption);
+    };
 
     async function updateDetails() {
         const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id, {
@@ -88,6 +103,7 @@ export default function EquipmentDetailView({ detailsData }) {
         if (response.status === 200) {
             const data = await response.json();
             setDetails(data);
+            return data.location;
         }
     }
 
@@ -102,6 +118,7 @@ export default function EquipmentDetailView({ detailsData }) {
             const data = await response.json();
             await setCurrentBooking(data);
             await getCommissionDetails(data.commissionId)
+
         } else if (response.status === 204) {
             await setCurrentBooking(null)
             await setCurrentCommission(null)
@@ -125,7 +142,7 @@ export default function EquipmentDetailView({ detailsData }) {
     async function handleBookingFormSubmit(event) {
         event.preventDefault();
         let raw = JSON.stringify({
-            commissionId: selectedCommission,
+            commissionId: selectedCommission.value,
             equipmentId: detailsData.id,
             endTime: endDate? endDate.toISOString() : null
         });
@@ -143,9 +160,13 @@ export default function EquipmentDetailView({ detailsData }) {
         } else if (response.ok) {
             const result = await response.json();
             await setCurrentBooking(result);
-            getCommissionDetails()
+            getCommissionDetails(result.commissionId)
             handleBookingModalClose();
-            await updateDetails()
+            var updatedLocation = await updateDetails()
+            if (updatedLocation.includes("On the way to"))
+                await setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`)
+        } else {
+            setSuccesfullMessage(`Succesfully created a booking for ${detailsData.serialNumber}`)
         }
     }
 
@@ -165,6 +186,7 @@ export default function EquipmentDetailView({ detailsData }) {
 			setErrorMessage(errorJson.Message);
 		} else if (response.ok) {
             handleCheckoutModalClose();
+            setSuccesfullMessage(`Succesfully checked out equipment from ${location}`)
             await updateDetails()
             await updateBook()
         }
@@ -185,7 +207,8 @@ export default function EquipmentDetailView({ detailsData }) {
 			setErrorMessage(errorJson.Message);
 		} else if (response.ok) {
             handleCheckinModalClose();
-            await updateDetails()
+            var updatedLocation = await updateDetails()
+            setSuccesfullMessage(`Succesfully checked in equipment at ${updatedLocation}`)
         }
     }
 
@@ -222,10 +245,12 @@ export default function EquipmentDetailView({ detailsData }) {
     return (
         <div className="details-section">
             <div className="myAndAllSwitch-section"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
+            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined? (
                 <p>Loading...</p>
             ) : (
                 <div className="details-grid">
+
                     <div className="section-left">
                         <h4 className="details-header">Equipment Details</h4>
                         {/*<p>Equipment name: </p>*/}
@@ -246,13 +271,9 @@ export default function EquipmentDetailView({ detailsData }) {
                     </div>
                     <div className="section-right">
                             <h4 className="details-header">Assigned Commission</h4>
-                            <br/>
-                                {/*<div className="cardsContainer">*/}
-                                {/*    {currentCommission === null ? <></> : <UniversalCard key={0} data={currentCommission} dataType={'commission'}></UniversalCard>}*/}
-                                {/*</div>*/}
-                                {/*<div className="cardsContainer">*/}
-                                {/*        {commissionList == null || commissionList.length === 0 ? <p>Loading...</p> : commissionList.map((card, index) => (<UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard>))}*/}
-                                {/*</div>*/}
+                                <div className="cardsContainer">
+                                {commissionList == null || currentCommission === undefined || commissionList.length === 0 ? <p>Loading...</p> : currentCommission == null ? <>No commission assigned.</> : commissionList.map((card, index) => (card.id === currentCommission.id ? <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard> : <></>))}
+                                </div>
                         <h4 className="details-header">Equipment Management</h4>
                             <div className="button-section">
                                 {(
@@ -285,31 +306,33 @@ export default function EquipmentDetailView({ detailsData }) {
                                 <Modal.Title>Equipment booking</Modal.Title>
                             </Modal.Header>
                             <form onSubmit={(event) => handleBookingFormSubmit(event)}>
-                                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                                 <Modal.Body>
                                     <label htmlFor="selectedCommission">Choose a commission:</label>
                                     <br />
-                                    <select
-                                        id="selectedCommission"
+                                    <Select
                                         value={selectedCommission}
-                                        onChange={(e) => setSelectedCommission(e.target.value)}
-                                    >
-                                        <option value="">Select a commission</option>
-                                        {commissionList.map((commission) => (
-                                            <option key={commission.id} value={commission.id}>
-                                                {commission.description}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        onChange={handleCommissionChange}
+                                        options={commissionList.map((commission) => ({
+                                            value: commission.id,
+                                            label: <>Description: {commission.description}<br />Scope: {commission.scope}<br />Location: {commission.location }</>,
+                                        }))}
+                                        placeholder="Select a commission"
+                                        isClearable
+                                        classNamePrefix="my-select"
+                                    />
                                     <br />
                                     <label htmlFor="endDate">Select an end date:</label>
                                     <br />
-                                    <DatePicker
-                                        selected={endDate}
-                                        onChange={item => setEndDate(item)}
-                                        minDate={new Date()}
-                                        dateFormat="dd/MM/yyyy"
-                                    />
+                                    <div>
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={item => setEndDate(item)}
+                                            minDate={new Date()}
+                                            dateFormat="dd/MM/yyyy"
+                                            isClearable={true}
+                                            />
+                                    </div>
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button type="submit">Book Equipment</Button>
@@ -321,7 +344,7 @@ export default function EquipmentDetailView({ detailsData }) {
                             <Modal.Title>Checkout Equipment</Modal.Title>
                         </Modal.Header>
                             <form onSubmit={(event) => handleCheckoutFormSubmit(event, !isAvailable && !inWarehouse)}>
-                                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                                 <Modal.Body>
                                     Are you sure?
                                 </Modal.Body>
@@ -336,7 +359,7 @@ export default function EquipmentDetailView({ detailsData }) {
                             <Modal.Title>Check in Equipment</Modal.Title>
                         </Modal.Header>
                             <form onSubmit={(event) => handleCheckinFormSubmit(event, (isAvailable && !inWarehouse) || (isAvailable && inWarehouse))}>
-                                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                             <Modal.Body>
                                 Are you sure?
                             </Modal.Body>

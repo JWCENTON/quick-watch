@@ -12,7 +12,7 @@ public class Commission
     public string Location { get; set; }
     public DateTime CreationTime { get; set; }
     public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set;}
+    public DateTime? EndTime { get; set;}
 
     //public List<Employee.Models.Employee>? Employees { get; set; } // how to save it to DB to contain only ID
     // list of photos of current work

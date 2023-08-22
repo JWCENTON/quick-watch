@@ -3,6 +3,9 @@ import { Button, Modal, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router'
 import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from 'react-datepicker';
+import Select from "react-select";
 
 export default function CommissionDetailView({ detailsData }) {
     const [equipment, setEquipment] = useState(null);
@@ -11,16 +14,35 @@ export default function CommissionDetailView({ detailsData }) {
     const [allWorkers, setAllWorkers] = useState(null);
     const [showEquipmentModal, setShowEquipmentModal] = useState(false);
     const [showWorkerModal, setShowWorkerModal] = useState(false);
+    const [endDate, setEndDate] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [succesfullMessage, setSuccesfullMessage] = useState('');
+    const [selectedEquipment, setSelectedEquipment] = useState('');
     const navigate = useNavigate()
     const { token } = useAuth();
 
-    const handleEquipmentClose = () => setShowEquipmentModal(false);
-    const handleEquipmentShow = () => setShowEquipmentModal(true);
+    const handleEquipmentClose = () => {
+        setShowEquipmentModal(false)
+        setErrorMessage('');
+        setSelectedEquipment('');
+        setEndDate(null);
+    };
+    const handleEquipmentShow = () => {
+        setSuccesfullMessage('')
+        setShowEquipmentModal(true)
+    };
 
     const handleWorkerClose = () => setShowWorkerModal(false);
-    const handleWorkerShow = () => setShowWorkerModal(true);
+    const handleWorkerShow = () => {
+        setSuccesfullMessage('')
+        setShowWorkerModal(true)
+    };
 
-    async function GetData(token) {
+    const handleEquipmentChange = (selectedOption) => {
+        setSelectedEquipment(selectedOption);
+    };
+
+    async function GetData() {
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -46,7 +68,7 @@ export default function CommissionDetailView({ detailsData }) {
         setWorkers(data);
     }
 
-    async function GetEquipmentModalData(token) {
+    async function GetEquipmentModalData() {
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -54,12 +76,12 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        let response = await fetch(`https://localhost:7007/api/equipment`, { method: "GET", headers });
+        let response = await fetch(`https://localhost:7007/api/equipment/available`, { method: "GET", headers });
         let data = await response.json();
         setAllEquipment(data);
     }
 
-    async function GetEmployeeModalData(token) {
+    async function GetEmployeeModalData() {
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -92,24 +114,31 @@ export default function CommissionDetailView({ detailsData }) {
         GetData(token);
     }
 
-    async function AddEquipment(event) {
-        let target = event.currentTarget;
-        const headers = {
-            'Content-Type': 'application/json',
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
+    async function handleBookingFormSubmit(event) {
+        event.preventDefault();
         let raw = JSON.stringify({
-            "equipmentId": `${target.getAttribute('value')}`
+            equipmentId: selectedEquipment.value,
+            commissionId: detailsData.id,
+            endTime: endDate ? endDate.toISOString() : null
         });
-
-        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "POST", headers: headers, body: raw });
-
-        setShowEquipmentModal(false);
-        GetData(token);
+        const response = await fetch('https://localhost:7007/api/bookequipment/', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: raw
+        });
+        if (response.status === 400) {
+            const errorJson = await response.json();
+            setErrorMessage(errorJson.Message);
+        } else if (response.ok) {
+            handleEquipmentClose()
+            await GetData()
+            let equipment = allEquipment.find(e => e.id === selectedEquipment.value)
+            console.log(equipment)
+            setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`)
+        }
     }
 
     useEffect(() => {
@@ -126,7 +155,7 @@ export default function CommissionDetailView({ detailsData }) {
 
     useEffect(() => {
         if (detailsData != null) {
-            GetData(token);
+            GetData();
         }
     }, [detailsData]);
 
@@ -135,7 +164,8 @@ export default function CommissionDetailView({ detailsData }) {
             <div className="myAndAllSwitch-section">
                 <a className="myAndAllSwitch" href="/commissions" >My Commissions</a> | <a className="myAndAllSwitch" href="/commissions" >All Commissions</a>
             </div>
-            {detailsData === null ? (
+            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
+            {detailsData === null || allEquipment === null ? (
                 <p>Loading...</p>
             ) : (
                 <div>
@@ -163,27 +193,54 @@ export default function CommissionDetailView({ detailsData }) {
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
-                            </div>
-                            <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Add Equipment</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <ListGroup>
-                                            {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((item, index) => (<ListGroup.Item value={item.id} onClick={AddEquipment}><span>SN: {item.serialNumber} </span><span>Category: {item.category}</span></ListGroup.Item>))}
-                                    </ListGroup>
-                                </Modal.Body>
+                                </div>
+                                <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Equipment booking</Modal.Title>
+                                    </Modal.Header>
+                                    {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                                    <form onSubmit={(event) => handleBookingFormSubmit(event)}>
+                                        <Modal.Body>
+                                            <label htmlFor="selectedEquipment">Choose an available Equipment:</label>
+                                            <br />
+                                            <Select
+                                                value={selectedEquipment}
+                                                onChange={handleEquipmentChange}
+                                                options={allEquipment.map((equipment) => ({
+                                                    value: equipment.id,
+                                                    label: <>SN: {equipment.serialNumber}<br /> Category: {equipment.category}<br/>
+                                                        Location: {equipment.location}</>,
+                                                }))}
+                                                placeholder="Select an equipment"
+                                                isClearable
+                                                classNamePrefix="my-select"
+                                            />
+                                            <br />
+                                            <label htmlFor="endDate">Select an end date:</label>
+                                            <br />
+                                            <DatePicker
+                                                selected={endDate}
+                                                onChange={item => setEndDate(item)}
+                                                minDate={new Date()}
+                                                dateFormat="dd/MM/yyyy"
+                                                isClearable={true}
+                                            />
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button type="submit">Add Equipment</Button>
+                                        </Modal.Footer>
+                                    </form>
                                 </Modal>
                                 <Modal show={showWorkerModal} onHide={handleWorkerClose}>
                                     <Modal.Header closeButton>
-                                        <Modal.Title>Add Worker</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <ListGroup>
-                                            {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id} onClick={AddEmployee}><p>{worker.userName}</p></ListGroup.Item>))}
-                                        </ListGroup>
-                                    </Modal.Body>
-                                </Modal>
+                                    <Modal.Title>Add Worker</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <ListGroup>
+                                        {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id} onClick={AddEmployee}><p>{worker.userName}</p></ListGroup.Item>))}
+                                    </ListGroup>
+                                </Modal.Body>
+                            </Modal>
                         </div>
                     </div>
                 </div>

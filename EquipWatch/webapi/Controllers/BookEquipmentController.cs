@@ -2,7 +2,6 @@
 using Domain.BookedEquipment.Models;
 using Domain.EquipmentInUse.Models;
 using DTO.BookedEquipmentDTOs;
-using DTO.CommissionDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -52,6 +51,7 @@ public class BookEquipmentController : ControllerBase
 
     [HttpGet("{equipmentId}/currentEquipmentBook")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -88,6 +88,11 @@ public class BookEquipmentController : ControllerBase
                 equipment.Location = "On the way to " + commission.Location;
             }
 
+            var endTime = createDto.EndTime;
+            if (createDto.EndTime == null)
+            {
+                endTime = commission.EndTime;
+            }
             var equipmentInUse = new EquipmentInUse()
             {
                 Id = Guid.NewGuid(),
@@ -95,7 +100,7 @@ public class BookEquipmentController : ControllerBase
                 Equipment = equipment,
                 EquipmentId = equipment.Id,
                 UserId = userId,
-                EndTime = createDto.EndTime
+                EndTime = endTime
             };
             await _unitOfWork.EquipmentInUse.CreateAsync(equipmentInUse);
 
