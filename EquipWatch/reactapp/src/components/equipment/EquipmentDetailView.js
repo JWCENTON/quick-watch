@@ -160,7 +160,7 @@ export default function EquipmentDetailView({ detailsData }) {
         } else if (response.ok) {
             const result = await response.json();
             await setCurrentBooking(result);
-            getCommissionDetails()
+            getCommissionDetails(result.commissionId)
             handleBookingModalClose();
             var updatedLocation = await updateDetails()
             if (updatedLocation.includes("On the way to"))
@@ -271,13 +271,9 @@ export default function EquipmentDetailView({ detailsData }) {
                     </div>
                     <div className="section-right">
                             <h4 className="details-header">Assigned Commission</h4>
-                            <br/>
-                                {/*<div className="cardsContainer">*/}
-                                {/*    {currentCommission === null ? <></> : <UniversalCard key={0} data={currentCommission} dataType={'commission'}></UniversalCard>}*/}
-                                {/*</div>*/}
-                                {/*<div className="cardsContainer">*/}
-                                {/*        {commissionList == null || commissionList.length === 0 ? <p>Loading...</p> : commissionList.map((card, index) => (<UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard>))}*/}
-                                {/*</div>*/}
+                                <div className="cardsContainer">
+                                {commissionList == null || currentCommission === undefined || commissionList.length === 0 ? <p>Loading...</p> : currentCommission == null ? <>No commission assigned.</> : commissionList.map((card, index) => (card.id === currentCommission.id ? <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard> : <></>))}
+                                </div>
                         <h4 className="details-header">Equipment Management</h4>
                             <div className="button-section">
                                 {(
