@@ -20,7 +20,7 @@ public class CommissionMappingProfile : Profile
 
         CreateMap<Domain.Commission.Models.Commission.Commission, PartialCommissionDTO>()
             .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime.ToString("dd-MM-yyyy HH:mm")))
-            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime.ToString("dd-MM-yyyy HH:mm")));
+            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime != null ? src.EndTime.Value.ToString("dd-MM-yyyy HH:mm") : null));
 
         CreateMap<PartialCommissionDTO, Domain.Commission.Models.Commission.Commission>();
     }

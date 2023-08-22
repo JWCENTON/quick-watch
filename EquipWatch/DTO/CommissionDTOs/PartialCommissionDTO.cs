@@ -10,5 +10,5 @@ public record PartialCommissionDTO
     public string Scope { get; init; } 
     public string Location { get; init; }
     public string StartTime { get; init; }
-    public string EndTime { get; init; }
+    public string? EndTime { get; init; }
 }

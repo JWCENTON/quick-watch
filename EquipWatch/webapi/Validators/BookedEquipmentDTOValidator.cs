@@ -19,10 +19,8 @@ public class CreateBookedEquipmentDTOValidator : AbstractValidator<CreateBookedE
         RuleFor(dto => dto.CommissionId).NotEmpty().WithMessage("You have to select a commission.");
         RuleFor(dto => dto.EquipmentId).NotEmpty().WithMessage("You have to select an equipment.");
         RuleFor(dto => dto.EndTime)
-            .NotNull()
-            .WithMessage("You need to specify end date.")
-            .GreaterThanOrEqualTo(DateTime.Now)
-            .WithMessage("End time must cannot be in the past.");
+            .Must(endTime => endTime == null || endTime >= DateTime.Now)
+            .WithMessage("End time must not be in the past if provided.");
     }
 }
 

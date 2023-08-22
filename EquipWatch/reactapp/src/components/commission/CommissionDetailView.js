@@ -39,7 +39,7 @@ export default function CommissionDetailView({ detailsData }) {
     };
 
     const handleEquipmentChange = (selectedOption) => {
-        setSelectedEquipment(selectedOption.value);
+        setSelectedEquipment(selectedOption);
     };
 
     async function GetData() {
@@ -117,7 +117,7 @@ export default function CommissionDetailView({ detailsData }) {
     async function handleBookingFormSubmit(event) {
         event.preventDefault();
         let raw = JSON.stringify({
-            equipmentId: selectedEquipment,
+            equipmentId: selectedEquipment.value,
             commissionId: detailsData.id,
             endTime: endDate ? endDate.toISOString() : null
         });
@@ -135,7 +135,9 @@ export default function CommissionDetailView({ detailsData }) {
         } else if (response.ok) {
             handleEquipmentClose()
             await GetData()
-            setSuccesfullMessage(`Succesfully created a booking for ${selectedEquipment}`)
+            let equipment = allEquipment.find(e => e.id === selectedEquipment.value)
+            console.log(equipment)
+            setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`)
         }
     }
 
@@ -159,10 +161,10 @@ export default function CommissionDetailView({ detailsData }) {
 
     return (
         <div className="details-section">
-            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             <div className="myAndAllSwitch-section">
                 <a className="myAndAllSwitch" href="/commissions" >My Commissions</a> | <a className="myAndAllSwitch" href="/commissions" >All Commissions</a>
             </div>
+            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             {detailsData === null || allEquipment === null ? (
                 <p>Loading...</p>
             ) : (
@@ -193,10 +195,10 @@ export default function CommissionDetailView({ detailsData }) {
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
                                 </div>
                                 <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
-                                    {errorMessage && <div className="error-message">{errorMessage}</div>}
                                     <Modal.Header closeButton>
                                         <Modal.Title>Equipment booking</Modal.Title>
                                     </Modal.Header>
+                                    {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                                     <form onSubmit={(event) => handleBookingFormSubmit(event)}>
                                         <Modal.Body>
                                             <label htmlFor="selectedEquipment">Choose an available Equipment:</label>
@@ -207,9 +209,11 @@ export default function CommissionDetailView({ detailsData }) {
                                                 options={allEquipment.map((equipment) => ({
                                                     value: equipment.id,
                                                     label: <>SN: {equipment.serialNumber}<br /> Category: {equipment.category}<br/>
-                                                    Location: {equipment.inWarehouse ? equipment.location : "being transported"}
-                                                    </>,
+                                                        Location: {equipment.location}</>,
                                                 }))}
+                                                placeholder="Select an equipment"
+                                                isClearable
+                                                classNamePrefix="my-select"
                                             />
                                             <br />
                                             <label htmlFor="endDate">Select an end date:</label>

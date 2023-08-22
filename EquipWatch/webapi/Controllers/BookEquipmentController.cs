@@ -88,6 +88,11 @@ public class BookEquipmentController : ControllerBase
                 equipment.Location = "On the way to " + commission.Location;
             }
 
+            var endTime = createDto.EndTime;
+            if (createDto.EndTime == null)
+            {
+                endTime = commission.EndTime;
+            }
             var equipmentInUse = new EquipmentInUse()
             {
                 Id = Guid.NewGuid(),
@@ -95,7 +100,7 @@ public class BookEquipmentController : ControllerBase
                 Equipment = equipment,
                 EquipmentId = equipment.Id,
                 UserId = userId,
-                EndTime = createDto.EndTime
+                EndTime = endTime
             };
             await _unitOfWork.EquipmentInUse.CreateAsync(equipmentInUse);
 

@@ -53,11 +53,13 @@
     font-size: 20px;
 }
 
-.select {
-    white-space: normal;
-    max-width: 300px;
-    max-height: 500px;
-    overflow-y: auto;
+.my-select__clear-indicator svg {
+    fill: red;
+    transition: fill 0.3s;
+}
+
+.my-select__clear-indicator:hover svg {
+    fill: darkred;
 }
 
 .button-section {

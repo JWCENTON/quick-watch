@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext';
 import UniversalCard from '../card/Card';
-import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import Select from "react-select";
 import QRCode from "react-qr-code";
 //import { Wrapper, Trigger } from 'react-download-svg';
 
@@ -88,6 +88,11 @@ export default function EquipmentDetailView({ detailsData }) {
         setShowCheckinModal(true);
     };
 
+
+    const handleCommissionChange = (selectedOption) => {
+        setSelectedCommission(selectedOption);
+    };
+
     async function updateDetails() {
         const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id, {
             headers: {
@@ -137,7 +142,7 @@ export default function EquipmentDetailView({ detailsData }) {
     async function handleBookingFormSubmit(event) {
         event.preventDefault();
         let raw = JSON.stringify({
-            commissionId: selectedCommission,
+            commissionId: selectedCommission.value,
             equipmentId: detailsData.id,
             endTime: endDate? endDate.toISOString() : null
         });
@@ -159,7 +164,7 @@ export default function EquipmentDetailView({ detailsData }) {
             handleBookingModalClose();
             var updatedLocation = await updateDetails()
             if (updatedLocation.includes("On the way to"))
-                await setSuccesfullMessage(`Succesfully created a booking for ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`)
+                await setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`)
         } else {
             setSuccesfullMessage(`Succesfully created a booking for ${detailsData.serialNumber}`)
         }
@@ -239,8 +244,8 @@ export default function EquipmentDetailView({ detailsData }) {
 
     return (
         <div className="details-section">
-            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             <div className="myAndAllSwitch-section"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
+            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined? (
                 <p>Loading...</p>
             ) : (
@@ -305,24 +310,21 @@ export default function EquipmentDetailView({ detailsData }) {
                                 <Modal.Title>Equipment booking</Modal.Title>
                             </Modal.Header>
                             <form onSubmit={(event) => handleBookingFormSubmit(event)}>
-                                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                                 <Modal.Body>
                                     <label htmlFor="selectedCommission">Choose a commission:</label>
                                     <br />
-                                    <select
-                                        id="selectedCommission"
-                                        class="select"
+                                    <Select
                                         value={selectedCommission}
-                                        onChange={(e) => setSelectedCommission(e.target.value)}
-                                    >
-                                        <option value="">Select a commission</option>
-                                        {commissionList.map((commission) => (
-                                            <option key={commission.id} value={commission.id}>
-                                                {commission.description}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <br />
+                                        onChange={handleCommissionChange}
+                                        options={commissionList.map((commission) => ({
+                                            value: commission.id,
+                                            label: <>Description: {commission.description}<br />Scope: {commission.scope}<br />Location: {commission.location }</>,
+                                        }))}
+                                        placeholder="Select a commission"
+                                        isClearable
+                                        classNamePrefix="my-select"
+                                    />
                                     <br />
                                     <label htmlFor="endDate">Select an end date:</label>
                                     <br />
@@ -346,7 +348,7 @@ export default function EquipmentDetailView({ detailsData }) {
                             <Modal.Title>Checkout Equipment</Modal.Title>
                         </Modal.Header>
                             <form onSubmit={(event) => handleCheckoutFormSubmit(event, !isAvailable && !inWarehouse)}>
-                                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                                 <Modal.Body>
                                     Are you sure?
                                 </Modal.Body>
@@ -361,7 +363,7 @@ export default function EquipmentDetailView({ detailsData }) {
                             <Modal.Title>Check in Equipment</Modal.Title>
                         </Modal.Header>
                             <form onSubmit={(event) => handleCheckinFormSubmit(event, (isAvailable && !inWarehouse) || (isAvailable && inWarehouse))}>
-                                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                             <Modal.Body>
                                 Are you sure?
                             </Modal.Body>
