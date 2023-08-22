@@ -47,6 +47,18 @@ public class EquipmentController : ControllerBase
         return data.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
     }
 
+    [HttpGet("available")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<List<PartialEquipmentDTO>> GetAllAvailable()
+    {
+        var data = await _unitOfWork.Equipments.GetAllAvailableAsync();
+        return data.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

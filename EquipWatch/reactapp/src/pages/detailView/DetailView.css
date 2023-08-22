@@ -53,6 +53,13 @@
     font-size: 20px;
 }
 
+.select {
+    white-space: normal;
+    max-width: 300px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
 .button-section {
     grid-column: 1 / span 2;
     grid-row: 2;

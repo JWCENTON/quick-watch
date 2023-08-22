@@ -5,6 +5,7 @@ import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import Select from "react-select";
 
 export default function CommissionDetailView({ detailsData }) {
     const [equipment, setEquipment] = useState(null);
@@ -15,22 +16,33 @@ export default function CommissionDetailView({ detailsData }) {
     const [showWorkerModal, setShowWorkerModal] = useState(false);
     const [endDate, setEndDate] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
-    const [selectedEquipment, setselectedEquipment] = useState('');
+    const [succesfullMessage, setSuccesfullMessage] = useState('');
+    const [selectedEquipment, setSelectedEquipment] = useState('');
     const navigate = useNavigate()
     const { token } = useAuth();
 
     const handleEquipmentClose = () => {
         setShowEquipmentModal(false)
         setErrorMessage('');
-        setselectedEquipment('');
+        setSelectedEquipment('');
         setEndDate(null);
     };
-    const handleEquipmentShow = () => setShowEquipmentModal(true);
+    const handleEquipmentShow = () => {
+        setSuccesfullMessage('')
+        setShowEquipmentModal(true)
+    };
 
     const handleWorkerClose = () => setShowWorkerModal(false);
-    const handleWorkerShow = () => setShowWorkerModal(true);
+    const handleWorkerShow = () => {
+        setSuccesfullMessage('')
+        setShowWorkerModal(true)
+    };
 
-    async function GetData(token) {
+    const handleEquipmentChange = (selectedOption) => {
+        setSelectedEquipment(selectedOption.value);
+    };
+
+    async function GetData() {
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -56,7 +68,7 @@ export default function CommissionDetailView({ detailsData }) {
         setWorkers(data);
     }
 
-    async function GetEquipmentModalData(token) {
+    async function GetEquipmentModalData() {
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -64,12 +76,12 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        let response = await fetch(`https://localhost:7007/api/equipment`, { method: "GET", headers });
+        let response = await fetch(`https://localhost:7007/api/equipment/available`, { method: "GET", headers });
         let data = await response.json();
         setAllEquipment(data);
     }
 
-    async function GetEmployeeModalData(token) {
+    async function GetEmployeeModalData() {
         const headers = {
             'Content-Type': 'application/json',
         };
@@ -105,7 +117,8 @@ export default function CommissionDetailView({ detailsData }) {
     async function handleBookingFormSubmit(event) {
         event.preventDefault();
         let raw = JSON.stringify({
-            equipmentId: detailsData.id,
+            equipmentId: selectedEquipment,
+            commissionId: detailsData.id,
             endTime: endDate ? endDate.toISOString() : null
         });
         const response = await fetch('https://localhost:7007/api/bookequipment/', {
@@ -120,9 +133,9 @@ export default function CommissionDetailView({ detailsData }) {
             const errorJson = await response.json();
             setErrorMessage(errorJson.Message);
         } else if (response.ok) {
-            const result = await response.json();
-            setShowEquipmentModal(false);
-            //await updateDetails()
+            handleEquipmentClose()
+            await GetData()
+            setSuccesfullMessage(`Succesfully created a booking for ${selectedEquipment}`)
         }
     }
 
@@ -140,16 +153,17 @@ export default function CommissionDetailView({ detailsData }) {
 
     useEffect(() => {
         if (detailsData != null) {
-            GetData(token);
+            GetData();
         }
     }, [detailsData]);
 
     return (
         <div className="details-section">
+            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             <div className="myAndAllSwitch-section">
                 <a className="myAndAllSwitch" href="/commissions" >My Commissions</a> | <a className="myAndAllSwitch" href="/commissions" >All Commissions</a>
             </div>
-            {detailsData === null ? (
+            {detailsData === null || allEquipment === null ? (
                 <p>Loading...</p>
             ) : (
                 <div>
@@ -177,50 +191,52 @@ export default function CommissionDetailView({ detailsData }) {
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
-                            </div>
-                            <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Add Equipment</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                        <ListGroup>
-                                            <label htmlFor="selectedCommission">Choose an Equipment:</label>
-                                            <select
-                                                id="selectedCommission"
+                                </div>
+                                <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
+                                    {errorMessage && <div className="error-message">{errorMessage}</div>}
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Equipment booking</Modal.Title>
+                                    </Modal.Header>
+                                    <form onSubmit={(event) => handleBookingFormSubmit(event)}>
+                                        <Modal.Body>
+                                            <label htmlFor="selectedEquipment">Choose an available Equipment:</label>
+                                            <br />
+                                            <Select
                                                 value={selectedEquipment}
-                                                onChange={(e) => setselectedEquipment(e.target.value)}
-                                            >
-                                                <option value="">Select an equipment</option>
-                                                {allEquipment == null ? <p>Loading Equipment...</p> : allEquipment.map((equipment) => (
-                                                    <option key={equipment.id} value={equipment.id}>
-                                                        SN: {equipment.serialNumber}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                onChange={handleEquipmentChange}
+                                                options={allEquipment.map((equipment) => ({
+                                                    value: equipment.id,
+                                                    label: <>SN: {equipment.serialNumber}<br /> Category: {equipment.category}<br/>
+                                                    Location: {equipment.inWarehouse ? equipment.location : "being transported"}
+                                                    </>,
+                                                }))}
+                                            />
                                             <br />
                                             <label htmlFor="endDate">Select an end date:</label>
+                                            <br />
                                             <DatePicker
                                                 selected={endDate}
                                                 onChange={item => setEndDate(item)}
                                                 minDate={new Date()}
                                                 dateFormat="dd/MM/yyyy"
+                                                isClearable={true}
                                             />
-                                    </ListGroup>
-                                    </Modal.Body>
-                                    <Modal.Footer>
-                                        <Button type="submit">Add Equipment</Button>
-                                    </Modal.Footer>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button type="submit">Add Equipment</Button>
+                                        </Modal.Footer>
+                                    </form>
                                 </Modal>
                                 <Modal show={showWorkerModal} onHide={handleWorkerClose}>
                                     <Modal.Header closeButton>
-                                        <Modal.Title>Add Worker</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <ListGroup>
-                                            {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id} onClick={AddEmployee}><p>{worker.userName}</p></ListGroup.Item>))}
-                                        </ListGroup>
-                                    </Modal.Body>
-                                </Modal>
+                                    <Modal.Title>Add Worker</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <ListGroup>
+                                        {allWorkers == null ? <p>Loading Workers...</p> : allWorkers.map((worker, index) => (<ListGroup.Item value={worker.id} onClick={AddEmployee}><p>{worker.userName}</p></ListGroup.Item>))}
+                                    </ListGroup>
+                                </Modal.Body>
+                            </Modal>
                         </div>
                     </div>
                 </div>

@@ -16,8 +16,9 @@ export default function EquipmentDetailView({ detailsData }) {
     const [showBookingModal, setShowBookingModal] = useState(false);
     const [isAvailable, setIsAvailable] = useState(false);
     const [inWarehouse, setInWarehouse] = useState(false);
-	const [location, setLocation] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
+    const [location, setLocation] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [succesfullMessage, setSuccesfullMessage] = useState('');
     const navigate = useNavigate();
     const { token } = useAuth();
     const [commissionList, setCommissionList] = useState([]);
@@ -28,7 +29,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
 
 
-	useEffect(() => {
+    useEffect(() => {
         if (detailsData) {
             setDetails(detailsData)
             setIsAvailable(detailsData.available);
@@ -49,8 +50,8 @@ export default function EquipmentDetailView({ detailsData }) {
             if (currentCommission !== null) {
                 getCommissionDetails();
             }
-		}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [detailsData, token]);
 
 
@@ -64,8 +65,11 @@ export default function EquipmentDetailView({ detailsData }) {
 
     useEffect(() => { }, [isAvailable, location]);
 
-    const handleCheckoutModalClose = () => {setShowCheckoutModal(false); setErrorMessage('');};
-    const handleCheckoutModalShow = () => setShowCheckoutModal(true);
+    const handleCheckoutModalClose = () => { setShowCheckoutModal(false); setErrorMessage(''); };
+    const handleCheckoutModalShow = () => {
+        setSuccesfullMessage('')
+        setShowCheckoutModal(true)
+    };
 
     const handleBookingModalClose = () => {
         setShowBookingModal(false);
@@ -73,10 +77,16 @@ export default function EquipmentDetailView({ detailsData }) {
         setSelectedCommission('');
         setEndDate(null);
     };
-    const handleBookingModalShow = () => setShowBookingModal(true);
+    const handleBookingModalShow = () => {
+        setShowBookingModal(true);
+        setSuccesfullMessage('');
+    };
 
     const handleCheckinModalClose = () =>{ setShowCheckinModal(false); setErrorMessage('');};
-    const handleCheckinModalShow = () => setShowCheckinModal(true);
+    const handleCheckinModalShow = () => {
+        setSuccesfullMessage('');
+        setShowCheckinModal(true);
+    };
 
     async function updateDetails() {
         const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id, {
@@ -88,6 +98,7 @@ export default function EquipmentDetailView({ detailsData }) {
         if (response.status === 200) {
             const data = await response.json();
             setDetails(data);
+            return data.location;
         }
     }
 
@@ -102,6 +113,7 @@ export default function EquipmentDetailView({ detailsData }) {
             const data = await response.json();
             await setCurrentBooking(data);
             await getCommissionDetails(data.commissionId)
+
         } else if (response.status === 204) {
             await setCurrentBooking(null)
             await setCurrentCommission(null)
@@ -145,7 +157,11 @@ export default function EquipmentDetailView({ detailsData }) {
             await setCurrentBooking(result);
             getCommissionDetails()
             handleBookingModalClose();
-            await updateDetails()
+            var updatedLocation = await updateDetails()
+            if (updatedLocation.includes("On the way to"))
+                await setSuccesfullMessage(`Succesfully created a booking for ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`)
+        } else {
+            setSuccesfullMessage(`Succesfully created a booking for ${detailsData.serialNumber}`)
         }
     }
 
@@ -165,6 +181,7 @@ export default function EquipmentDetailView({ detailsData }) {
 			setErrorMessage(errorJson.Message);
 		} else if (response.ok) {
             handleCheckoutModalClose();
+            setSuccesfullMessage(`Succesfully checked out equipment from ${location}`)
             await updateDetails()
             await updateBook()
         }
@@ -185,7 +202,8 @@ export default function EquipmentDetailView({ detailsData }) {
 			setErrorMessage(errorJson.Message);
 		} else if (response.ok) {
             handleCheckinModalClose();
-            await updateDetails()
+            var updatedLocation = await updateDetails()
+            setSuccesfullMessage(`Succesfully checked in equipment at ${updatedLocation}`)
         }
     }
 
@@ -221,11 +239,13 @@ export default function EquipmentDetailView({ detailsData }) {
 
     return (
         <div className="details-section">
+            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             <div className="myAndAllSwitch-section"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
             {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined? (
                 <p>Loading...</p>
             ) : (
                 <div className="details-grid">
+
                     <div className="section-left">
                         <h4 className="details-header">Equipment Details</h4>
                         {/*<p>Equipment name: </p>*/}
@@ -291,6 +311,7 @@ export default function EquipmentDetailView({ detailsData }) {
                                     <br />
                                     <select
                                         id="selectedCommission"
+                                        class="select"
                                         value={selectedCommission}
                                         onChange={(e) => setSelectedCommission(e.target.value)}
                                     >
@@ -305,12 +326,15 @@ export default function EquipmentDetailView({ detailsData }) {
                                     <br />
                                     <label htmlFor="endDate">Select an end date:</label>
                                     <br />
-                                    <DatePicker
-                                        selected={endDate}
-                                        onChange={item => setEndDate(item)}
-                                        minDate={new Date()}
-                                        dateFormat="dd/MM/yyyy"
-                                    />
+                                    <div>
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={item => setEndDate(item)}
+                                            minDate={new Date()}
+                                            dateFormat="dd/MM/yyyy"
+                                            isClearable={true}
+                                            />
+                                    </div>
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button type="submit">Book Equipment</Button>

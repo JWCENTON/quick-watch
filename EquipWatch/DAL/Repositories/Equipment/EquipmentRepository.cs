@@ -16,6 +16,10 @@ namespace DAL.Repositories.Equipment
         {
             return await _context.Equipment.Include(equipment => equipment.Company).ToListAsync();
         }
+        public async Task<List<Domain.Equipment.Models.Equipment>> GetAllAvailableAsync()
+        {
+            return await _context.Equipment.Include(equipment => equipment.Company).Where(e => e.Available == true).ToListAsync();
+        }
 
         public async Task<Domain.Equipment.Models.Equipment> GetAsync(Guid id)
         {
