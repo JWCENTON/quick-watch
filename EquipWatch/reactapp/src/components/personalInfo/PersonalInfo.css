@@ -5,11 +5,10 @@ body {
 }
 
 a {
-    display: block;
     color: #3F72AF;
-    text-decoration: none;
-    margin: 5px;
-    padding: 5px;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 5px;
 }
 
 a:hover {
@@ -40,13 +39,7 @@ h3 {
     color: #112D4E;
 }
 
-a {
-    color: #3F72AF;
-    padding: 10px 15px;
-    margin: 5px 0;
-    border-radius: 5px;
-    background-color: #F9F7F7;
-}
+
 
 a:hover {
     background-color: #3F72AF;
