@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Button, Modal, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router'
 import UniversalCard from '../card/Card';
-//import debounce from 'lodash.debounce';
 import { useAuth } from '../authProvider/AuthContext';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
@@ -157,14 +156,15 @@ export default function CommissionDetailView({ detailsData }) {
             const errorJson = await response.json();
             setErrorMessage(errorJson.Message);
         } else if (response.ok) {
+            let equipment = assignedEquipment.find(e => e.id === selectedEquipment.value)
             handleEquipmentClose()
             fetchEquipmentData()
-            let equipment = assignedEquipment.find(e => e.id === selectedEquipment.value)
             setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`)
         }
     }
+
     useEffect(() => {
-        if (detailsData) {
+        if (detailsData != null && detailsData.available === undefined) {
             fetchEquipmentData();
             fetchWorkersData();
         }
@@ -182,17 +182,6 @@ export default function CommissionDetailView({ detailsData }) {
         }
     }, [showWorkerModal]);
 
-
-    //const debouncedFetchEquipmentData = debounce(fetchEquipmentData);
-    //const debouncedFetchWorkersData = debounce(fetchWorkersData);
-
-    //useEffect(() => {
-    //    if (detailsData != null) {
-    //        debouncedFetchEquipmentData();
-    //        debouncedFetchWorkersData();
-    //    }
-    //}, [detailsData]);
-
     return (
         <div className="details-section">
             <div className="myAndAllSwitch-section">
@@ -202,8 +191,7 @@ export default function CommissionDetailView({ detailsData }) {
             {detailsData === null || assignedEquipment == null ? (
                 <p>Loading...</p>
             ) : (
-
-                <div>
+                    <div>
                     <div className="section-justified">
                         <h4 className="details-header">Commission Details</h4>
                         <p>Location: {detailsData.location}</p>

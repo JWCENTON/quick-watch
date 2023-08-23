@@ -27,7 +27,7 @@ public class WorksOnRepository : IWorksOnRepository
 
     public Task CreateAsync(Domain.WorksOn.Models.WorksOn entity)
     {
-        if (_context.WorksOn.Any(w => w.UserId == entity.UserId && w.CommissionId == entity.CommissionId))
+        if (_context.WorksOn.Any(w => w.UserId == entity.UserId && w.CommissionId == entity.CommissionId && !w.IsFinished))
         {
             throw new ArgumentException("Worker is already assigned to this commission");
         }
@@ -45,9 +45,9 @@ public class WorksOnRepository : IWorksOnRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<User>> GetCommissionEmployeesAsync(Guid commissionId)
+    public Task<List<User>> GetCommissionAssignedEmployeesAsync(Guid commissionId)
     {
-        var jobs = _context.WorksOn.Where(booking => booking.CommissionId == commissionId);
+        var jobs = _context.WorksOn.Where(booking => booking.CommissionId == commissionId && !booking.IsFinished);
         var userIds = jobs.Select(job => job.UserId);
         var users = new List<User>();
         foreach (var userId in userIds)
@@ -56,9 +56,9 @@ public class WorksOnRepository : IWorksOnRepository
         }
         return Task.FromResult(users);
     }
-    public async Task<List<Domain.WorksOn.Models.WorksOn>> GetWorksOnByCommissionIdAsync(Guid commissionId)
+    public async Task<List<Domain.WorksOn.Models.WorksOn>> GeCurrentWorksOnByCommissionIdAsync(Guid commissionId)
     {
-        var jobs = await _context.WorksOn.Where(booking => booking.CommissionId == commissionId).ToListAsync();
+        var jobs = await _context.WorksOn.Where(booking => booking.CommissionId == commissionId && !booking.IsFinished).ToListAsync();
         
         return jobs;
     }

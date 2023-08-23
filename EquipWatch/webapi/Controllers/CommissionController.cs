@@ -150,9 +150,9 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<List<PartialUserDTO>> GetEmployees(Guid id)
+        public async Task<List<PartialUserDTO>> GetAssignedEmployees(Guid id)
         {
-            var employees = await _unitOfWork.WorksOn.GetCommissionEmployeesAsync(id);
+            var employees = await _unitOfWork.WorksOn.GetCommissionAssignedEmployeesAsync(id);
             return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
         }
 
@@ -190,6 +190,7 @@ namespace webapi.Controllers
                     Commission = commission,
                     CommissionId = commission.Id,
                     UserId = data.EmployeeId,
+                    IsFinished = false
                 };
 
                 await _unitOfWork.WorksOn.CreateAsync(worksOn);

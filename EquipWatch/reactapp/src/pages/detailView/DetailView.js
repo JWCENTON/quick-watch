@@ -38,7 +38,6 @@ export default function DetailView() {
         };
         fetchDetailsData();
     }, [id, dataType, token]);
-
     return (
         <Layout>
             <ViewComponent detailsData={detailsData} />

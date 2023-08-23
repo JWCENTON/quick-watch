@@ -275,7 +275,10 @@ export default function EquipmentDetailView({ detailsData }) {
                     <div className="section-right">
                         <h4 className="details-header">Assigned Commission</h4>
                         <div className="cardsContainer">
-                            {commissionList == null || currentCommission === undefined || commissionList.length === 0 ? <p>Loading...</p> : currentCommission == null ? <>No commission assigned.</> : commissionList.map((card, index) => (card.id === currentCommission.id ? <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard> : <></>))}
+                                {commissionList == null || currentCommission === undefined || commissionList.length === 0 ?
+                                    <p>Loading...</p> : currentCommission == null ?
+                                        <>No commission assigned.</> : commissionList.map((card, index) => (card.id === currentCommission.id ?
+                                    <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard> : <></>))}
                         </div>
                         <h4 className="details-header">Equipment Management</h4>
                         <div className="button-section">
