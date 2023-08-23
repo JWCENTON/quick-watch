@@ -132,9 +132,9 @@ function CardList() {
     }
 
     return (
-        <div className="cardSection">
+        <div className="card-section">
             <a className="myAndAllSwitch" href="/" >My {displayedCategory}</a> | <a className="myAndAllSwitch" href="/" >All {displayedCategory}</a>
-            <div className="cardsContainer">
+            <div>
                 {cards == null ? <p>Loading...</p> : cards.map((card, index) => (
                     <UniversalCard key={index} data={card} dataType={itemType} insideCardList={true} />
                 ))}

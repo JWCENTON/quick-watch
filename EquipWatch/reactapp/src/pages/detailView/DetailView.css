@@ -23,10 +23,14 @@
     border-radius: 10px;
 }
 
+.card-section {
+    margin: 5px;
+}
+
 .section-justified {
     background-color: #FFFFFF;
     padding: 20px;
-    margin: 10px;
+    margin-bottom: 10px;
     border-radius: 10px;
 }
 

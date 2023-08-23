@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Card.css';
 
 function UniversalCard({ data, dataType, insideCardList }) {
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const filteredData = Object.entries(data).filter(([key]) => key !== 'id');
     let numberOfItems = filteredData.length;
 
-    if (window.innerWidth <= 768) { // Mobile view
-        if (!insideCardList && dataType !== "commission") {
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    if (windowWidth <= 768 && !insideCardList) { // Mobile view
+        if (dataType !== "commission") {
             numberOfItems = 2;
-        } else if (!insideCardList && dataType === "commission") {
+        } else if (dataType === "commission") {
             numberOfItems = 1;
         }
     } else if (numberOfItems > 4) {
