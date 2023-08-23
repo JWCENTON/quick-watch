@@ -11,7 +11,8 @@ body {
     display: grid;
     gap: 20px;
     background-color: #F9F7F7;
-    border-color: #DBE2EF;
+    border-color: #3F72AF;
+    border-width: 2px;
 }
 
 .card:hover {
