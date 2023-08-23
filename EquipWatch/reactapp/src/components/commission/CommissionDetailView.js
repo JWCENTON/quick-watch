@@ -156,9 +156,7 @@ export default function CommissionDetailView({ detailsData }) {
             "equipmentId": `${target.getAttribute('value')}`
         });
 
-        let response = await fetch(`https://localhost:7007/api/${detailsData.id}/equipment`, { method: "DELETE", headers: headers, body: raw });
-
-        navigate(0);
+        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "DELETE", headers: headers, body: raw });
     }
 
     useEffect(() => {

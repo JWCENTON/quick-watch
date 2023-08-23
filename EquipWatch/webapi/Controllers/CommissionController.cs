@@ -143,6 +143,20 @@ namespace webapi.Controllers
             return equipment.Select(equipment => _mapper.Map<PartialEquipmentDTO>(equipment)).ToList();
         }
 
+        [HttpDelete("{id}/equipment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task RemoveEquipment(Guid id, [FromBody] CommissionEquipmentRemoveDTO data)
+        {
+            var equipmentId = Guid.Parse(data.EquipmentId);
+            var equipment = _unitOfWork.BookedEquipment.GetAllAsync().Result;
+            var booking = equipment.First(booking => booking.CommissionId == id && booking.EquipmentInUseId == equipmentId);
+            await _unitOfWork.BookedEquipment.RemoveAsync(booking.Id);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         [HttpGet("{id}/employees")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
