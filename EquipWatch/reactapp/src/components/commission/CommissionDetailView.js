@@ -159,7 +159,7 @@ export default function CommissionDetailView({ detailsData }) {
             const errorJson = await response.json();
             setErrorMessage(errorJson.Message);
         } else if (response.ok) {
-            let equipment = assignedEquipment.find(e => e.id === selectedEquipment.value)
+            let equipment = availableEquipment.find(e => e.id === selectedEquipment.value)
             handleEquipmentClose()
             fetchEquipmentData()
             setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`)

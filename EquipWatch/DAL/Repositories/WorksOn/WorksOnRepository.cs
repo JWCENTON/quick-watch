@@ -27,7 +27,7 @@ public class WorksOnRepository : IWorksOnRepository
 
     public Task CreateAsync(Domain.WorksOn.Models.WorksOn entity)
     {
-        if (_context.WorksOn.Any(w => w.UserId == entity.UserId && w.CommissionId == entity.CommissionId && !w.IsFinished))
+        if (_context.WorksOn.Any(w => w.UserId == entity.UserId && w.CommissionId == entity.CommissionId && w.EndTime == null))
         {
             throw new ArgumentException("Worker is already assigned to this commission");
         }

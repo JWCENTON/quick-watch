@@ -107,6 +107,7 @@ public class BookEquipmentController : ControllerBase
             var bookedEquipment = new BookedEquipment()
             {
                 Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Commission = commission,
                 CommissionId = commission.Id,
                 EquipmentInUse = equipmentInUse,
