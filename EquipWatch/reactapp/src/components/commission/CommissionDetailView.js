@@ -156,7 +156,7 @@ export default function CommissionDetailView({ detailsData }) {
             "equipmentId": `${target.getAttribute('value')}`
         });
 
-        let response = await fetch(`https://localhost:7007/api/${detailsData.id}/employees`, { method: "DELETE", headers: headers, body: raw });
+        let response = await fetch(`https://localhost:7007/api/${detailsData.id}/equipment`, { method: "DELETE", headers: headers, body: raw });
 
         navigate(0);
     }
