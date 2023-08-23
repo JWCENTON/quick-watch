@@ -152,6 +152,7 @@ public class EquipmentController : ControllerBase
             bookedEquipment.EquipmentInUse.EndTime = DateTime.Now;
             equipment.Available = true;
             bookedEquipment.IsFinished = true;
+            bookedEquipment.EndTime = DateTime.Now;
         }
         else
         {
