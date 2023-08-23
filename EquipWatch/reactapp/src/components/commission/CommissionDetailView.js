@@ -5,6 +5,7 @@ import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import { parseISO } from 'date-fns';
 import Select from "react-select";
 
 export default function CommissionDetailView({ detailsData }) {
@@ -19,6 +20,7 @@ export default function CommissionDetailView({ detailsData }) {
     const [succesfullMessage, setSuccesfullMessage] = useState('');
     const [selectedEquipment, setSelectedEquipment] = useState('');
     const [selectedWorker, setSelectedWorker] = useState('');
+    const [maxDate, setMaxDate] = useState(null)
     const navigate = useNavigate()
     const { token } = useAuth();
 
@@ -45,6 +47,7 @@ export default function CommissionDetailView({ detailsData }) {
 
     const handleEquipmentChange = (selectedOption) => {
         setSelectedEquipment(selectedOption);
+        setEndDate(null)
     };
     const handleWorkerChange = (selectedOption) => {
         selectedOption == null ?
@@ -167,6 +170,7 @@ export default function CommissionDetailView({ detailsData }) {
         if (detailsData != null && detailsData.available === undefined) {
             fetchEquipmentData();
             fetchWorkersData();
+            setMaxDate(detailsData.endTime == null ? null : detailsData.endTime.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:00"));
         }
     }, [detailsData]);
 
@@ -245,7 +249,8 @@ export default function CommissionDetailView({ detailsData }) {
                                             <DatePicker
                                                 selected={endDate}
                                                 onChange={item => setEndDate(item)}
-                                                minDate={new Date()}
+                                                    minDate={new Date()}
+                                                    maxDate={parseISO(maxDate)}
                                                 dateFormat="dd/MM/yyyy"
                                                 isClearable={true}
                                             />

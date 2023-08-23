@@ -7,6 +7,9 @@ public class BookedEquipment
     public Guid? ReservationId { get; set; }
     public Guid? EquipmentInUseId { get; set; }
     public bool IsFinished { get; set; }
+    public DateTime CreationTime { get; set; }
+    public DateTime? StartTime { get; set; }
+    public DateTime? EndTime { get; set; }
     public Commission.Models.Commission.Commission Commission { get; set; }
     public Reservation.Models.Reservation? Reservation { get; set;}
     public EquipmentInUse.Models.EquipmentInUse EquipmentInUse { get; set; }

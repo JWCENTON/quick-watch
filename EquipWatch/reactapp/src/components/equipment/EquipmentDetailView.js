@@ -32,7 +32,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
 
     useEffect(() => {
-        if (detailsData) {
+        if (detailsData && detailsData.available !== undefined) {
             setDetails(detailsData)
             setIsAvailable(detailsData.available);
             setInWarehouse(detailsData.inWarehouse)
@@ -58,14 +58,14 @@ export default function EquipmentDetailView({ detailsData }) {
 
 
     useEffect(() => {
-        if (details) {
+        if (details && details.available !== undefined) {
             setIsAvailable(details.available);
             setInWarehouse(details.inWarehouse)
             setLocation(details.location);
         }
     }, [details]);
 
-    useEffect(() => { }, [isAvailable, location]);
+    useEffect(() => {}, [isAvailable, location]);
 
     const handleCheckoutModalClose = () => { setShowCheckoutModal(false); setErrorMessage(''); };
     const handleCheckoutModalShow = () => {
@@ -253,8 +253,8 @@ export default function EquipmentDetailView({ detailsData }) {
             {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined ? (
                 <p>Loading...</p>
             ) : (
-                <div className="details-grid">
-                    <div className="section-left">
+                    <div className="details-grid">
+                        <div className="section-left">
                         <h4 className="details-header">Equipment Details</h4>
                         {/*<p>Equipment name: </p>*/}
                         <p>Serial number: {detailsData.serialNumber}</p>
