@@ -82,7 +82,7 @@ export default function EquipmentDetailView({ detailsData }) {
         setSuccesfullMessage('');
     };
 
-    const handleCheckinModalClose = () =>{ setShowCheckinModal(false); setErrorMessage('');};
+    const handleCheckinModalClose = () => { setShowCheckinModal(false); setErrorMessage(''); };
     const handleCheckinModalShow = () => {
         setSuccesfullMessage('');
         setShowCheckinModal(true);
@@ -136,7 +136,7 @@ export default function EquipmentDetailView({ detailsData }) {
             const data = await response.json();
             await setCurrentCommission(data);
         }
-        
+
     };
 
     async function handleBookingFormSubmit(event) {
@@ -144,7 +144,7 @@ export default function EquipmentDetailView({ detailsData }) {
         let raw = JSON.stringify({
             commissionId: selectedCommission.value,
             equipmentId: detailsData.id,
-            endTime: endDate? endDate.toISOString() : null
+            endTime: endDate ? endDate.toISOString() : null
         });
         const response = await fetch('https://localhost:7007/api/bookequipment/', {
             method: "POST",
@@ -181,10 +181,10 @@ export default function EquipmentDetailView({ detailsData }) {
             },
             body: warehouseDelivery
         });
-		if (response.status === 400){
-			const errorJson = await response.json();
-			setErrorMessage(errorJson.Message);
-		} else if (response.ok) {
+        if (response.status === 400) {
+            const errorJson = await response.json();
+            setErrorMessage(errorJson.Message);
+        } else if (response.ok) {
             handleCheckoutModalClose();
             setSuccesfullMessage(`Succesfully checked out equipment from ${location}`)
             await updateDetails()
@@ -202,10 +202,10 @@ export default function EquipmentDetailView({ detailsData }) {
             },
             body: warehouseDelivery
         });
-		if (response.status === 400){
-			const errorJson = await response.json();
-			setErrorMessage(errorJson.Message);
-		} else if (response.ok) {
+        if (response.status === 400) {
+            const errorJson = await response.json();
+            setErrorMessage(errorJson.Message);
+        } else if (response.ok) {
             handleCheckinModalClose();
             var updatedLocation = await updateDetails()
             setSuccesfullMessage(`Succesfully checked in equipment at ${updatedLocation}`)
@@ -222,8 +222,7 @@ export default function EquipmentDetailView({ detailsData }) {
         navigate("/equipment");
     }
 
-    function onImageDownload()
-    {
+    function onImageDownload() {
         const svg = document.getElementById("QRCode");
         const svgData = new XMLSerializer().serializeToString(svg);
         const canvas = document.createElement("canvas");
@@ -246,7 +245,7 @@ export default function EquipmentDetailView({ detailsData }) {
         <div className="details-section">
             <div className="myAndAllSwitch-section"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
             {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
-            {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined? (
+            {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined ? (
                 <p>Loading...</p>
             ) : (
                 <div className="details-grid">
@@ -256,97 +255,97 @@ export default function EquipmentDetailView({ detailsData }) {
                         <p>Serial number: {detailsData.serialNumber}</p>
                         <p>Location: {location}</p>
                         <p>Condition:
-                                {[...Array(details.condition)].map((e, i) => <span className="star" key={i}>&#9733;</span>)}
-                                {[...Array(5 - details.condition)].map((e, i) => <span className="dark-star" key={i}>&#9733;</span>)}
+                            {[...Array(details.condition)].map((e, i) => <span className="star" key={i}>&#9733;</span>)}
+                            {[...Array(5 - details.condition)].map((e, i) => <span className="dark-star" key={i}>&#9733;</span>)}
                         </p>
                         {/*<p>Status: </p>*/}
                         <div className="button-section">
                             <Button className="detail-view-btn">Edit</Button>
                             <Button className="detail-view-btn" onClick={DeleteEquipment}>Remove</Button>
-                            </div>
-                            <h4 className="details-header">QR Code</h4>
-                            <QRCode id="QRCode" value={window.location.href}></QRCode>
-                            <Button className="detail-view-btn" onClick={onImageDownload}>Download QR Code</Button>
+                        </div>
+                        <h4 className="details-header">QR Code</h4>
+                        <QRCode id="QRCode" value={window.location.href}></QRCode>
+                        <Button className="detail-view-btn" onClick={onImageDownload}>Download QR Code</Button>
                     </div>
                     <div className="section-right">
-                            <h4 className="details-header">Assigned Commission</h4>
-                                <div className="cardsContainer">
-                                {commissionList == null || currentCommission === undefined || commissionList.length === 0 ? <p>Loading...</p> : currentCommission == null ? <>No commission assigned.</> : commissionList.map((card, index) => (card.id === currentCommission.id ? <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard> : <></>))}
-                                </div>
+                        <h4 className="details-header">Assigned Commission</h4>
+                        <div className="cardsContainer">
+                            {commissionList == null || currentCommission === undefined || commissionList.length === 0 ? <p>Loading...</p> : currentCommission == null ? <>No commission assigned.</> : commissionList.map((card, index) => (card.id === currentCommission.id ? <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard> : <></>))}
+                        </div>
                         <h4 className="details-header">Equipment Management</h4>
-                            <div className="button-section">
-                                {(
-                                    <>
-                                        {currentBooking === null && !inWarehouse ? (
-                                            <>
-                                                <Button className="detail-view-btn" onClick={handleBookingModalShow}>Book Equipment</Button>
-                                                <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In to Warehouse</Button>
-                                            </>
-                                        ) : (currentBooking === null || currentBooking === undefined) ? (
-                                                <Button className="detail-view-btn" onClick={handleBookingModalShow}>Book Equipment</Button>
-                                            ) : (isAvailable && inWarehouse) || (!isAvailable && inWarehouse) ? (
+                        <div className="button-section">
+                            {(
+                                <>
+                                    {currentBooking === null && !inWarehouse ? (
+                                        <>
+                                            <Button className="detail-view-btn" onClick={handleBookingModalShow}>Book Equipment</Button>
+                                            <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In to Warehouse</Button>
+                                        </>
+                                    ) : (currentBooking === null || currentBooking === undefined) ? (
+                                        <Button className="detail-view-btn" onClick={handleBookingModalShow}>Book Equipment</Button>
+                                    ) : (isAvailable && inWarehouse) || (!isAvailable && inWarehouse) ? (
+                                        <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
+                                    ) : isAvailable && !inWarehouse ? (
+                                        <>
                                             <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
-                                        ) : isAvailable && !inWarehouse ? (
-                                            <>
-                                                <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
-                                                <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In to Warehouse</Button>
-                                            </>
-                                            ) : !inWarehouse && !location.includes("On the way to") ? (
-                                            <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout to Warehouse</Button>
-                                        ) : (
-                                            <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In</Button>
-                                        )}
-                                    </>
-                                )}
-                            </div>
+                                            <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In to Warehouse</Button>
+                                        </>
+                                    ) : !inWarehouse && !location.includes("On the way to") ? (
+                                        <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout to Warehouse</Button>
+                                    ) : (
+                                        <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In</Button>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
-                        <Modal show={showBookingModal} onHide={handleBookingModalClose}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Equipment booking</Modal.Title>
-                            </Modal.Header>
-                            <form onSubmit={(event) => handleBookingFormSubmit(event)}>
-                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
-                                <Modal.Body>
-                                    <label htmlFor="selectedCommission">Choose a commission:</label>
-                                    <br />
-                                    <Select
-                                        value={selectedCommission}
-                                        onChange={handleCommissionChange}
-                                        options={commissionList.map((commission) => ({
-                                            value: commission.id,
-                                            label: <>Description: {commission.description}<br />Scope: {commission.scope}<br />Location: {commission.location }</>,
-                                        }))}
-                                        placeholder="Select a commission"
-                                        isClearable
-                                        classNamePrefix="my-select"
+                    <Modal show={showBookingModal} onHide={handleBookingModalClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Equipment booking</Modal.Title>
+                        </Modal.Header>
+                        <form onSubmit={(event) => handleBookingFormSubmit(event)}>
+                            {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                            <Modal.Body>
+                                <label htmlFor="selectedCommission">Choose a commission:</label>
+                                <br />
+                                <Select
+                                    value={selectedCommission}
+                                    onChange={handleCommissionChange}
+                                    options={commissionList.map((commission) => ({
+                                        value: commission.id,
+                                        label: <>Description: {commission.description}<br />Scope: {commission.scope}<br />Location: {commission.location}</>,
+                                    }))}
+                                    placeholder="Select a commission"
+                                    isClearable
+                                    classNamePrefix="my-select"
+                                />
+                                <br />
+                                <label htmlFor="endDate">Select an end date:</label>
+                                <br />
+                                <div>
+                                    <DatePicker
+                                        selected={endDate}
+                                        onChange={item => setEndDate(item)}
+                                        minDate={new Date()}
+                                        dateFormat="dd/MM/yyyy"
+                                        isClearable={true}
                                     />
-                                    <br />
-                                    <label htmlFor="endDate">Select an end date:</label>
-                                    <br />
-                                    <div>
-                                        <DatePicker
-                                            selected={endDate}
-                                            onChange={item => setEndDate(item)}
-                                            minDate={new Date()}
-                                            dateFormat="dd/MM/yyyy"
-                                            isClearable={true}
-                                            />
-                                    </div>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button type="submit">Book Equipment</Button>
-                                </Modal.Footer>
-                            </form>
-                        </Modal>
+                                </div>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button type="submit">Book Equipment</Button>
+                            </Modal.Footer>
+                        </form>
+                    </Modal>
                     <Modal show={showCheckoutModal} onHide={handleCheckoutModalClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>Checkout Equipment</Modal.Title>
                         </Modal.Header>
-                            <form onSubmit={(event) => handleCheckoutFormSubmit(event, !isAvailable && !inWarehouse)}>
-                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
-                                <Modal.Body>
-                                    Are you sure?
-                                </Modal.Body>
+                        <form onSubmit={(event) => handleCheckoutFormSubmit(event, !isAvailable && !inWarehouse)}>
+                            {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                            <Modal.Body>
+                                Are you sure?
+                            </Modal.Body>
                             <Modal.Footer>
                                 <Button type="submit">Checkout</Button>
                             </Modal.Footer>
@@ -357,8 +356,8 @@ export default function EquipmentDetailView({ detailsData }) {
                         <Modal.Header closeButton>
                             <Modal.Title>Check in Equipment</Modal.Title>
                         </Modal.Header>
-                            <form onSubmit={(event) => handleCheckinFormSubmit(event, (isAvailable && !inWarehouse) || (isAvailable && inWarehouse))}>
-                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                        <form onSubmit={(event) => handleCheckinFormSubmit(event, (isAvailable && !inWarehouse) || (isAvailable && inWarehouse))}>
+                            {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
                             <Modal.Body>
                                 Are you sure?
                             </Modal.Body>

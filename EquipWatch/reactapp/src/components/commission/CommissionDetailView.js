@@ -202,7 +202,7 @@ export default function CommissionDetailView({ detailsData }) {
                 <p>Loading...</p>
             ) : (
 
-                    <div>
+                <div>
                     <div className="section-justified">
                         <h4 className="details-header">Commission Details</h4>
                         <p>Location: {detailsData.location}</p>
@@ -214,7 +214,7 @@ export default function CommissionDetailView({ detailsData }) {
                         <div className="section-left">
                             <h4 className="details-header">Workers</h4>
                             <div className="cardsContainer">
-                                    {assignedWorkers == null ? <p>Loading Workers...</p> : assignedWorkers.length === 0 ? <p>No Workers Assigned</p> : assignedWorkers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>))}
+                                {assignedWorkers == null ? <p>Loading Workers...</p> : assignedWorkers.length === 0 ? <p>No Workers Assigned</p> : assignedWorkers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleWorkerShow}>Add Worker</Button>
@@ -222,79 +222,79 @@ export default function CommissionDetailView({ detailsData }) {
                         </div>
                         <div className="section-right">
                             <h4 className="details-header">Equipment</h4>
-                                <div className="cardsContainer">
-                                    {assignedEquipment == null ? <p>Loading Equipment...</p> : assignedEquipment.length === 0 ? <p>No Equipment Assigned</p> : assignedEquipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
+                            <div className="cardsContainer">
+                                {assignedEquipment == null ? <p>Loading Equipment...</p> : assignedEquipment.length === 0 ? <p>No Equipment Assigned</p> : assignedEquipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
-                                </div>
-                                <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
-                                    <Modal.Header closeButton>
-                                        <Modal.Title>Equipment booking</Modal.Title>
-                                    </Modal.Header>
-                                    {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
-                                    {availableEquipment === null ? <>loading...</> :
-                                        <form onSubmit={(event) => handleBookingFormSubmit(event)}>
-                                            <Modal.Body>
-                                                <label htmlFor="selectedEquipment">Choose an available Equipment:</label>
-                                                <br />
-                                                <Select
-                                                    value={selectedEquipment}
-                                                    onChange={handleEquipmentChange}
-                                                    options={availableEquipment.map((equipment) => ({
-                                                        value: equipment.id,
-                                                        label: <>SN: {equipment.serialNumber}<br /> Category: {equipment.category}<br />
-                                                            Location: {equipment.location}</>,
-                                                    }))}
-                                                    placeholder="Select an equipment"
-                                                    isClearable
-                                                    classNamePrefix="my-select"
-                                                />
-                                                <br />
-                                                <label htmlFor="endDate">Select an end date:</label>
-                                                <br />
-                                                <DatePicker
-                                                    selected={endDate}
-                                                    onChange={item => setEndDate(item)}
-                                                    minDate={new Date()}
-                                                    dateFormat="dd/MM/yyyy"
-                                                    isClearable={true}
-                                                />
-                                            </Modal.Body>
-                                            <Modal.Footer>
-                                                <Button type="submit">Book Equipment</Button>
-                                            </Modal.Footer>
-                                        </form>
-                                    }
-                                </Modal>
-                                <Modal show={showWorkerModal} onHide={handleWorkerClose}>
-                                    <Modal.Header closeButton>
+                            </div>
+                            <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Equipment booking</Modal.Title>
+                                </Modal.Header>
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                                {availableEquipment === null ? <>loading...</> :
+                                    <form onSubmit={(event) => handleBookingFormSubmit(event)}>
+                                        <Modal.Body>
+                                            <label htmlFor="selectedEquipment">Choose an available Equipment:</label>
+                                            <br />
+                                            <Select
+                                                value={selectedEquipment}
+                                                onChange={handleEquipmentChange}
+                                                options={availableEquipment.map((equipment) => ({
+                                                    value: equipment.id,
+                                                    label: <>SN: {equipment.serialNumber}<br /> Category: {equipment.category}<br />
+                                                        Location: {equipment.location}</>,
+                                                }))}
+                                                placeholder="Select an equipment"
+                                                isClearable
+                                                classNamePrefix="my-select"
+                                            />
+                                            <br />
+                                            <label htmlFor="endDate">Select an end date:</label>
+                                            <br />
+                                            <DatePicker
+                                                selected={endDate}
+                                                onChange={item => setEndDate(item)}
+                                                minDate={new Date()}
+                                                dateFormat="dd/MM/yyyy"
+                                                isClearable={true}
+                                            />
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button type="submit">Book Equipment</Button>
+                                        </Modal.Footer>
+                                    </form>
+                                }
+                            </Modal>
+                            <Modal show={showWorkerModal} onHide={handleWorkerClose}>
+                                <Modal.Header closeButton>
                                     <Modal.Title>Add Worker</Modal.Title>
-                                    </Modal.Header>
-                                    {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
-                                    {availableWorkers === null ? <>loading...</> :
-                                        <form onSubmit={(event) => AddEmployee(event)}>
-                                                <Modal.Body>
-                                                    <label htmlFor="selectedWorker">Choose worker:</label>
-                                                    <br />
-                                                    <Select
-                                                        value={selectedWorker}
-                                                        onChange={handleWorkerChange}
-                                                        options={availableWorkers.map((worker) => ({
-                                                            value: worker.id,
-                                                            label: <>{worker.userName}</>
-                                                        }))}
-                                                        placeholder="Select worker"
-                                                        isClearable
-                                                        classNamePrefix="my-select"
-                                                    />
-                                                    <br />
-                                                </Modal.Body>
-                                                <Modal.Footer>
-                                                    <Button type="submit">Assign worker</Button>
-                                                </Modal.Footer>
-                                        </form>
-                                    }
+                                </Modal.Header>
+                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                                {availableWorkers === null ? <>loading...</> :
+                                    <form onSubmit={(event) => AddEmployee(event)}>
+                                        <Modal.Body>
+                                            <label htmlFor="selectedWorker">Choose worker:</label>
+                                            <br />
+                                            <Select
+                                                value={selectedWorker}
+                                                onChange={handleWorkerChange}
+                                                options={availableWorkers.map((worker) => ({
+                                                    value: worker.id,
+                                                    label: <>{worker.userName}</>
+                                                }))}
+                                                placeholder="Select worker"
+                                                isClearable
+                                                classNamePrefix="my-select"
+                                            />
+                                            <br />
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button type="submit">Assign worker</Button>
+                                        </Modal.Footer>
+                                    </form>
+                                }
                             </Modal>
                         </div>
                     </div>
