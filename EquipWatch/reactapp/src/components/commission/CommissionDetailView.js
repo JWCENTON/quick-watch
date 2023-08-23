@@ -48,7 +48,9 @@ export default function CommissionDetailView({ detailsData }) {
         setSelectedEquipment(selectedOption);
     };
     const handleWorkerChange = (selectedOption) => {
-        setSelectedWorker(selectedOption);
+        selectedOption == null ?
+            setSelectedWorker('') :
+            setSelectedWorker(selectedOption);
     };
 
     async function fetchEquipmentData() {
@@ -121,7 +123,6 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-
         let raw = JSON.stringify({
             "employeeId": selectedWorker.value
         });
