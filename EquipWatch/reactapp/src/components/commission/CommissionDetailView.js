@@ -3,6 +3,7 @@ import { Button, Modal, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router'
 import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
+import './CommissionDetailView.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import Select from "react-select";
@@ -141,6 +142,25 @@ export default function CommissionDetailView({ detailsData }) {
         }
     }
 
+    async function RemoveEquipment(event) {
+        let target = event.currentTarget;
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        let raw = JSON.stringify({
+            "equipmentId": `${target.getAttribute('value')}`
+        });
+
+        let response = await fetch(`https://localhost:7007/api/${detailsData.id}/employees`, { method: "DELETE", headers: headers, body: raw });
+
+        navigate(0);
+    }
+
     useEffect(() => {
         if (detailsData != null) {
             GetEquipmentModalData(token)
@@ -188,8 +208,8 @@ export default function CommissionDetailView({ detailsData }) {
                         </div>
                         <div className="section-right">
                             <h4 className="details-header">Equipment</h4>
-                            <div className="cardsContainer">
-                                {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
+                                <div className="cardsContainer">
+                                    {equipment == null ? <p>Loading Equipment...</p> : equipment.length === 0 ? <p>No Equipment Assigned</p> : equipment.map((equipment, index) => (<span style={{ display: "inline-block" }} ><UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard><Button className="delete-btn" value={equipment.equipmentId} onClick={RemoveEquipment}>X</Button></span>))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>

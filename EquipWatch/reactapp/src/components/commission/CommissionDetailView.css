@@ -4,3 +4,7 @@
     padding: 2%;
     overflow-y: scroll;
 }
+
+.delete-btn {
+    float: right;
+}
