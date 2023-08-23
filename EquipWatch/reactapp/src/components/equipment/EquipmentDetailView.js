@@ -5,6 +5,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext';
 import UniversalCard from '../card/Card';
 import DatePicker from 'react-datepicker';
+import { parseISO } from 'date-fns';
 import Select from "react-select";
 import QRCode from "react-qr-code";
 //import { Wrapper, Trigger } from 'react-download-svg';
@@ -25,6 +26,7 @@ export default function EquipmentDetailView({ detailsData }) {
     const [currentBooking, setCurrentBooking] = useState(null);
     const [currentCommission, setCurrentCommission] = useState(null);
     const [selectedCommission, setSelectedCommission] = useState('');
+    const [maxDate, setMaxDate] = useState(null)
     const [endDate, setEndDate] = useState(null);
 
 
@@ -91,6 +93,9 @@ export default function EquipmentDetailView({ detailsData }) {
 
     const handleCommissionChange = (selectedOption) => {
         setSelectedCommission(selectedOption);
+        const dateString = selectedOption == null ? null : commissionList.find(c => c.id === selectedOption.value).endTime
+        setMaxDate(dateString == null ? null : dateString.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:00"));
+        setEndDate(null)
     };
 
     async function updateDetails() {
@@ -322,11 +327,12 @@ export default function EquipmentDetailView({ detailsData }) {
                                 <br />
                                 <label htmlFor="endDate">Select an end date:</label>
                                 <br />
-                                <div>
+                                    <div>
                                     <DatePicker
                                         selected={endDate}
                                         onChange={item => setEndDate(item)}
                                         minDate={new Date()}
+                                        maxDate={parseISO(maxDate)}
                                         dateFormat="dd/MM/yyyy"
                                         isClearable={true}
                                     />
