@@ -18,13 +18,15 @@ namespace webapi.Controllers
         private readonly IMapper _mapper;
         private readonly CreateCommissionDTOValidator _CreateValidator;
         private readonly UpdateCommissionDTOValidator _UpdateValidator;
+        private readonly CommissionEmployeeAddDTOValidator _CommissionEmployeeAddValidator;
 
-        public CommissionController(IUnitOfWork unitOfWork, IMapper mapper, CreateCommissionDTOValidator createValidator, UpdateCommissionDTOValidator updateValidator)
+        public CommissionController(IUnitOfWork unitOfWork, IMapper mapper, CreateCommissionDTOValidator createValidator, UpdateCommissionDTOValidator updateValidator, CommissionEmployeeAddDTOValidator commissionEmployeeAddValidator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _CreateValidator = createValidator;
             _UpdateValidator = updateValidator;
+            _CommissionEmployeeAddValidator = commissionEmployeeAddValidator;
         }
 
         [HttpGet]
@@ -177,21 +179,26 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddEmployee(Guid id, [FromBody] CommissionEmployeeAddDTO data)
         {
-            var commission = await _unitOfWork.Commissions.GetAsync(id);
-
-            var worksOn = new WorksOn()
+            var result = await _CommissionEmployeeAddValidator.ValidateAsync(data);
+            if (result.IsValid)
             {
-                Id = Guid.NewGuid(),
-                Commission = commission,
-                CommissionId = commission.Id,
-                UserId = data.EmployeeId,
-            };
+                var commission = await _unitOfWork.Commissions.GetAsync(id);
 
-            await _unitOfWork.WorksOn.CreateAsync(worksOn);
+                var worksOn = new WorksOn()
+                {
+                    Id = Guid.NewGuid(),
+                    Commission = commission,
+                    CommissionId = commission.Id,
+                    UserId = data.EmployeeId,
+                };
 
-            await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.WorksOn.CreateAsync(worksOn);
 
-            return Ok();
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok();
+            }
+            throw new ArgumentException(result.Errors.First().ErrorMessage);
         }
 
     }

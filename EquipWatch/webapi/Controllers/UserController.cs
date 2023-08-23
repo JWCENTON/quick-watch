@@ -7,6 +7,7 @@ using webapi.Services;
 using System.Security.Claims;
 using System.Web;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using webapi.uow;
 
 namespace webapi.Controllers;
@@ -264,5 +265,24 @@ public class UserController : ControllerBase
     {
         var data = _userManager.Users;
         return data.Select(user => _mapper.Map<PartialUserDTO>(user)).ToList();
+    }
+
+    [Authorize]
+    [HttpGet("{commissionId}/availableEmployees")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<List<PartialUserDTO>> GetAvailableEmployees(Guid commissionId)
+    {
+        var worksOnList = await _unitOfWork.WorksOn.GetWorksOnByCommissionIdAsync(commissionId);
+
+        var assignedUserIds = worksOnList.Select(work => work.UserId).ToList();
+
+        var availableUsers = _userManager.Users
+            .Where(user => !assignedUserIds.Contains(user.Id))
+            .ToList();
+
+        return availableUsers.Select(user => _mapper.Map<PartialUserDTO>(user)).ToList();
     }
 }

@@ -44,6 +44,17 @@ public class FullCommissionDTOValidator : BaseCommissionDTOValidator<FullCommiss
     }
 }
 
+public class CommissionEmployeeAddDTOValidator : AbstractValidator<CommissionEmployeeAddDTO>
+{
+    public CommissionEmployeeAddDTOValidator()
+    {
+        RuleFor(dto => dto.EmployeeId)
+            .NotEmpty().WithMessage("You have to select employee.")
+            .Must(GuidValidator.ValidateGuid)
+            .WithMessage("Invalid employee ID.");
+    }
+}
+
 public class UpdateCommissionDTOValidator : AbstractValidator<UpdateCommissionDTO>
 {
     public UpdateCommissionDTOValidator()
