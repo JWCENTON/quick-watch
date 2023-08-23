@@ -3,13 +3,8 @@ using Domain.Client.Models;
 using DTO.ClientDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Client.Models;
 using webapi.uow;
-using Domain.Company.Models;
 using webapi.Validators;
-using DTO.CommissionDTOs;
-using Domain.Equipment.Models;
-using DTO.EquipmentDTOs;
 
 namespace webapi.Controllers;
 

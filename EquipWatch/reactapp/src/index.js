@@ -35,6 +35,7 @@ const router = createBrowserRouter([
             { path: "personal-info", element: <PersonalInfoPage /> },
             { path: ":dataType/:id", element: <DetailView /> },
             { path: ":dataType/:id/edit", element: <EditView /> },
+            { path: "search", element: <CardList /> },
             { path: "/:formType/create", element: <CreateForm /> }
         ]
     }

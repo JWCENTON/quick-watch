@@ -54,6 +54,9 @@ function App() {
                     <Route path="/:dataType/:id/edit" element={<PrivateRoute />}>
                         <Route path="/:dataType/:id/edit" element={<EditView />} />
                     </Route>
+                    <Route path="/search" element={<PrivateRoute />}>
+                        <Route path="/search" element={<CardList />} />
+                    </Route>
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
             </SidebarProvider>
