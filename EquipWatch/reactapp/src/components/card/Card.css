@@ -4,13 +4,12 @@ body {
     padding: 0;
 }
 
-
-
 .card {
+    padding-top: 10px;
+    padding-bottom: 10px;
     width: 100%;
-    justify-content: space-evenly;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    gap: 20px;
     background-color: #F9F7F7;
 }
 
@@ -20,14 +19,25 @@ body {
 
 .cardColumn {
     text-align: center;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: fit-content;
-    height: fit-content;
-    position: relative;
     color: #3F72AF;
+    box-sizing: border-box;
 }
 
 .card-title {
     color: #112D4E;
+    font-size: 20px;
+}
+
+.card-text {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 14px;
+    }
+
+    .card-text {
+        font-size: 12px;
+    }
 }
