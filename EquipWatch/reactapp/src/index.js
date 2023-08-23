@@ -6,7 +6,6 @@ import { AuthProvider } from './components/authProvider/AuthContext'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
-import SearchResults from './components/searchResults/SearchResults';
 import Registration from './pages/registration/Registration';
 import ErrorPage from './pages/error/error-page';
 import MainPage from './pages/mainPage/MainPage';
@@ -36,7 +35,7 @@ const router = createBrowserRouter([
             { path: "personal-info", element: <PersonalInfoPage /> },
             { path: ":dataType/:id", element: <DetailView /> },
             { path: ":dataType/:id/edit", element: <EditView /> },
-            { path: "search-results", element: <SearchResults /> },
+            { path: "search", element: <CardList /> },
             { path: "/:formType/create", element: <CreateForm /> }
         ]
     }

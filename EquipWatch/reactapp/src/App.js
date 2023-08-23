@@ -5,7 +5,6 @@ import { AuthProvider } from './components/authProvider/AuthContext';
 import { SidebarProvider } from './contexts/SidebarContext';
 import Login from './pages/login/Login';
 import PrivateRoute from './components/privateRoute/PrivateRoute';
-import SearchResults from './components/searchResults/SearchResults';
 import MainPage from './pages/mainPage/MainPage';
 import CardList from './pages/cardList/CardListPage';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
@@ -55,8 +54,8 @@ function App() {
                     <Route path="/:dataType/:id/edit" element={<PrivateRoute />}>
                         <Route path="/:dataType/:id/edit" element={<EditView />} />
                     </Route>
-                    <Route path="/search-results" element={<PrivateRoute />}>
-                        <Route path="/search-results" element={<SearchResults />} />
+                    <Route path="/search" element={<PrivateRoute />}>
+                        <Route path="/search" element={<CardList />} />
                     </Route>
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
