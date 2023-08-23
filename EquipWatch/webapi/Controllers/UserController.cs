@@ -44,17 +44,19 @@ public class UserController : ControllerBase
     {
         var user = _userServices.MatchModelToNewUser(model);
         var userCreationResult = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
-        if (userCreationResult.Succeeded)
+
+        if (!userCreationResult.Succeeded) return BadRequest(userCreationResult.Errors);
+        if (_userManager.Users.Count() == 1)
         {
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
-
-            await _emailService.SendEmailForConfirmationAsync(user, confirmationLink).ConfigureAwait(true);
-
-            return Ok();
+            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Admin"));
         }
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
 
-        return BadRequest(userCreationResult.Errors);
+        await _emailService.SendEmailForConfirmationAsync(user, confirmationLink).ConfigureAwait(true);
+
+        return Ok();
+
     }
 
     [AllowAnonymous]
