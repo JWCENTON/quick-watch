@@ -275,7 +275,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<List<PartialUserDTO>> GetAvailableEmployees(Guid commissionId)
     {
-        var worksOnList = await _unitOfWork.WorksOn.GetWorksOnByCommissionIdAsync(commissionId);
+        var worksOnList = await _unitOfWork.WorksOn.GeCurrentWorksOnByCommissionIdAsync(commissionId);
 
         var assignedUserIds = worksOnList.Select(work => work.UserId).ToList();
 

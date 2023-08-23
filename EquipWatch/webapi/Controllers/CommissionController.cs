@@ -150,9 +150,9 @@ namespace webapi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<List<PartialUserDTO>> GetEmployees(Guid id)
+        public async Task<List<PartialUserDTO>> GetAssignedEmployees(Guid id)
         {
-            var employees = await _unitOfWork.WorksOn.GetCommissionEmployeesAsync(id);
+            var employees = await _unitOfWork.WorksOn.GetCommissionAssignedEmployeesAsync(id);
             return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
         }
 
@@ -165,11 +165,11 @@ namespace webapi.Controllers
         {
             //var assignments = _unitOfWork.WorksOn.GetAllAsync().Result.Where(assignment => assignment.CommissionId == id);
             //var assignedUsers = assignments.Select(assignment => assignment.UserId);
-            var employees = _unitOfWork.Employees.GetAllAsync().Result;
+            var employees = await _unitOfWork.Employees.GetAllAsync();
             //var notAssigned = employees.Where(employee => !assignedUsers.Any(user => Guid.Parse(user) == employee.Id));
             //return notAssigned.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
 
-            return employees.Select(employee => _mapper.Map<PartialUserDTO>(employee)).ToList();
+            return employees.Select(_mapper.Map<PartialUserDTO>).ToList();
         }
 
         [HttpPost("{id}/employees")]

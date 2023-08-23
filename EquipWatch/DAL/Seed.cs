@@ -226,20 +226,34 @@ public class Seed
                 Id = Guid.NewGuid(),
                 Commission = commission1,
                 CommissionId = commission1.Id,
-                UserId = identityContext.Users.First().Id
+                UserId = identityContext.Users.First().Id,
+                CreationDate = DateTime.Now,
+                EndTime = null
             };
             var work2 = new WorksOn()
             {
                 Id = Guid.NewGuid(),
                 Commission = commission2,
                 CommissionId = commission2.Id,
-                UserId = identityContext.Users.First().Id
+                UserId = identityContext.Users.First().Id,
+                CreationDate = DateTime.Now.AddMinutes(1),
+                EndTime = null  
+            };
+            var work3 = new WorksOn()
+            {
+                Id = Guid.NewGuid(),
+                Commission = commission2,
+                CommissionId = commission2.Id,
+                UserId = identityContext.Users.First().Id,
+                CreationDate = DateTime.Now,
+                EndTime = DateTime.Now.AddSeconds(50)
             };
             context.WorksOn.Add(work1);
             context.WorksOn.Add(work2);
+            context.WorksOn.Add(work3);
 
             ////////////
-            
+
             var equipmentInUse1 = new EquipmentInUse()
             {
                 Id = Guid.NewGuid(),
