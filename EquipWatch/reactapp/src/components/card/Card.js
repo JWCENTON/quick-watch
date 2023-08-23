@@ -3,11 +3,17 @@ import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Card.css';
 
-function UniversalCard({ data, dataType }) {
+function UniversalCard({ data, dataType, insideCardList }) {
     const filteredData = Object.entries(data).filter(([key]) => key !== 'id');
     let numberOfItems = filteredData.length;
 
-    if (numberOfItems > 4) {
+    if (window.innerWidth <= 768) { // Mobile view
+        if (!insideCardList && dataType !== "commission") {
+            numberOfItems = 2;
+        } else if (!insideCardList && dataType === "commission") {
+            numberOfItems = 1;
+        }
+    } else if (numberOfItems > 4) {
         numberOfItems = Math.ceil(numberOfItems / 2);
     }
 

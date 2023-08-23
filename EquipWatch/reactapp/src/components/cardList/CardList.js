@@ -79,8 +79,7 @@ function CardList() {
         }
         const response = await fetch(url, { headers });
         let data = await response.json();
-
-        console.log("API Response:", data);
+        
         if (location.search) {
             switch (displayedCategory) {
                 case 'equipment':
@@ -129,7 +128,6 @@ function CardList() {
                 return item;
             }
         });
-        console.log("Filtered Data:", modifiedData);
         setCards(modifiedData);
     }
 
@@ -138,7 +136,7 @@ function CardList() {
             <a className="myAndAllSwitch" href="/" >My {displayedCategory}</a> | <a className="myAndAllSwitch" href="/" >All {displayedCategory}</a>
             <div className="cardsContainer">
                 {cards == null ? <p>Loading...</p> : cards.map((card, index) => (
-                    <UniversalCard key={index} data={card} dataType={itemType} />
+                    <UniversalCard key={index} data={card} dataType={itemType} insideCardList={true} />
                 ))}
             </div>
             <div className="btn-section">
@@ -146,7 +144,6 @@ function CardList() {
             </div>
         </div>
     );
-
 }
 
 export default CardList;
