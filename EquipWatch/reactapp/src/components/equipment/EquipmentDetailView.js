@@ -250,7 +250,6 @@ export default function EquipmentDetailView({ detailsData }) {
                 <p>Loading...</p>
             ) : (
                 <div className="details-grid">
-
                     <div className="section-left">
                         <h4 className="details-header">Equipment Details</h4>
                         {/*<p>Equipment name: </p>*/}

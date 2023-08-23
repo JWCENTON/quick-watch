@@ -56,4 +56,10 @@ public class WorksOnRepository : IWorksOnRepository
         }
         return Task.FromResult(users);
     }
+    public async Task<List<Domain.WorksOn.Models.WorksOn>> GetWorksOnByCommissionIdAsync(Guid commissionId)
+    {
+        var jobs = await _context.WorksOn.Where(booking => booking.CommissionId == commissionId).ToListAsync();
+        
+        return jobs;
+    }
 }
