@@ -32,7 +32,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
 
     useEffect(() => {
-        if (detailsData) {
+        if (detailsData && detailsData.available !== undefined) {
             setDetails(detailsData)
             setIsAvailable(detailsData.available);
             setInWarehouse(detailsData.inWarehouse)
@@ -58,14 +58,14 @@ export default function EquipmentDetailView({ detailsData }) {
 
 
     useEffect(() => {
-        if (details) {
+        if (details && details.available !== undefined) {
             setIsAvailable(details.available);
             setInWarehouse(details.inWarehouse)
             setLocation(details.location);
         }
     }, [details]);
 
-    useEffect(() => { }, [isAvailable, location]);
+    useEffect(() => {}, [isAvailable, location]);
 
     const handleCheckoutModalClose = () => { setShowCheckoutModal(false); setErrorMessage(''); };
     const handleCheckoutModalShow = () => {
