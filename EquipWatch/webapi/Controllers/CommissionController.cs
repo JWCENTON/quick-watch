@@ -190,7 +190,7 @@ namespace webapi.Controllers
                     Commission = commission,
                     CommissionId = commission.Id,
                     UserId = data.EmployeeId,
-                    CreationDate = DateTime.Now
+                    CreationTime = DateTime.Now
                 };
 
                 await _unitOfWork.WorksOn.CreateAsync(worksOn);

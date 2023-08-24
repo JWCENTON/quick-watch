@@ -10,6 +10,7 @@ using Domain.Invite;
 using Domain.Invite.Models;
 using Domain.Reservation.Models;
 using Domain.WorksOn.Models;
+using System;
 
 namespace DAL;
 
@@ -227,7 +228,7 @@ public class Seed
                 Commission = commission1,
                 CommissionId = commission1.Id,
                 UserId = identityContext.Users.First().Id,
-                CreationDate = DateTime.Now,
+                CreationTime = DateTime.Now,
                 EndTime = null
             };
             var work2 = new WorksOn()
@@ -236,7 +237,7 @@ public class Seed
                 Commission = commission2,
                 CommissionId = commission2.Id,
                 UserId = identityContext.Users.First().Id,
-                CreationDate = DateTime.Now.AddMinutes(1),
+                CreationTime = DateTime.Now.AddMinutes(1),
                 EndTime = null  
             };
             var work3 = new WorksOn()
@@ -245,7 +246,7 @@ public class Seed
                 Commission = commission2,
                 CommissionId = commission2.Id,
                 UserId = identityContext.Users.First().Id,
-                CreationDate = DateTime.Now,
+                CreationTime = DateTime.Now,
                 EndTime = DateTime.Now.AddSeconds(50)
             };
             context.WorksOn.Add(work1);
@@ -272,7 +273,7 @@ public class Seed
                 EquipmentInUse = equipmentInUse1,
                 EquipmentInUseId = equipmentInUse1.Id,
                 CreationTime = DateTime.Now,
-                IsFinished = false
+                EndTime = null
             };
 
             context.BookedEquipments.Add(book1);
@@ -328,7 +329,7 @@ public class Seed
             context.CheckOuts.Add(warehouseCheckOut1);
             warehouseCheckOut1.Equipment.Available = true;
             warehouseCheckOut1.Equipment.Location = "On the way to main warehouse";
-            book1.IsFinished = true;
+            book1.EndTime = DateTime.Now.AddDays(10).AddHours(4);
 
             context.CheckIns.Add(warehouseCheckIn1);
             warehouseCheckIn1.Equipment.InWarehouse = true;
@@ -354,7 +355,7 @@ public class Seed
                 CommissionId = commission1.Id,
                 EquipmentInUse = equipmentInUse2,
                 EquipmentInUseId = equipmentInUse2.Id,
-                IsFinished = false,
+                EndTime = null
             };
 
             context.BookedEquipments.Add(book2);
@@ -410,7 +411,7 @@ public class Seed
             context.CheckOuts.Add(warehouseCheckOut2);
             warehouseCheckOut2.Equipment.Available = true;
             warehouseCheckOut2.Equipment.Location = "On the way to main warehouse";
-            book2.IsFinished = true;
+            book2.EndTime = DateTime.Now.AddDays(10).AddHours(2);
 
             context.CheckIns.Add(warehouseCheckIn2);
             warehouseCheckIn2.Equipment.InWarehouse = true;
@@ -435,7 +436,7 @@ public class Seed
                 CommissionId = commission1.Id,
                 EquipmentInUse = equipmentInUse3,
                 EquipmentInUseId = equipmentInUse3.Id,
-                IsFinished = false
+                EndTime = null
             };
 
             context.BookedEquipments.Add(book3);
@@ -488,7 +489,7 @@ public class Seed
                 CommissionId = commission2.Id,
                 EquipmentInUse = equipmentInUse4,
                 EquipmentInUseId = equipmentInUse4.Id,
-                IsFinished = false
+                EndTime = null
             };
 
             context.BookedEquipments.Add(book4);
@@ -528,7 +529,7 @@ public class Seed
                 CommissionId = commission2.Id,
                 EquipmentInUse = equipmentInUse5,
                 EquipmentInUseId = equipmentInUse5.Id,
-                IsFinished = false
+                EndTime = null
             };
 
             context.BookedEquipments.Add(book5);
@@ -574,7 +575,7 @@ public class Seed
             context.CheckOuts.Add(warehouseCheckOut3);
             warehouseCheckOut3.Equipment.Available = true;
             warehouseCheckOut3.Equipment.Location = "On the way to main warehouse";
-            book5.IsFinished = true;
+            book5.EndTime = DateTime.Now.AddDays(15).AddHours(2);
 
             /////////
 
@@ -595,7 +596,7 @@ public class Seed
                 CommissionId = commission2.Id,
                 EquipmentInUse = equipmentInUse6,
                 EquipmentInUseId = equipmentInUse6.Id,
-                IsFinished = false
+                EndTime = null
             };
 
             context.BookedEquipments.Add(book6);
@@ -638,8 +639,8 @@ public class Seed
                 EquipmentId = equipment1.Id,
                 Id = Guid.NewGuid(),
                 CreationTime = DateTime.Now,
-                StartDate = DateTime.Now.AddDays(11),
-                EndDate = DateTime.Now.AddDays(25)
+                StartTime = DateTime.Now.AddDays(11),
+                EndTime = DateTime.Now.AddDays(25)
             };
 
             var book7 = new BookedEquipment()
@@ -650,14 +651,14 @@ public class Seed
                 CommissionId = commission1.Id,
                 Reservation = reservation1,
                 ReservationId = reservation1.Id,
-                IsFinished = false
+                EndTime = null
             };
 
             var equipmentInUse7 = new EquipmentInUse()
             {
                 Id = Guid.NewGuid(),
-                CreationTime = reservation1.StartDate,
-                EndTime = reservation1.EndDate,
+                CreationTime = reservation1.StartTime,
+                EndTime = reservation1.EndTime,
                 Equipment = reservation1.Equipment,
                 EquipmentId = reservation1.Equipment.Id,
                 UserId = identityContext.Users.First().Id
@@ -717,7 +718,7 @@ public class Seed
             context.CheckOuts.Add(warehouseCheckOut7);
             warehouseCheckOut7.Equipment.Available = true;
             warehouseCheckOut7.Equipment.Location = "On the way to main warehouse";
-            book1.IsFinished = true;
+            book1.EndTime = DateTime.Now.AddDays(25).AddHours(2);
 
             context.CheckIns.Add(warehouseCheckIn7);
             warehouseCheckIn7.Equipment.InWarehouse = true;

@@ -10,5 +10,6 @@ public class Equipment
     public Guid CompanyId { get; set; }
     public bool Available { get; set; }
     public bool InWarehouse { get; set; }
+    public DateTime CreationTime { get; set; }
     public Company.Models.Company Company { get; set; }
 }

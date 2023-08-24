@@ -45,7 +45,14 @@ export default function EquipmentDetailView({ detailsData }) {
                     }
                 });
                 const data = await response.json();
-                setCommissionList(data);
+                const modifiedData = await data.map(item => {
+                    return {
+                        ...item,
+                        endTime: item.endTime == null ? <span> Not specified </span> : <span>{item.endTime}</span>
+                    };
+                });
+
+                setCommissionList(modifiedData);
             };
             fetchCommissions();
             updateBook();
@@ -93,7 +100,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
     const handleCommissionChange = (selectedOption) => {
         setSelectedCommission(selectedOption);
-        const dateString = selectedOption == null ? null : commissionList.find(c => c.id === selectedOption.value).endTime
+        const dateString = selectedOption == null ? null : commissionList.find(c => c.id === selectedOption.value).endTime.props.children
         setMaxDate(dateString == null ? null : dateString.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:00"));
         setEndDate(null)
     };

@@ -88,6 +88,7 @@ public class EquipmentController : ControllerBase
             equipment.Id = Guid.NewGuid();
             equipment.InWarehouse = true;
             equipment.Available = true;
+            equipment.CreationTime = DateTime.Now;
             await _unitOfWork.Equipments.CreateAsync(equipment);
             var fullEquipmentDto = _mapper.Map<FullEquipmentDTO>(equipment);
             return CreatedAtAction(nameof(Get), new { id = fullEquipmentDto.Id }, fullEquipmentDto);
@@ -151,7 +152,7 @@ public class EquipmentController : ControllerBase
             equipment.Location = "On the way to main warehouse";
             bookedEquipment.EquipmentInUse.EndTime = DateTime.Now;
             equipment.Available = true;
-            bookedEquipment.IsFinished = true;
+            bookedEquipment.EndTime = DateTime.Now;
         }
         else
         {
