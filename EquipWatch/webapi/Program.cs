@@ -18,7 +18,8 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 var mySqlConnectionString = builder.Configuration.GetConnectionString("MySqlContextConnection") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
-var mySqlIdentityConnectionString = builder.Configuration.GetConnectionString("MySqlIdentityContextConnection") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
+var mySqlIdentityConnectionString = builder.Configuration.GetConnectionString("MySqlIdentityContextConnection") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'MySqlIdentityContextConnection' not found.");
+var mySqlSerilogConnectionString = builder.Configuration.GetConnectionString("SerilogConnectionString") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'SerilogConnectionString' not found.");
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
 builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySqlIdentityConnectionString, ServerVersion.AutoDetect(mySqlIdentityConnectionString)));
@@ -36,6 +37,7 @@ builder.Services.AddSingleton<ISmtpClientWrapper>(provider =>
 // Set up Serilog logger
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
+    .WriteTo.MySQL(connectionString: mySqlSerilogConnectionString)
     .CreateLogger();
 
 // Configure logging
@@ -78,6 +80,8 @@ builder.Services.AddMyDependencyGroup();
 
 var app = builder.Build();
 
+app.UseDeveloperExceptionPage();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -99,8 +103,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseDeveloperExceptionPage();
 
 try
 {
