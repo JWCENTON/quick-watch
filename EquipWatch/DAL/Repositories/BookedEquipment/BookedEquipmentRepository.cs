@@ -26,7 +26,7 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
     public async Task CreateAsync(Domain.BookedEquipment.Models.BookedEquipment entity)
     {
         if (_context.BookedEquipments.Any(b =>
-                b.EquipmentInUse.EquipmentId == entity.EquipmentInUse.EquipmentId && b.CommissionId == entity.CommissionId && !b.IsFinished))
+                b.EquipmentInUse.EquipmentId == entity.EquipmentInUse.EquipmentId && b.CommissionId == entity.CommissionId && b.EndTime == null))
         {
             throw new ArgumentException("Equipment is already assigned to this commission");
         }
@@ -47,7 +47,7 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
 
     public Task<List<Domain.Equipment.Models.Equipment>> GetCommissionEquipmentAsync(Guid commissionId)
     {
-        var bookings = _context.BookedEquipments.Where(booking => booking.CommissionId == commissionId && !booking.IsFinished);
+        var bookings = _context.BookedEquipments.Where(booking => booking.CommissionId == commissionId && booking.EndTime == null);
         var equipment = bookings.Select(booking => booking.EquipmentInUse.Equipment);
         return equipment.ToListAsync();
     }
@@ -60,7 +60,7 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
             .FirstOrDefaultAsync(
             book => 
                 book.EquipmentInUse.EquipmentId == equipmentId && 
-                book.IsFinished == false &&
+                book.EndTime == null &&
                 book.EquipmentInUse.CreationTime < DateTime.Now);
 
         return book!;
@@ -71,7 +71,7 @@ public class BookedEquipmentRepository : IBookedEquipmentRepository
         var book = await _context.BookedEquipments.FirstOrDefaultAsync(
                 book =>
                     book.EquipmentInUse.EquipmentId == equipmentId &&
-                    book.IsFinished == false &&
+                    book.EndTime == null &&
                     book.EquipmentInUse.CreationTime < DateTime.Now);
 
         return book!;

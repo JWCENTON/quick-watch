@@ -112,7 +112,7 @@ public class BookEquipmentController : ControllerBase
                 CommissionId = commission.Id,
                 EquipmentInUse = equipmentInUse,
                 EquipmentInUseId = equipmentInUse.Id,
-                IsFinished = false
+                EndTime = null
             };
             await _unitOfWork.BookedEquipment.CreateAsync(bookedEquipment);
             equipment.Available = false;

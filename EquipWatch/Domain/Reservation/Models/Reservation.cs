@@ -6,7 +6,7 @@ public class Reservation
     public Guid EquipmentId { get; set; }
     public string UserId { get; set; }
     public DateTime CreationTime { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime? EndTime { get; set; }
     public Equipment.Models.Equipment Equipment { get; set; }
 }

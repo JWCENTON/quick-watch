@@ -124,7 +124,12 @@ function CardList() {
                     inWarehouse: item.inWarehouse ? <span className="unicode-mark">&#x2705;</span> : <span className="unicode-mark">&#x274C;</span>,
                     condition: <span className="star">{`★`.repeat(item.condition)}<span className="dark-star">{`★`.repeat(5 - item.condition)}</span></span>
                 };
-            } else {
+            } else if (displayedCategory === 'commissions') {
+                return {
+                    ...item,
+                    endTime: item.endTime == null ? <span> Not specified </span> : <span> {item.endTime}</span>
+                };
+                } else {
                 return item;
             }
         });
