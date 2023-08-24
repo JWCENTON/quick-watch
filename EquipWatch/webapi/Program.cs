@@ -100,6 +100,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseDeveloperExceptionPage();
 
 try
 {
