@@ -226,20 +226,34 @@ public class Seed
                 Id = Guid.NewGuid(),
                 Commission = commission1,
                 CommissionId = commission1.Id,
-                UserId = identityContext.Users.First().Id
+                UserId = identityContext.Users.First().Id,
+                CreationDate = DateTime.Now,
+                EndTime = null
             };
             var work2 = new WorksOn()
             {
                 Id = Guid.NewGuid(),
                 Commission = commission2,
                 CommissionId = commission2.Id,
-                UserId = identityContext.Users.First().Id
+                UserId = identityContext.Users.First().Id,
+                CreationDate = DateTime.Now.AddMinutes(1),
+                EndTime = null  
+            };
+            var work3 = new WorksOn()
+            {
+                Id = Guid.NewGuid(),
+                Commission = commission2,
+                CommissionId = commission2.Id,
+                UserId = identityContext.Users.First().Id,
+                CreationDate = DateTime.Now,
+                EndTime = DateTime.Now.AddSeconds(50)
             };
             context.WorksOn.Add(work1);
             context.WorksOn.Add(work2);
+            context.WorksOn.Add(work3);
 
             ////////////
-            
+
             var equipmentInUse1 = new EquipmentInUse()
             {
                 Id = Guid.NewGuid(),
@@ -257,6 +271,7 @@ public class Seed
                 CommissionId = commission1.Id,
                 EquipmentInUse = equipmentInUse1,
                 EquipmentInUseId = equipmentInUse1.Id,
+                CreationTime = DateTime.Now,
                 IsFinished = false
             };
 
@@ -333,11 +348,13 @@ public class Seed
 
             var book2 = new BookedEquipment()
             {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Commission = commission1,
                 CommissionId = commission1.Id,
                 EquipmentInUse = equipmentInUse2,
                 EquipmentInUseId = equipmentInUse2.Id,
-                IsFinished = false
+                IsFinished = false,
             };
 
             context.BookedEquipments.Add(book2);
@@ -412,6 +429,8 @@ public class Seed
 
             var book3 = new BookedEquipment()
             {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Commission = commission1,
                 CommissionId = commission1.Id,
                 EquipmentInUse = equipmentInUse3,
@@ -463,6 +482,8 @@ public class Seed
 
             var book4 = new BookedEquipment()
             {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Commission = commission2,
                 CommissionId = commission2.Id,
                 EquipmentInUse = equipmentInUse4,
@@ -501,6 +522,8 @@ public class Seed
 
             var book5 = new BookedEquipment()
             {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Commission = commission2,
                 CommissionId = commission2.Id,
                 EquipmentInUse = equipmentInUse5,
@@ -566,6 +589,8 @@ public class Seed
 
             var book6 = new BookedEquipment()
             {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Commission = commission2,
                 CommissionId = commission2.Id,
                 EquipmentInUse = equipmentInUse6,
@@ -619,6 +644,8 @@ public class Seed
 
             var book7 = new BookedEquipment()
             {
+                Id = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
                 Commission = commission1,
                 CommissionId = commission1.Id,
                 Reservation = reservation1,

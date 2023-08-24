@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Button, Modal, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router'
 import UniversalCard from '../card/Card';
-//import debounce from 'lodash.debounce';
 import { useAuth } from '../authProvider/AuthContext';
 import 'react-datepicker/dist/react-datepicker.css';
+import { parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import Select from "react-select";
 
@@ -20,6 +20,7 @@ export default function CommissionDetailView({ detailsData }) {
     const [succesfullMessage, setSuccesfullMessage] = useState('');
     const [selectedEquipment, setSelectedEquipment] = useState('');
     const [selectedWorker, setSelectedWorker] = useState('');
+    const [maxDate, setMaxDate] = useState(null)
     const navigate = useNavigate()
     const { token } = useAuth();
 
@@ -46,6 +47,7 @@ export default function CommissionDetailView({ detailsData }) {
 
     const handleEquipmentChange = (selectedOption) => {
         setSelectedEquipment(selectedOption);
+        setEndDate(null)
     };
     const handleWorkerChange = (selectedOption) => {
         selectedOption == null ?
@@ -157,16 +159,17 @@ export default function CommissionDetailView({ detailsData }) {
             const errorJson = await response.json();
             setErrorMessage(errorJson.Message);
         } else if (response.ok) {
+            let equipment = availableEquipment.find(e => e.id === selectedEquipment.value)
             handleEquipmentClose()
             fetchEquipmentData()
-            let equipment = assignedEquipment.find(e => e.id === selectedEquipment.value)
             setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`)
         }
     }
     useEffect(() => {
-        if (detailsData) {
+        if (detailsData != null && detailsData.available === undefined) {
             fetchEquipmentData();
             fetchWorkersData();
+            setMaxDate(detailsData.endTime == null ? null : detailsData.endTime.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:00"));
         }
     }, [detailsData]);
 
@@ -181,17 +184,6 @@ export default function CommissionDetailView({ detailsData }) {
             GetEmployeeModalData()
         }
     }, [showWorkerModal]);
-
-
-    //const debouncedFetchEquipmentData = debounce(fetchEquipmentData);
-    //const debouncedFetchWorkersData = debounce(fetchWorkersData);
-
-    //useEffect(() => {
-    //    if (detailsData != null) {
-    //        debouncedFetchEquipmentData();
-    //        debouncedFetchWorkersData();
-    //    }
-    //}, [detailsData]);
 
     return (
         <div className="details-section">
@@ -258,6 +250,7 @@ export default function CommissionDetailView({ detailsData }) {
                                                 selected={endDate}
                                                 onChange={item => setEndDate(item)}
                                                 minDate={new Date()}
+                                                maxDate={parseISO(maxDate)}
                                                 dateFormat="dd/MM/yyyy"
                                                 isClearable={true}
                                             />
