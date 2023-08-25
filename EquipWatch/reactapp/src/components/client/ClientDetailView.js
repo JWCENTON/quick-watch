@@ -17,9 +17,6 @@ export default function ClientDetailView({ detailsData }) {
     const { token } = useAuth();
     return (
         <div className="details-section">
-            <div className="myAndAllSwitch-section">
-                <a className="myAndAllSwitch" href="/equipment" >My Clients</a> | <a className="myAndAllSwitch" href="/clients" >All Clients</a>
-            </div>
         { detailsData === null ? (
             <p>Loading...</p>
             ) : (

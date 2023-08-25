@@ -74,12 +74,12 @@ export default function CommissionDetailView({ detailsData }) {
 
             };
         });
-        setAssignedEquipment(modifiedData)
+        setAssignedEquipment(modifiedData);
     }
 
     async function fetchWorkersData() {
         const headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         };
 
         if (token) {
@@ -87,7 +87,7 @@ export default function CommissionDetailView({ detailsData }) {
         }
         let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "GET", headers });
         let data = await response.json();
-        setAssignedWorkers(data)
+        setAssignedWorkers(data);
     }
 
     async function GetEquipmentModalData() {
@@ -187,9 +187,6 @@ export default function CommissionDetailView({ detailsData }) {
 
     return (
         <div className="details-section">
-            <div className="myAndAllSwitch-section">
-                <a className="myAndAllSwitch" href="/commissions" >My Commissions</a> | <a className="myAndAllSwitch" href="/commissions" >All Commissions</a>
-            </div>
             {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             {detailsData === null || assignedEquipment == null ? (
                 <p>Loading...</p>

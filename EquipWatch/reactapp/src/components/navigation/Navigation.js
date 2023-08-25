@@ -14,7 +14,7 @@ const Navigation = () => {
                 <Navbar.Brand className="sidebar-toggle-button" onClick={toggleSidebar}>
                     <BiMenuAltRight size={30} />
                 </Navbar.Brand>
-                <Navbar.Brand href="/main">Home</Navbar.Brand>
+                <Navbar.Brand href="/commissions">Home</Navbar.Brand>
             </div>
             <Searchbar />
             <Nav className="ml-auto logout-link">

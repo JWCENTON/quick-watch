@@ -248,7 +248,6 @@ export default function EquipmentDetailView({ detailsData }) {
 
     return (
         <div className="details-section">
-            <div className="myAndAllSwitch-section"><a className="myAndAllSwitch" href="/equipment" >My Equipment</a> | <a className="myAndAllSwitch" href="/equipment" >All Equipment</a></div>
             {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
             {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined ? (
                 <p>Loading...</p>
