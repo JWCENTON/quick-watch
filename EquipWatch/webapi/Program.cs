@@ -20,7 +20,7 @@ var configuration = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
 
-var loginDataKey = environmentName == "Development" ? "DatabaseLoginData" : "AzureDatabaseLoginData";
+var loginDataKey = environmentName == "Development" ? "LocalDatabaseLoginData" : "AzureDatabaseLoginData";
 
 var loginData = configuration.GetSection("SQL")[loginDataKey].IsNullOrEmpty()
     ? throw new InvalidOperationException("MySql login string not found.")
