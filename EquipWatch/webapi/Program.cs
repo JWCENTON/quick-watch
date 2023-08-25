@@ -55,7 +55,7 @@ if (configuration.GetSection("Serilog").GetSection("WriteTo:0:Args")["connection
 {
     throw new InvalidOperationException("Connection string for SeriLog not found.");
 }
-configuration.GetSection("Serilog").GetSection("WriteTo:0:Args")["connectionString"] += configuration.GetSection("SQL")["LoginData"];
+configuration.GetSection("Serilog").GetSection("WriteTo:0:Args")["connectionString"] += configuration.GetSection("SQL")[loginDataKey];
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
