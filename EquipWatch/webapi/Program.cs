@@ -11,15 +11,20 @@ using webapi.Middleware;
 using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var environmentName = builder.Environment.EnvironmentName;
+var configFileName = environmentName == "Development" ? "appsettings.Development.json" : "appsettings.json";
+
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile(configFileName, optional: false, reloadOnChange: true)
     .AddUserSecrets<Program>()
     .Build();
 
-var loginData = configuration.GetSection("SQL")["LoginData"].IsNullOrEmpty()
+var loginDataKey = environmentName == "Development" ? "DatabaseLoginData" : "AzureDatabaseLoginData";
+
+var loginData = configuration.GetSection("SQL")[loginDataKey].IsNullOrEmpty()
     ? throw new InvalidOperationException("MySql login string not found.")
-    : configuration.GetSection("SQL")["LoginData"];
+    : configuration.GetSection("SQL")[loginDataKey];
 
 var mySqlDatabase = configuration.GetConnectionString("MySqlContextConnection").IsNullOrEmpty()
     ? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.")
@@ -96,7 +101,7 @@ builder.Services.AddMyDependencyGroup();
 
 var app = builder.Build();
 
-//app.UseDeveloperExceptionPage();
+app.UseDeveloperExceptionPage();
 
 // Configure the HTTP request pipeline.
 
