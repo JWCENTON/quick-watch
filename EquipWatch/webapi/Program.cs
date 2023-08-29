@@ -11,14 +11,31 @@ using webapi.Middleware;
 using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var environmentName = builder.Environment.EnvironmentName;
+var configFileName = environmentName == "Development" ? "appsettings.Development.json" : "appsettings.json";
+
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile(configFileName, optional: false, reloadOnChange: true)
     .AddUserSecrets<Program>()
     .Build();
 
-var mySqlConnectionString = builder.Configuration.GetConnectionString("MySqlContextConnection") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
-var mySqlIdentityConnectionString = builder.Configuration.GetConnectionString("MySqlIdentityContextConnection") + configuration.GetSection("SQL")["LoginData"] ?? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.");
+var loginDataKey = environmentName == "Development" ? "LocalDatabaseLoginData" : "AzureDatabaseLoginData";
+
+var loginData = configuration.GetSection("SQL")[loginDataKey].IsNullOrEmpty()
+    ? throw new InvalidOperationException("MySql login string not found.")
+    : configuration.GetSection("SQL")[loginDataKey];
+
+var mySqlDatabase = configuration.GetConnectionString("MySqlContextConnection").IsNullOrEmpty()
+    ? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.")
+    : configuration.GetConnectionString("MySqlContextConnection");
+
+var mySqlIdentity = configuration.GetConnectionString("MySqlIdentityContextConnection").IsNullOrEmpty()
+    ? throw new InvalidOperationException("Connection string 'MySqlIdentityContextConnection' not found.")
+    : configuration.GetConnectionString("MySqlIdentityContextConnection");
+
+var mySqlConnectionString = mySqlDatabase + loginData;
+var mySqlIdentityConnectionString = mySqlIdentity + loginData;
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
 builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySqlIdentityConnectionString, ServerVersion.AutoDetect(mySqlIdentityConnectionString)));
@@ -33,7 +50,13 @@ builder.Services.AddSingleton<ISmtpClientWrapper>(provider =>
     return new SmtpClientWrapper(emailContext.Smtp, emailContext.Port, emailContext.Username, emailContext.Password);
 });
 
-// Set up Serilog logger
+// Set up Serilog logger and update serilog connection string with username and password
+if (configuration.GetSection("Serilog").GetSection("WriteTo:0:Args")["connectionString"].IsNullOrEmpty())
+{
+    throw new InvalidOperationException("Connection string for SeriLog not found.");
+}
+configuration.GetSection("Serilog").GetSection("WriteTo:0:Args")["connectionString"] += configuration.GetSection("SQL")[loginDataKey];
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
@@ -78,15 +101,16 @@ builder.Services.AddMyDependencyGroup();
 
 var app = builder.Build();
 
+app.UseDeveloperExceptionPage();
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
+
 
 //configure exception handling middleware
 app.UseMiddleware<ExceptionHandlerMiddleware>();
@@ -99,7 +123,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 try
 {
