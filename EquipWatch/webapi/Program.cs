@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using webapi;
 using webapi.Extensions;
 using webapi.Middleware;
 using webapi.Services;
@@ -21,6 +22,10 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .AddUserSecrets<Program>()
     .Build();
+
+// while enabled instead of local config app will use the manually fetched one from Azure KeyVault also using Azure Database
+//var tester = new AzureDatabaseAndKeyVaultTester(configuration);
+//tester.OverrideConfigToTestAzureIntegration();
 
 var configValidator = new AppConfigValidator();
 
