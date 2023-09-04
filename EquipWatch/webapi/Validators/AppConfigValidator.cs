@@ -6,7 +6,7 @@ public class AppConfigValidator : AbstractValidator<IConfiguration>
 {
     public AppConfigValidator()
     {
-        RuleFor(config => config["SQL"])
+        RuleFor(config => config["SQL:LoginData"])
             .NotEmpty().WithMessage("SQL login data is empty");
 
         RuleFor(config => config["ConnectionStrings:MySqlContextConnectionString"])

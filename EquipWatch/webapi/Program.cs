@@ -18,6 +18,7 @@ var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{environmentName}.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables()
     .AddUserSecrets<Program>()
     .Build();
 
@@ -29,7 +30,7 @@ if (!result.IsValid)
     throw new KeyNotFoundException(result.Errors.First().ErrorMessage);
 }
 
-var connectionStringService = new ConnectionStringService(configuration, "SQL");
+var connectionStringService = new ConnectionStringService(configuration, "SQL:LoginData");
 
 var mySqlConnectionString = connectionStringService.GetConnectionString("MySqlContextConnectionString");
 var mySqlIdentityConnectionString = connectionStringService.GetConnectionString("MySqlIdentityContextConnectionString");
