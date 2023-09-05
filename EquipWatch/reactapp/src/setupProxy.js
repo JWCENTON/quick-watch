@@ -1,9 +1,9 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
-
+const apiUrl = process.env.REACT_APP_API_URL;
 
 module.exports = function (app) {
     const apiProxy = createProxyMiddleware({
-        target: 'https://localhost:7007',
+        target: `${apiUrl}`,
         secure: false,
         headers: {
             Connection: 'Keep-Alive'
@@ -20,7 +20,7 @@ module.exports = function (app) {
 
 module.exports = function (app) {
     const appProxy = createProxyMiddleware("/client", {
-        target: 'https://localhost:7007/api/client',
+        target: `${apiUrl}/api/client`,
         secure: false,
         headers: {
             Connection: 'Keep-Alive'

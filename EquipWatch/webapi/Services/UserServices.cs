@@ -59,4 +59,14 @@ public class UserServices : IUserServices
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public string GetReactAppRedirectAddress()
+    {
+        return _configuration["ReactAppUrl"];
+    }
+
+    public string GetWebAppRedirectAddress()
+    {
+        return _configuration["WebApiUrl"];
+    }
 }

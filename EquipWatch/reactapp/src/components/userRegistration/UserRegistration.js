@@ -11,6 +11,7 @@ function Registration() {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState([]);
     const [isLoading, setLoading] = useState(false);
+    const apiUrl = process.env.REACT_APP_API_URL;
 
 
     const handleSubmit = async (e) => {
@@ -22,7 +23,7 @@ function Registration() {
         e.preventDefault();
         setLoading(true);
 
-        const response = await fetch('https://localhost:7007/api/User/register', {
+        const response = await fetch(`${apiUrl}/api/User/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

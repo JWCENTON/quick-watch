@@ -3,6 +3,7 @@ import './PersonalInfo.css';
 import { Button } from 'react-bootstrap';
 
 function PersonalInfo() {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const [userInfo, setUserInfo] = useState({
         firstName: '',
         lastName: '',
@@ -37,7 +38,7 @@ function PersonalInfo() {
 
     const fetchUserInfo = async () => {
         try {
-            const response = await fetch('https://localhost:7007/api/User/getUserInfo', {
+            const response = await fetch(`${apiUrl}/api/User/getUserInfo`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -73,7 +74,7 @@ function PersonalInfo() {
     };
 
     const updateUserInfo = async () => {
-        return await fetch('https://localhost:7007/api/User/updateUserInfo', {
+        return await fetch(`${apiUrl}/api/User/updateUserInfo`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ function PersonalInfo() {
     };
 
     const changePassword = async () => {
-        return await fetch('https://localhost:7007/api/User/changePassword', {
+        return await fetch(`${apiUrl}/api/User/changePassword`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

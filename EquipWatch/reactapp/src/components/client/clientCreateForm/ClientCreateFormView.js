@@ -7,6 +7,7 @@ import './clientCreateForm.css';
 import { useAuth } from '../../authProvider/AuthContext';
 
 export default function ClientCreateFormView() {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const { token } = useAuth();
 	const [errorMessage, setErrorMessage] = useState('');
@@ -18,7 +19,7 @@ export default function ClientCreateFormView() {
         let formEmail = event.target.email.value;
         let formPhoneNubmer = event.target.phoneNumber.value;
         let formAddress = event.target.address.value;
-		let companyResponse = await fetch('https://localhost:7007/api/company', {
+		let companyResponse = await fetch(`${apiUrl}/api/company`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +40,7 @@ export default function ClientCreateFormView() {
             "companyId": companyId
         });
 
-        const response = await fetch('https://localhost:7007/api/client', {
+        const response = await fetch(`${apiUrl}/api/client`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

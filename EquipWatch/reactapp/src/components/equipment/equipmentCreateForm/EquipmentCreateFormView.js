@@ -7,6 +7,7 @@ import './equipmentCreateForm.css';
 import { useAuth } from '../../authProvider/AuthContext';
 
 export default function EquipmentCreateFormView() {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const [rating, setRating] = useState(0);
     const { token } = useAuth();
@@ -17,7 +18,7 @@ export default function EquipmentCreateFormView() {
         let formSerialNumber = event.target.serialNumber.value;
         let formCategory = event.target.category.value;
         let formLocation = event.target.location.value;
-		let companyResponse = await fetch('https://localhost:7007/api/company', {
+		let companyResponse = await fetch(`${apiUrl}/api/company`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -38,7 +39,7 @@ export default function EquipmentCreateFormView() {
             "companyId": companyId
         });
 
-        const response = await fetch('https://localhost:7007/api/equipment', {
+        const response = await fetch(`${apiUrl}/api/equipment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

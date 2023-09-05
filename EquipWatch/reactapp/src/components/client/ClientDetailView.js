@@ -4,11 +4,11 @@ import { Button } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext'; // Import useAuth
 
 
-
+//const apiUrl = process.env.REACT_APP_API_URL;
 //const [Commissions, setCommissions] = useState(null);
 
 //async function GetClientCommissions() {
-//    const response = await fetch('https://localhost:7007/api/client/commissions');
+//    const response = await fetch(`${apiUrl}/api/client/commissions`);
 //    const data = await response.json();
 //    setCommissions(data);
 //}
