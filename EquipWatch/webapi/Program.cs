@@ -1,45 +1,43 @@
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 using DAL;
 using Domain.User.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Text;
 using webapi.Extensions;
 using webapi.Middleware;
 using webapi.Services;
+using webapi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 var environmentName = builder.Environment.EnvironmentName;
-var configFileName = environmentName == "Development" ? "appsettings.Development.json" : "appsettings.json";
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile(configFileName, optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{environmentName}.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables()
     .AddUserSecrets<Program>()
     .Build();
 
-var loginDataKey = environmentName == "Development" ? "LocalDatabaseLoginData" : "AzureDatabaseLoginData";
+var configValidator = new AppConfigValidator();
 
-var loginData = configuration.GetSection("SQL")[loginDataKey].IsNullOrEmpty()
-    ? throw new InvalidOperationException("MySql login string not found.")
-    : configuration.GetSection("SQL")[loginDataKey];
+var result = configValidator.Validate(configuration);
+if (!result.IsValid)
+{
+    throw new KeyNotFoundException(result.Errors.First().ErrorMessage);
+}
 
-var mySqlDatabase = configuration.GetConnectionString("MySqlContextConnection").IsNullOrEmpty()
-    ? throw new InvalidOperationException("Connection string 'MySqlContextConnection' not found.")
-    : configuration.GetConnectionString("MySqlContextConnection");
+var connectionStringService = new ConnectionStringService(configuration, "SQL:LoginData");
 
-var mySqlIdentity = configuration.GetConnectionString("MySqlIdentityContextConnection").IsNullOrEmpty()
-    ? throw new InvalidOperationException("Connection string 'MySqlIdentityContextConnection' not found.")
-    : configuration.GetConnectionString("MySqlIdentityContextConnection");
-
-var mySqlConnectionString = mySqlDatabase + loginData;
-var mySqlIdentityConnectionString = mySqlIdentity + loginData;
+var mySqlConnectionString = connectionStringService.GetConnectionString("MySqlContextConnectionString");
+var mySqlIdentityConnectionString = connectionStringService.GetConnectionString("MySqlIdentityContextConnectionString");
+connectionStringService.UpdateSerilogConnectionString("MySqlSerilogConnectionString");
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
 builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySqlIdentityConnectionString, ServerVersion.AutoDetect(mySqlIdentityConnectionString)));
-
 
 builder.Services.Configure<EmailContext>(configuration.GetSection("Email"));
 
@@ -51,11 +49,6 @@ builder.Services.AddSingleton<ISmtpClientWrapper>(provider =>
 });
 
 // Set up Serilog logger and update serilog connection string with username and password
-if (configuration.GetSection("Serilog").GetSection("WriteTo:0:Args")["connectionString"].IsNullOrEmpty())
-{
-    throw new InvalidOperationException("Connection string for SeriLog not found.");
-}
-configuration.GetSection("Serilog").GetSection("WriteTo:0:Args")["connectionString"] += configuration.GetSection("SQL")[loginDataKey];
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
@@ -138,4 +131,3 @@ finally
     Log.Information("Shutting down the application");
     Log.CloseAndFlush();
 }
-
