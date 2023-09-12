@@ -10,6 +10,7 @@ import { useAuth } from '../../components/authProvider/AuthContext';
 import './DetailView.css';
 
 export default function DetailView() {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const { id, dataType } = useParams();
     const { token } = useAuth();
 
@@ -27,7 +28,7 @@ export default function DetailView() {
 
     useEffect(() => {
         const fetchDetailsData = async () => {
-            const response = await fetch(`https://localhost:7007/api/${dataType}/${id}`, {
+            const response = await fetch(`${apiUrl}/api/${dataType}/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`

@@ -109,7 +109,7 @@ public class UserController : ControllerBase
         var result = await _userManager.ConfirmEmailAsync(user, token);
         if (result.Succeeded)
         {
-            return Redirect("https://localhost:3000/");
+            return Redirect($"{_userServices.GetReactAppRedirectAddress()}");
         }
         else
         {
@@ -149,7 +149,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult RedirectResetPassword(string userId, string token)
     {
-        var resetPasswordPageUrl = $"https://localhost:3000/resetPassword/{userId}/{HttpUtility.UrlEncode(token)}";
+        var resetPasswordPageUrl = $"{_userServices.GetReactAppRedirectAddress()}/resetPassword/{userId}/{HttpUtility.UrlEncode(token)}";
 
         return Redirect(resetPasswordPageUrl);
     }

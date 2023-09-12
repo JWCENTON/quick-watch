@@ -9,6 +9,7 @@ function CardList() {
     const [cards, setCards] = useState(null);
     const location = useLocation();
     const { token } = useAuth();
+    const apiUrl = process.env.REACT_APP_API_URL;
     let displayedCategory;
     let itemType;
     let searchWords;
@@ -49,19 +50,19 @@ function CardList() {
         // eslint-disable-next-line default-case
         switch (displayedCategory) {
             case 'equipment':
-                url = 'https://localhost:7007/api/equipment';
+                url = `${apiUrl}/api/equipment`;
                 break;
             case 'commissions':
-                url = 'https://localhost:7007/api/commission';
+                url = `${apiUrl}/api/commission`;
                 break;
             case 'clients':
-                url = 'https://localhost:7007/api/client';
+                url = `${apiUrl}/api/client`;
                 break;
             case 'companies':
-                url = 'https://localhost:7007/api/company';
+                url = `${apiUrl}/api/company`;
                 break;
             case 'employees':
-                url = 'https://localhost:7007/api/employee';
+                url = `${apiUrl}/api/employee`;
                 break;
             default:
                 break;

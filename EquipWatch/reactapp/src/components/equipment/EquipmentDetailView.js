@@ -28,6 +28,7 @@ export default function EquipmentDetailView({ detailsData }) {
     const [selectedCommission, setSelectedCommission] = useState('');
     const [maxDate, setMaxDate] = useState(null)
     const [endDate, setEndDate] = useState(null);
+    const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
@@ -38,7 +39,7 @@ export default function EquipmentDetailView({ detailsData }) {
             setInWarehouse(detailsData.inWarehouse)
             setLocation(detailsData.location);
             const fetchCommissions = async () => {
-                const response = await fetch(`https://localhost:7007/api/commission`, {
+                const response = await fetch(`${apiUrl}/api/commission`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
@@ -106,7 +107,7 @@ export default function EquipmentDetailView({ detailsData }) {
     };
 
     async function updateDetails() {
-        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id, {
+        const response = await fetch(`${apiUrl}/api/equipment/` + detailsData.id, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -120,7 +121,7 @@ export default function EquipmentDetailView({ detailsData }) {
     }
 
     async function updateBook() {
-        const response = await fetch('https://localhost:7007/api/bookequipment/' + detailsData.id + '/CurrentEquipmentBook', {
+        const response = await fetch(`${apiUrl}/api/bookequipment/` + detailsData.id + '/CurrentEquipmentBook', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -138,7 +139,7 @@ export default function EquipmentDetailView({ detailsData }) {
     }
 
     async function getCommissionDetails(commissionId) {
-        const response = await fetch(`https://localhost:7007/api/commission/` + commissionId, {
+        const response = await fetch(`${apiUrl}/api/commission/` + commissionId, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -158,7 +159,7 @@ export default function EquipmentDetailView({ detailsData }) {
             equipmentId: detailsData.id,
             endTime: endDate ? endDate.toISOString() : null
         });
-        const response = await fetch('https://localhost:7007/api/bookequipment/', {
+        const response = await fetch(`${apiUrl}/api/bookequipment/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -185,7 +186,7 @@ export default function EquipmentDetailView({ detailsData }) {
     async function handleCheckoutFormSubmit(event, warehouseDelivery) {
         event.preventDefault();
 
-        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkout', {
+        const response = await fetch(`${apiUrl}/api/equipment/` + detailsData.id + '/checkout', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -206,7 +207,7 @@ export default function EquipmentDetailView({ detailsData }) {
 
     async function handleCheckinFormSubmit(event, warehouseDelivery) {
         event.preventDefault();
-        const response = await fetch('https://localhost:7007/api/equipment/' + detailsData.id + '/checkin', {
+        const response = await fetch(`${apiUrl}/api/equipment/` + detailsData.id + '/checkin', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -225,7 +226,7 @@ export default function EquipmentDetailView({ detailsData }) {
     }
 
     async function DeleteEquipment() {
-        await fetch(`https://localhost:7007/api/equipment/${detailsData.id}`, {
+        await fetch(`${apiUrl}/api/equipment/${detailsData.id}`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -9,6 +9,7 @@ import { DateRangePicker } from 'react-date-range';
 import { useAuth } from '../../authProvider/AuthContext';
 
 export default function CommissionCreateFormView() {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const [options, setOptions] = useState(null);
     const { token } = useAuth(); 
@@ -28,7 +29,7 @@ export default function CommissionCreateFormView() {
         let formDescription = event.target.description.value;
         let formScope = event.target.scope.value;
 		
-		let companyResponse = await fetch('https://localhost:7007/api/company', {
+		let companyResponse = await fetch(`${apiUrl}/api/company`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -50,7 +51,7 @@ export default function CommissionCreateFormView() {
             "endTime": dateRange[0].endDate
         });
 		
-        const response = await fetch('https://localhost:7007/api/commission', {
+        const response = await fetch(`${apiUrl}/api/commission`, {
             method: "POST", 
             headers: { "Content-Type": "application/json",
 			'Authorization': `Bearer ${token}`},
@@ -74,7 +75,7 @@ export default function CommissionCreateFormView() {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        const response = await fetch('https://localhost:7007/api/client', 
+        const response = await fetch(`${apiUrl}/api/client`, 
 			{ headers: {'Authorization': `Bearer ${token}`}
 			});
         const data = await response.json();

@@ -9,6 +9,12 @@ public class AppConfigValidator : AbstractValidator<IConfiguration>
         RuleFor(config => config["SQL:LoginData"])
             .NotEmpty().WithMessage("SQL login data is empty");
 
+        RuleFor(config => config["WebApiUrl"])
+            .NotEmpty().WithMessage("WebApiUrl is empty");
+
+        RuleFor(config => config["ReactAppUrl"])
+            .NotEmpty().WithMessage("ReactAppUrl is empty");
+
         RuleFor(config => config["ConnectionStrings:MySqlContextConnectionString"])
             .NotEmpty().WithMessage("Context connection string is empty");
 

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 function ResetPassword() {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const { userId, token } = useParams();
     const [newPassword, setNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ function ResetPassword() {
             setLoading(true);
             setError('');
 
-            const response = await fetch('https://localhost:7007/api/User/resetPassword', {
+            const response = await fetch(`${apiUrl}/api/User/resetPassword`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

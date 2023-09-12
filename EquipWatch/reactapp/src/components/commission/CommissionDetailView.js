@@ -23,6 +23,7 @@ export default function CommissionDetailView({ detailsData }) {
     const [maxDate, setMaxDate] = useState(null)
     const navigate = useNavigate()
     const { token } = useAuth();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const handleEquipmentClose = () => {
         setShowEquipmentModal(false)
@@ -63,7 +64,7 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/equipment`, { method: "GET", headers });
+        let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/equipment`, { method: "GET", headers });
         let data = await response.json();
         const modifiedData = await data.map(item => {
             return {
@@ -85,7 +86,7 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "GET", headers });
+        let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/employees`, { method: "GET", headers });
         let data = await response.json();
         setAssignedWorkers(data);
     }
@@ -98,7 +99,7 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        let response = await fetch(`https://localhost:7007/api/equipment/available`, { method: "GET", headers });
+        let response = await fetch(`${apiUrl}/api/equipment/available`, { method: "GET", headers });
         let data = await response.json();
         setAvailableEquipment(data);
     }
@@ -111,7 +112,7 @@ export default function CommissionDetailView({ detailsData }) {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        let response = await fetch(`https://localhost:7007/api/user/${detailsData.id}/availableEmployees`, { method: "GET", headers });
+        let response = await fetch(`${apiUrl}/api/user/${detailsData.id}/availableEmployees`, { method: "GET", headers });
         let data = await response.json();
         setAvailableWorkers(data);
     }
@@ -128,7 +129,7 @@ export default function CommissionDetailView({ detailsData }) {
         let raw = JSON.stringify({
             "employeeId": selectedWorker.value
         });
-        let response = await fetch(`https://localhost:7007/api/commission/${detailsData.id}/employees`, { method: "POST", headers: headers, body: raw });
+        let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/employees`, { method: "POST", headers: headers, body: raw });
         if (response.status === 400) {
             const errorJson = await response.json();
             setErrorMessage(errorJson.Message);
@@ -147,7 +148,7 @@ export default function CommissionDetailView({ detailsData }) {
             commissionId: detailsData.id,
             endTime: endDate ? endDate.toISOString() : null
         });
-        const response = await fetch('https://localhost:7007/api/bookequipment/', {
+        const response = await fetch(`${apiUrl}/api/bookequipment/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

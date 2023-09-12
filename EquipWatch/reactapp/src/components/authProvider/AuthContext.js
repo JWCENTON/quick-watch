@@ -5,9 +5,10 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const login = async (email, password) => {
-        const response = await fetch('https://localhost:7007/api/User/login', {
+        const response = await fetch(`${apiUrl}/api/User/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
