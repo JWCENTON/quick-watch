@@ -2,7 +2,7 @@
 
 EquipWatch is a comprehensive web application designed for efficient hardware and equipment management.
 
-![EquipWatch Logo](insert_url_to_logo_here)
+<!-- ![EquipWatch Logo](insert_url_to_logo_here) -->
 
 The primary objective of this application is to simplify equipment tracking, making it easier to monitor its location and schedule through an intuitive booking system. EquipWatch is tailored for use by both managers and employees, offering a seamless solution for organizations with dedicated equipment warehouses.
 
@@ -85,11 +85,12 @@ Each sprint lasted one week and followed this timeline:
   - Azure deployment for the application
   - Unit Tests
   - General Improvements
-
+<!--
 ## Getting Started
 
 You can access the EquipWatch application publicly at [insert_url_here]. Get started today and experience hassle-free equipment management.
-
+-->
+#
 If you have any questions or need further assistance, please don't hesitate to [contact us](mailto:marcin.stodolny@o2.pl).
 
 Thank you for choosing EquipWatch for your equipment management needs. We look forward to serving you!
