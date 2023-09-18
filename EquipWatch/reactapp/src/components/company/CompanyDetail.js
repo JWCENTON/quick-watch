@@ -1,4 +1,4 @@
-export default function CompanyDetailView({ detailsData }) {
+export default function CompanyDetail({ detailsData }) {
     return (
         <div>
             {detailsData === null ? (

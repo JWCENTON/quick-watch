@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { SidebarContext } from '../../contexts/SidebarContext';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import ClientEditView from '../../components/client/ClientEditView';
-import EquipmentEditView from '../../components/equipment/EquipmentEditView';
-import CommissionEditView from '../../components/commission/CommissionEditView';
-import CompanyEditView from '../../components/company/CompanyEditView';
-import EmployeeEditView from '../../components/employee/EmployeeEditView';
+import ClientDetail from '../../components/client/ClientDetail';
+import EquipmentDetail from '../../components/equipment/EquipmentDetail';
+import CompanyDetail from '../../components/company/CompanyDetail';
+import EmployeeDetail from '../../components/employee/EmployeeDetail';
+import CommissionDetail from '../../components/commission/CommissionDetail';
 import { useAuth } from '../../components/authProvider/AuthContext';
+import './Detail.css';
 
-export default function EditView() {
+export default function Detail() {
     const apiUrl = process.env.REACT_APP_API_URL;
     const { id, dataType } = useParams();
     const { token } = useAuth();
@@ -17,11 +17,11 @@ export default function EditView() {
     const [detailsData, setDetailsData] = useState(null);
 
     const components = {
-        client: ClientEditView,
-        equipment: EquipmentEditView,
-        commission: CommissionEditView,
-        company: CompanyEditView,
-        employee: EmployeeEditView
+        client: ClientDetail,
+        equipment: EquipmentDetail,
+        commission: CommissionDetail,
+        company: CompanyDetail,
+        employee: EmployeeDetail
     };
 
     const ViewComponent = components[dataType];
@@ -38,11 +38,11 @@ export default function EditView() {
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id, token]);
+    }, [id, dataType, token, apiUrl]);
 
     return (
         <Layout>
             <ViewComponent detailsData={detailsData} />
-        </Layout >
+        </Layout>
     );
 };

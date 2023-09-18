@@ -1,7 +1,7 @@
 /*import "./Main.css";*/
 import { Link } from 'react-router-dom';
 
-function IndexCompanyView() {
+function IndexCompany() {
     return (
         <div className="background-color wrapper">
             <Link to="/add-employee" >ADD EMPLOYEE</Link>
@@ -13,4 +13,4 @@ function IndexCompanyView() {
     );
 }
 
-export default IndexCompanyView;
+export default IndexCompany;

@@ -3,22 +3,21 @@ import { Rating } from '@mui/material';
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import './clientCreateForm.css';
+import './equipmentCreateForm.css';
 import { useAuth } from '../../authProvider/AuthContext';
 
-export default function ClientCreateFormView() {
+export default function EquipmentCreateForm() {
     const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
+    const [rating, setRating] = useState(0);
     const { token } = useAuth();
 	const [errorMessage, setErrorMessage] = useState('');
 
     async function handleSubmit(event) {
         event.preventDefault();
-        let formFirstName = event.target.firstName.value;
-        let formLastName = event.target.lastName.value;
-        let formEmail = event.target.email.value;
-        let formPhoneNubmer = event.target.phoneNumber.value;
-        let formAddress = event.target.address.value;
+        let formSerialNumber = event.target.serialNumber.value;
+        let formCategory = event.target.category.value;
+        let formLocation = event.target.location.value;
 		let companyResponse = await fetch(`${apiUrl}/api/company`, {
             method: "GET",
             headers: {
@@ -31,16 +30,16 @@ export default function ClientCreateFormView() {
 
 			const companyId = companyData.id;
 
+
         let raw = JSON.stringify({
-            "firstName": formFirstName,
-            "lastName": formLastName,
-            "email": formEmail,
-            "phoneNumber": formPhoneNubmer,
-            "contactAddress": formAddress,
+            "serialNumber": formSerialNumber,
+            "category": formCategory,
+            "location": formLocation,
+            "condition": rating,
             "companyId": companyId
         });
 
-        const response = await fetch(`${apiUrl}/api/client`, {
+        const response = await fetch(`${apiUrl}/api/equipment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -52,8 +51,8 @@ export default function ClientCreateFormView() {
 			const errorJson = await response.json();
 			setErrorMessage(errorJson.Message);
 		} else {
-			const clientData = await response.json();
-			navigate('/client/' + clientData.id);
+			const equipmentData = await response.json();
+			navigate("/equipment/" + equipmentData.id);
 		}
 		};
     }
@@ -62,26 +61,29 @@ export default function ClientCreateFormView() {
         <div >
 			{errorMessage && <div className="error-message">{errorMessage}</div>}
             <form onSubmit={ handleSubmit }>
-                <label for="firstName">First Name: </label>
+                <label for="category">Category: </label>
                 <br/>
-                <input type="text" id="firstName" name="firstName" />
+                <input type="text" id="category" name="category" />
                 <br/>
-                <label for="lastName">Last Name: </label>
+                <label for="location">Location: </label>
                 <br/>
-                <input type="text" id="lastName" name="LastName" />
+                <input type="text" id="location" name="location" />
+                <br />
+				<label for="serialNumber">Serial Number: </label>
                 <br/>
-                <label for="email">Email: </label>
+                <input type="text" id="serialNumber" name="serialNumber" />
                 <br/>
-                <input type="email" id="email" name="email" />
-                <br />
-                <label for="phoneNumber">Phone Number: </label>
-                <br />
-                <input type="text" id="phoneNumber" name="phoneNumber" />
-                <br />
-                <label for="address">Address: </label>
-                <br />
-                <input type="text" id="address" name="address" />
-                <br />
+                <label for="rating">Condition: </label>
+                <br/>
+                <Rating
+                    id="rating"
+                    name="rating"
+                    value={rating}
+                    onChange={(event, newValue) => {
+                        setRating(newValue);
+                    }}
+                />
+                <br/>
                 <Button type="submit">Submit</Button>
             </form>
         </div>

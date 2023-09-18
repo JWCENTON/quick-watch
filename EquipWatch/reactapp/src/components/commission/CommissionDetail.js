@@ -8,7 +8,7 @@ import { parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import Select from "react-select";
 
-export default function CommissionDetailView({ detailsData }) {
+export default function CommissionDetail({ detailsData }) {
     const [availableEquipment, setAvailableEquipment] = useState(null);
     const [assignedWorkers, setAssignedWorkers] = useState(null);
     const [assignedEquipment, setAssignedEquipment] = useState(null);

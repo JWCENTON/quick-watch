@@ -2,19 +2,19 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { SidebarProvider } from './contexts/SidebarContext';
-import { AuthProvider } from './components/authProvider/AuthContext'
+//import { AuthProvider } from './components/authProvider/AuthContext'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import Registration from './pages/registration/Registration';
-import ErrorPage from './pages/error/error-page';
-import MainPage from './pages/mainPage/MainPage';
-import CardList from './pages/cardList/CardListPage';
+import Error from './pages/error/Error';
+import Main from './pages/main/Main';
+import CardList from './pages/cardList/CardList';
 import PersonalInfoPage from './pages/personalInfo/PersonalInfo';
-import DetailView from './pages/detailView/DetailView';
-import EditView from './pages/editView/EditView';
+import Detail from './pages/detail/Detail';
+import Edit from './pages/edit/Edit';
 import CreateForm from './pages/createForm/CreateForm';
-import ForgotPasswordPage from './pages/passwordReset/ForgotPasswordPage';
+import ForgotPassword from './pages/passwordReset/ForgotPassword';
 import ResetPassword from './components/resetPassword/ResetPassword';
 
 
@@ -22,19 +22,19 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
-        errorElement: <ErrorPage />,
+        errorElement: <Error />,
         children: [
-            { path: "main", element: <MainPage /> },
+            { path: "main", element: <Main /> },
             { path: "register", element: <Registration /> },
-            { path: "forgotpassword", element: <ForgotPasswordPage /> },
+            { path: "forgotpassword", element: <ForgotPassword /> },
             { path: "resetPassword/:userId/:token", element: <ResetPassword /> },
             { path: "clients", element: <CardList /> },
             { path: "companies", element: <CardList /> },
             { path: "equipment", element: <CardList /> },
             { path: "commissions", element: <CardList /> },
             { path: "personal-info", element: <PersonalInfoPage /> },
-            { path: ":dataType/:id", element: <DetailView /> },
-            { path: ":dataType/:id/edit", element: <EditView /> },
+            { path: ":dataType/:id", element: <Detail /> },
+            { path: ":dataType/:id/edit", element: <Edit /> },
             { path: "search", element: <CardList /> },
             { path: "/:formType/create", element: <CreateForm /> }
         ]

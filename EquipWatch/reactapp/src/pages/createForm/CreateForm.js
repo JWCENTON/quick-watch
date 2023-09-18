@@ -1,21 +1,21 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import ClientCreateFormView from '../../components/client/clientCreateForm/ClientCreateFormView';
-import EquipmentCreateFormView from '../../components/equipment/equipmentCreateForm/EquipmentCreateFormView';
-//import EmployeeCreateFormView from '../../components/employee/employeeCreateForm/EmployeeCreateFormView';
-import CommissionCreateFormView from '../../components/commission/commissionCreateForm/CommissionCreateFormView';
-//import CompanyCreateFormView from '../../components/company/companyCreateForm/CompanyCreateFormView';
+import ClientCreateForm from '../../components/client/clientCreateForm/ClientCreateForm';
+import EquipmentCreateForm from '../../components/equipment/equipmentCreateForm/EquipmentCreateForm';
+//import EmployeeCreateForm from '../../components/employee/employeeCreateForm/EmployeeCreateForm';
+import CommissionCreateForm from '../../components/commission/commissionCreateForm/CommissionCreateForm';
+//import CompanyCreateForm from '../../components/company/companyCreateForm/CompanyCreateForm';
 
 const CreateForm = () => {
     const { formType } = useParams();
 
     const componentMap = {
-        'client': ClientCreateFormView,
-        'equipment': EquipmentCreateFormView,
-        //'employee': EmployeeCreateFormView,
-        'commission': CommissionCreateFormView,
-        //'company': CompanyCreateFormView,
+        'client': ClientCreateForm,
+        'equipment': EquipmentCreateForm,
+        //'employee': EmployeeCreateForm,
+        'commission': CommissionCreateForm,
+        //'company': CompanyCreateForm,
     }
 
     const FormView = componentMap[formType];

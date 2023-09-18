@@ -10,7 +10,7 @@ import Select from "react-select";
 import QRCode from "react-qr-code";
 //import { Wrapper, Trigger } from 'react-download-svg';
 
-export default function EquipmentDetailView({ detailsData }) {
+export default function EquipmentDetail({ detailsData }) {
     const [details, setDetails] = useState(detailsData);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
     const [showCheckinModal, setShowCheckinModal] = useState(false);

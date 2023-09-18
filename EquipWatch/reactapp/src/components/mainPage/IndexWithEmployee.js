@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function IndexEmployeeView() {
+function IndexEmployee() {
     return (
         <div className="background-color wrapper">
             <h3>EQUIPMENT :</h3>
@@ -12,4 +12,4 @@ function IndexEmployeeView() {
     );
 }
 
-export default IndexEmployeeView;
+export default IndexEmployee;

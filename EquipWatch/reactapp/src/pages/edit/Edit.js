@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { SidebarContext } from '../../contexts/SidebarContext';
 import { useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import ClientDetailView from '../../components/client/ClientDetailView';
-import EquipmentDetailView from '../../components/equipment/EquipmentDetailView';
-import CompanyDetailView from '../../components/company/CompanyDetailView';
-import EmployeeDetailView from '../../components/employee/EmployeeDetailView';
-import CommissionDetailView from '../../components/commission/CommissionDetailView';
+import ClientEdit from '../../components/client/ClientEdit';
+import EquipmentEdit from '../../components/equipment/EquipmentEdit';
+import CommissionEdit from '../../components/commission/CommissionEdit';
+import CompanyEdit from '../../components/company/CompanyEdit';
+import EmployeeEdit from '../../components/employee/EmployeeEdit';
 import { useAuth } from '../../components/authProvider/AuthContext';
-import './DetailView.css';
 
-export default function DetailView() {
+export default function Edit() {
     const apiUrl = process.env.REACT_APP_API_URL;
     const { id, dataType } = useParams();
     const { token } = useAuth();
@@ -17,11 +17,11 @@ export default function DetailView() {
     const [detailsData, setDetailsData] = useState(null);
 
     const components = {
-        client: ClientDetailView,
-        equipment: EquipmentDetailView,
-        commission: CommissionDetailView,
-        company: CompanyDetailView,
-        employee: EmployeeDetailView
+        client: ClientEdit,
+        equipment: EquipmentEdit,
+        commission: CommissionEdit,
+        company: CompanyEdit,
+        employee: EmployeeEdit
     };
 
     const ViewComponent = components[dataType];
@@ -38,11 +38,11 @@ export default function DetailView() {
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id, dataType, token]);
+    }, [id, token]);
 
     return (
         <Layout>
             <ViewComponent detailsData={detailsData} />
-        </Layout>
+        </Layout >
     );
 };

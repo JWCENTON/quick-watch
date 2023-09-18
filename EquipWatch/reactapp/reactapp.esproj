@@ -21,9 +21,7 @@
     <Folder Include="src\components\privateRoute\" />
     <Folder Include="src\components\userRegistration\" />
     <Folder Include="src\contexts\" />
-    <Folder Include="src\pages\cardList\" />
     <Folder Include="src\pages\login\" />
-    <Folder Include="src\pages\mainPage\" />
     <Folder Include="src\pages\createForm\" />
     <Folder Include="src\pages\personalInfo\" />
   </ItemGroup>

@@ -13,7 +13,7 @@ import { useAuth } from '../authProvider/AuthContext'; // Import useAuth
 //    setCommissions(data);
 //}
 
-export default function ClientDetailView({ detailsData }) {
+export default function ClientDetail({ detailsData }) {
     const { token } = useAuth();
     return (
         <div className="details-section">

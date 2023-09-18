@@ -8,7 +8,7 @@ import './commissionCreateForm.css';
 import { DateRangePicker } from 'react-date-range';
 import { useAuth } from '../../authProvider/AuthContext';
 
-export default function CommissionCreateFormView() {
+export default function CommissionCreateForm() {
     const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const [options, setOptions] = useState(null);
