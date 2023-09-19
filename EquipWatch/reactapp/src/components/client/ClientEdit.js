@@ -1,8 +1,7 @@
 function ClientEdit({ detailsData }) {
 
     return (
-        <div>
-            
+        <div>            
         </div>
     );
 }

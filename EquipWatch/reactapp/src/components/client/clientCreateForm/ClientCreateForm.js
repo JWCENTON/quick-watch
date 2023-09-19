@@ -1,5 +1,4 @@
 import React from 'react';
-import { Rating } from '@mui/material';
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";

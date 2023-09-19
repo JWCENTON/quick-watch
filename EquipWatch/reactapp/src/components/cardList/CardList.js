@@ -24,7 +24,6 @@ function CardList() {
         displayedCategory = location.pathname.slice(1);
     }
 
-    // eslint-disable-next-line default-case
     switch (displayedCategory) {
         case 'equipment':
             itemType = 'equipment';
@@ -47,7 +46,6 @@ function CardList() {
 
     useEffect(() => {
         let url;
-        // eslint-disable-next-line default-case
         switch (displayedCategory) {
             case 'equipment':
                 url = `${apiUrl}/api/equipment`;
@@ -139,7 +137,6 @@ function CardList() {
 
     return (
         <div className="card-section">
-            {/*<a className="myAndAllSwitch" href="/" >My {displayedCategory}</a> | <a className="myAndAllSwitch" href="/" >All {displayedCategory}</a>*/}
             <div>
                 {cards == null ? <p>Loading...</p> : cards.map((card, index) => (
                     <UniversalCard key={index} data={card} dataType={itemType} insideCardList={true} />

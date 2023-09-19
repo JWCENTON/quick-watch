@@ -1,20 +1,7 @@
 import React from 'react';
-import UniversalCard from '../card/Card';
 import { Button } from 'react-bootstrap';
-import { useAuth } from '../authProvider/AuthContext'; // Import useAuth
-
-
-//const apiUrl = process.env.REACT_APP_API_URL;
-//const [Commissions, setCommissions] = useState(null);
-
-//async function GetClientCommissions() {
-//    const response = await fetch(`${apiUrl}/api/client/commissions`);
-//    const data = await response.json();
-//    setCommissions(data);
-//}
 
 export default function ClientDetail({ detailsData }) {
-    const { token } = useAuth();
     return (
         <div className="details-section">
         { detailsData === null ? (
@@ -35,9 +22,6 @@ export default function ClientDetail({ detailsData }) {
                     </div>
                     <div className="section-right">
                         <h4 className="details-header">Assigned Commissions</h4>
-                        {/*<div className="cardsContainer">*/}
-                        {/*    {Commissions == null ? <p>Loading...</p> : Commissions.map((card, index) => (<UniversalCard key={index} data={Commissions} dataType={'commission'}></UniversalCard>))}*/}
-                        {/*</div>*/}
                         <div className="button-section">
                             <Button className="detail-view-btn">Add Commission</Button>
                         </div>

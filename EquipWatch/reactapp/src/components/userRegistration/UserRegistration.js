@@ -5,14 +5,23 @@ import './UserRegistration.css';
 
 function Registration() {
     const navigate = useNavigate();
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+    });
     const [errorMessage, setErrorMessage] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const apiUrl = process.env.REACT_APP_API_URL;
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,17 +37,11 @@ function Registration() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                email,
-                password,
-            }),
+            body: JSON.stringify(formData),
         });
 
         if (response.ok) {
-            console.log('Registration successful');
-            const username = `${firstName} ${lastName}`;
+            const username = `${formData.firstName} ${formData.lastName}`;
             navigate('/', { state: { registrationSuccess: true, username } });
         } else {
             try {
@@ -52,7 +55,6 @@ function Registration() {
                     setErrorMessage(['Registration failed: An error occurred.']);
                 }
             } catch (error) {
-                console.log('Error parsing error response:', error);
                 setErrorMessage(['Registration failed: An error occurred.']);
             }
         }
@@ -77,26 +79,30 @@ function Registration() {
                 <input
                     type="text"
                     placeholder="First Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
                 />
                 <input
                     type="text"
                     placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
                 />
                 <input
                     type="email"
                     placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                 />
                 <input
                     type="password"
                     placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                 />
                 <Button onClick={handleRegister} type="submit" variant="outline-primary" disabled={isLoading}>
                     Register

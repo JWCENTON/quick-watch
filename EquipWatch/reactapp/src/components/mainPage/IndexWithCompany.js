@@ -1,4 +1,3 @@
-/*import "./Main.css";*/
 import { Link } from 'react-router-dom';
 
 function IndexCompany() {

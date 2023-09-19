@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Modal, ListGroup } from 'react-bootstrap';
-import { useNavigate } from 'react-router'
+import { Button, Modal } from 'react-bootstrap';
 import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -9,51 +8,91 @@ import DatePicker from 'react-datepicker';
 import Select from "react-select";
 
 export default function CommissionDetail({ detailsData }) {
-    const [availableEquipment, setAvailableEquipment] = useState(null);
-    const [assignedWorkers, setAssignedWorkers] = useState(null);
-    const [assignedEquipment, setAssignedEquipment] = useState(null);
-    const [availableWorkers, setAvailableWorkers] = useState(null);
-    const [showEquipmentModal, setShowEquipmentModal] = useState(false);
-    const [showWorkerModal, setShowWorkerModal] = useState(false);
-    const [endDate, setEndDate] = useState(null);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [succesfullMessage, setSuccesfullMessage] = useState('');
-    const [selectedEquipment, setSelectedEquipment] = useState('');
-    const [selectedWorker, setSelectedWorker] = useState('');
-    const [maxDate, setMaxDate] = useState(null)
-    const navigate = useNavigate()
+
+    const [equipmentState, setEquipmentState] = useState({
+        availableEquipment: null,
+        assignedEquipment: null,
+        selectedEquipment: '',
+        endDate: null,
+    });
+
+    const [workerState, setWorkerState] = useState({
+        assignedWorkers: null,
+        availableWorkers: null,
+        selectedWorker: '',
+    });
+
+    const [modalState, setModalState] = useState({
+        showEquipmentModal: false,
+        showWorkerModal: false,
+        errorMessage: '',
+        succesfullMessage: '',
+        maxDate: null,
+    });
+
     const { token } = useAuth();
     const apiUrl = process.env.REACT_APP_API_URL;
 
     const handleEquipmentClose = () => {
-        setShowEquipmentModal(false)
-        setErrorMessage('');
-        setSelectedEquipment('');
-        setEndDate(null);
+        setModalState((prevState) => ({
+            ...prevState,
+            showEquipmentModal: false,
+            errorMessage: '',
+        }));
+        setEquipmentState((prevState) => ({
+            ...prevState,
+            selectedEquipment: '',
+            endDate: null,
+        }));
     };
+
     const handleEquipmentShow = () => {
-        setSuccesfullMessage('')
-        setShowEquipmentModal(true)
+        setModalState((prevState) => ({
+            ...prevState,
+            succesfullMessage: '',
+            showEquipmentModal: true,
+        }));
+
     };
 
     const handleWorkerClose = () => {
-        setShowWorkerModal(false)
-        setErrorMessage('');
-        setSelectedWorker('')
+        setModalState((prevState) => ({
+            ...prevState,
+            showWorkerModal: false,
+            errorMessage: '',
+        }));
+
+        setWorkerState((prevState) => ({
+            ...prevState,
+            selectedWorker: '',
+        }));
     };
+
     const handleWorkerShow = () => {
-        setSuccesfullMessage('')
-        setShowWorkerModal(true)
+        setModalState((prevState) => ({
+            ...prevState,
+            succesfullMessage: '',
+        }));
+        setModalState((prevState) => ({
+            ...prevState,
+            showWorkerModal: true,
+        }));
     };
 
     const handleEquipmentChange = (selectedOption) => {
-        setSelectedEquipment(selectedOption);
-        setEndDate(null)
+        setEquipmentState((prevState) => ({
+            ...prevState,
+            selectedEquipment: selectedOption,
+            endDate: null,
+        }));
+
     };
+
     const handleWorkerChange = (selectedOption) => {
-        selectedOption == null ?
-            setSelectedWorker('') :
-            setSelectedWorker(selectedOption);
+        setWorkerState((prevState) => ({
+            ...prevState,
+            selectedWorker: selectedOption ? selectedOption : '',
+        }));
     };
 
     async function fetchEquipmentData() {
@@ -75,7 +114,10 @@ export default function CommissionDetail({ detailsData }) {
 
             };
         });
-        setAssignedEquipment(modifiedData);
+        setEquipmentState((prevState) => ({
+            ...prevState,
+            assignedEquipment: modifiedData,
+        }));        
     }
 
     async function fetchWorkersData() {
@@ -88,7 +130,10 @@ export default function CommissionDetail({ detailsData }) {
         }
         let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/employees`, { method: "GET", headers });
         let data = await response.json();
-        setAssignedWorkers(data);
+        setWorkerState((prevState) => ({
+            ...prevState,
+            assignedWorkers: data,
+        }));
     }
 
     async function GetEquipmentModalData() {
@@ -101,7 +146,10 @@ export default function CommissionDetail({ detailsData }) {
         }
         let response = await fetch(`${apiUrl}/api/equipment/available`, { method: "GET", headers });
         let data = await response.json();
-        setAvailableEquipment(data);
+        setEquipmentState((prevState) => ({
+            ...prevState,
+            availableEquipment: data,
+        })); 
     }
 
     async function GetEmployeeModalData() {
@@ -114,7 +162,10 @@ export default function CommissionDetail({ detailsData }) {
         }
         let response = await fetch(`${apiUrl}/api/user/${detailsData.id}/availableEmployees`, { method: "GET", headers });
         let data = await response.json();
-        setAvailableWorkers(data);
+        setWorkerState((prevState) => ({
+            ...prevState,
+            availableWorkers: data,
+        })); 
     }
 
     async function AddEmployee(event) {
@@ -127,26 +178,32 @@ export default function CommissionDetail({ detailsData }) {
             headers['Authorization'] = `Bearer ${token}`;
         }
         let raw = JSON.stringify({
-            "employeeId": selectedWorker.value
+            "employeeId": workerState.selectedWorker.value
         });
         let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/employees`, { method: "POST", headers: headers, body: raw });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setErrorMessage(errorJson.Message);
+            setModalState((prevState) => ({
+                ...prevState,
+                errorMessage: errorJson.Message,
+            })); 
         } else if (response.ok) {
             handleWorkerClose()
             fetchWorkersData()
-            let worker = availableWorkers.find(e => e.id === selectedWorker.value)
-            setSuccesfullMessage(`Succesfully assigned ${worker.userName} to commission`)
+            let worker = workerState.availableWorkers.find(e => e.id === workerState.selectedWorker.value)
+            setModalState((prevState) => ({
+                ...prevState,
+                succesfullMessage: `Succesfully assigned ${worker.userName} to commission`,
+            }));
         }
     }
 
     async function handleBookingFormSubmit(event) {
         event.preventDefault();
         let raw = JSON.stringify({
-            equipmentId: selectedEquipment.value,
+            equipmentId: equipmentState.selectedEquipment.value,
             commissionId: detailsData.id,
-            endTime: endDate ? endDate.toISOString() : null
+            endTime: equipmentState.endDate ? equipmentState.endDate.toISOString() : null
         });
         const response = await fetch(`${apiUrl}/api/bookequipment/`, {
             method: "POST",
@@ -158,19 +215,28 @@ export default function CommissionDetail({ detailsData }) {
         });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setErrorMessage(errorJson.Message);
+            setModalState((prevState) => ({
+                ...prevState,
+                errorMessage: errorJson.Message,
+            }));
         } else if (response.ok) {
-            let equipment = availableEquipment.find(e => e.id === selectedEquipment.value)
+            let equipment = equipmentState.availableEquipment.find(e => e.id === equipmentState.selectedEquipment.value)
             handleEquipmentClose()
             fetchEquipmentData()
-            setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`)
+            setModalState((prevState) => ({
+                ...prevState,
+                succesfullMessage: `Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`,
+            }));
         }
     }
     useEffect(() => {
         if (detailsData != null && detailsData.available === undefined) {
             fetchEquipmentData();
             fetchWorkersData();
-            setMaxDate(detailsData.endTime == null ? null : detailsData.endTime.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:00"));
+            setModalState((prevState) => ({
+                ...prevState,
+                maxDate: detailsData.endTime == null ? null : detailsData.endTime.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:00"),
+            }));
         }
     }, [detailsData]);
 
@@ -178,18 +244,18 @@ export default function CommissionDetail({ detailsData }) {
         if (detailsData != null) {
             GetEquipmentModalData()
         }
-    }, [showEquipmentModal]);
+    }, [modalState.showEquipmentModal]);
 
     useEffect(() => {
         if (detailsData != null) {
             GetEmployeeModalData()
         }
-    }, [showWorkerModal]);
+    }, [modalState.showWorkerModal]);
 
     return (
         <div className="details-section">
-            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
-            {detailsData === null || assignedEquipment == null ? (
+            {modalState.succesfullMessage && <div className="success-message">{modalState.succesfullMessage}</div>}
+            {detailsData === null || equipmentState.assignedEquipment == null ? (
                 <p>Loading...</p>
             ) : (
 
@@ -205,7 +271,9 @@ export default function CommissionDetail({ detailsData }) {
                         <div className="section-left">
                             <h4 className="details-header">Workers</h4>
                             <div className="cardsContainer">
-                                {assignedWorkers == null ? <p>Loading Workers...</p> : assignedWorkers.length === 0 ? <p>No Workers Assigned</p> : assignedWorkers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>))}
+                                    {workerState.assignedWorkers == null ?
+                                        <p>Loading Workers...</p> : workerState.assignedWorkers.length === 0 ?
+                                            <p>No Workers Assigned</p> : workerState.assignedWorkers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleWorkerShow}>Add Worker</Button>
@@ -214,25 +282,27 @@ export default function CommissionDetail({ detailsData }) {
                         <div className="section-right">
                             <h4 className="details-header">Equipment</h4>
                             <div className="cardsContainer">
-                                {assignedEquipment == null ? <p>Loading Equipment...</p> : assignedEquipment.length === 0 ? <p>No Equipment Assigned</p> : assignedEquipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
+                                    {equipmentState.assignedEquipment == null ?
+                                        <p>Loading Equipment...</p> : equipmentState.assignedEquipment.length === 0 ?
+                                            <p>No Equipment Assigned</p> : equipmentState.assignedEquipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
                             </div>
-                            <Modal show={showEquipmentModal} onHide={handleEquipmentClose}>
+                                <Modal show={modalState.showEquipmentModal} onHide={handleEquipmentClose}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Equipment booking</Modal.Title>
                                 </Modal.Header>
-                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
-                                {availableEquipment === null ? <>loading...</> :
+                                    {modalState.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{modalState.errorMessage}</div>}
+                                    {equipmentState.availableEquipment === null ? <>loading...</> :
                                     <form onSubmit={(event) => handleBookingFormSubmit(event)}>
                                         <Modal.Body>
                                             <label htmlFor="selectedEquipment">Choose an available Equipment:</label>
                                             <br />
                                             <Select
-                                                value={selectedEquipment}
+                                                    value={equipmentState.selectedEquipment}
                                                 onChange={handleEquipmentChange}
-                                                options={availableEquipment.map((equipment) => ({
+                                                    options={equipmentState.availableEquipment.map((equipment) => ({
                                                     value: equipment.id,
                                                     label: <>SN: {equipment.serialNumber}<br /> Category: {equipment.category}<br />
                                                         Location: {equipment.location}</>,
@@ -245,10 +315,13 @@ export default function CommissionDetail({ detailsData }) {
                                             <label htmlFor="endDate">Select an end date:</label>
                                             <br />
                                             <DatePicker
-                                                selected={endDate}
-                                                onChange={item => setEndDate(item)}
+                                                    selected={equipmentState.endDate}
+                                                    onChange={item => setEquipmentState((prevState) => ({
+                                                        ...prevState,
+                                                        endDate: item,
+                                                    }))}
                                                 minDate={new Date()}
-                                                maxDate={parseISO(maxDate)}
+                                                    maxDate={parseISO(modalState.maxDate)}
                                                 dateFormat="dd/MM/yyyy"
                                                 isClearable={true}
                                             />
@@ -259,20 +332,20 @@ export default function CommissionDetail({ detailsData }) {
                                     </form>
                                 }
                             </Modal>
-                            <Modal show={showWorkerModal} onHide={handleWorkerClose}>
+                                <Modal show={modalState.showWorkerModal} onHide={handleWorkerClose}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Add Worker</Modal.Title>
                                 </Modal.Header>
-                                {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
-                                {availableWorkers === null ? <>loading...</> :
+                                    {modalState.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{modalState.errorMessage}</div>}
+                                    {workerState.availableWorkers === null ? <>loading...</> :
                                     <form onSubmit={(event) => AddEmployee(event)}>
                                         <Modal.Body>
                                             <label htmlFor="selectedWorker">Choose worker:</label>
                                             <br />
                                             <Select
-                                                value={selectedWorker}
+                                                    value={workerState.selectedWorker}
                                                 onChange={handleWorkerChange}
-                                                options={availableWorkers.map((worker) => ({
+                                                    options={workerState.availableWorkers.map((worker) => ({
                                                     value: worker.id,
                                                     label: <>{worker.userName}</>
                                                 }))}
