@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { SidebarContext } from '../../contexts/SidebarContext';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import ClientEdit from '../../components/client/ClientEdit';
