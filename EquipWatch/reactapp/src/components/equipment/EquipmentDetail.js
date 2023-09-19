@@ -77,12 +77,12 @@ export default function EquipmentDetail({ detailsData }) {
 
     useEffect(() => {
         if (details && details.available !== undefined) {
-            setBooking({
-                ...booking,
+            setBooking((prevState) => ({
+                ...prevState,
                 isAvailable: details.available,
                 inWarehouse: details.inWarehouse,
                 location: details.location,
-            });
+            }));
         }
     }, [details]);
 
@@ -155,20 +155,20 @@ export default function EquipmentDetail({ detailsData }) {
     };
 
     const handleCommissionChange = (selectedOption) => {
-        setBooking({
-            ...booking,
-            selectedCommission: selectedOption,
-        });
+        setBooking((prevState) => ({
+            ...prevState,
+            selectedCommission: selectedOption
+        }));
         const dateString =
             selectedOption == null
                 ? null
                 : commissionList.find((c) => c.id === selectedOption.value).endTime.props
                     .children;
-        setBooking({
-            ...booking,
+        setBooking((prevState) => ({
+            ...prevState,
             maxDate: dateString == null ? null : dateString.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00'),
             endDate: null,
-        });
+        }));
     };
 
     async function updateDetails() {
@@ -244,17 +244,18 @@ export default function EquipmentDetail({ detailsData }) {
             getCommissionDetails(result.commissionId)
             handleBookingModalClose();
             var updatedLocation = await updateDetails()
-            if (updatedLocation.includes("On the way to"))
+            if (updatedLocation.includes("On the way to")) {
                 await setMessages((prevState) => ({
                     ...prevState,
                     succesfullMessage:
                         `Succesfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`
                 }));
-        } else {
-            setMessages((prevState) => ({
-                ...prevState,
-                succesfullMessage: `Succesfully created a booking for ${detailsData.serialNumber}`
-            }));
+            } else {
+                setMessages((prevState) => ({
+                    ...prevState,
+                    succesfullMessage: `Succesfully created a booking for ${detailsData.serialNumber}`
+                }));
+            } 
         }
     }
 
@@ -296,7 +297,7 @@ export default function EquipmentDetail({ detailsData }) {
         } else if (response.ok) {
             handleCheckinModalClose();
             var updatedLocation = await updateDetails()
-            setMessages((prevState) => ({...prevState, setSuccesfullMessage: `Succesfully checked in equipment at ${updatedLocation}`}));
+            setMessages((prevState) => ({...prevState, succesfullMessage: `Succesfully checked in equipment at ${updatedLocation}`}));
         }
     }
 
@@ -414,7 +415,7 @@ export default function EquipmentDetail({ detailsData }) {
                                 <div>
                                     <DatePicker
                                         selected={booking.endDate}
-                                            onChange={item => setBooking(...booking, { endDate:item })}
+                                            onChange={item => setBooking((prevState) => ({ ...prevState, endDate: item }))}
                                         minDate={new Date()}
                                         maxDate={parseISO(booking.maxDate)}
                                         dateFormat="dd/MM/yyyy"
