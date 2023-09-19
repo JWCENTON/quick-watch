@@ -1,55 +1,67 @@
-import React from 'react';
-import { useState, useContext, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext';
 import UniversalCard from '../card/Card';
 import DatePicker from 'react-datepicker';
 import { parseISO } from 'date-fns';
-import Select from "react-select";
-import QRCode from "react-qr-code";
-//import { Wrapper, Trigger } from 'react-download-svg';
+import Select from 'react-select';
+import QRCode from 'react-qr-code';
 
 export default function EquipmentDetail({ detailsData }) {
     const [details, setDetails] = useState(detailsData);
-    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-    const [showCheckinModal, setShowCheckinModal] = useState(false);
-    const [showBookingModal, setShowBookingModal] = useState(false);
-    const [isAvailable, setIsAvailable] = useState(false);
-    const [inWarehouse, setInWarehouse] = useState(false);
-    const [location, setLocation] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [succesfullMessage, setSuccesfullMessage] = useState('');
+    const [modals, setModals] = useState({
+        showCheckoutModal: false,
+        showCheckinModal: false,
+        showBookingModal: false,
+    });
+    const [booking, setBooking] = useState({
+        isAvailable: false,
+        inWarehouse: false,
+        location: '',
+        selectedCommission: '',
+        maxDate: null,
+        endDate: null,
+    });
+    const [messages, setMessages] = useState({
+        errorMessage: '',
+        succesfullMessage: '',
+    });
     const navigate = useNavigate();
     const { token } = useAuth();
     const [commissionList, setCommissionList] = useState([]);
     const [currentBooking, setCurrentBooking] = useState(null);
     const [currentCommission, setCurrentCommission] = useState(null);
-    const [selectedCommission, setSelectedCommission] = useState('');
-    const [maxDate, setMaxDate] = useState(null)
-    const [endDate, setEndDate] = useState(null);
     const apiUrl = process.env.REACT_APP_API_URL;
-
-
 
     useEffect(() => {
         if (detailsData && detailsData.available !== undefined) {
-            setDetails(detailsData)
-            setIsAvailable(detailsData.available);
-            setInWarehouse(detailsData.inWarehouse)
-            setLocation(detailsData.location);
+            setDetails(detailsData);
+            setBooking({
+                isAvailable: detailsData.available,
+                inWarehouse: detailsData.inWarehouse,
+                location: detailsData.location,
+                selectedCommission: '',
+                maxDate: null,
+                endDate: null,
+            });
             const fetchCommissions = async () => {
                 const response = await fetch(`${apiUrl}/api/commission`, {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 const data = await response.json();
-                const modifiedData = await data.map(item => {
+                const modifiedData = await data.map((item) => {
                     return {
                         ...item,
-                        endTime: item.endTime == null ? <span> Not specified </span> : <span>{item.endTime}</span>
+                        endTime:
+                            item.endTime == null ? (
+                                <span> Not specified </span>
+                            ) : (
+                                <span>{item.endTime}</span>
+                            ),
                     };
                 });
 
@@ -61,49 +73,102 @@ export default function EquipmentDetail({ detailsData }) {
                 getCommissionDetails();
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [detailsData, token]);
-
 
     useEffect(() => {
         if (details && details.available !== undefined) {
-            setIsAvailable(details.available);
-            setInWarehouse(details.inWarehouse)
-            setLocation(details.location);
+            setBooking({
+                ...booking,
+                isAvailable: details.available,
+                inWarehouse: details.inWarehouse,
+                location: details.location,
+            });
         }
     }, [details]);
 
-    useEffect(() => {}, [isAvailable, location]);
-
-    const handleCheckoutModalClose = () => { setShowCheckoutModal(false); setErrorMessage(''); };
+    const handleCheckoutModalClose = () => {
+        setModals({
+            ...modals,
+            showCheckoutModal: false,
+        });
+        setMessages({
+            ...messages,
+            errorMessage: '',
+        });
+    };
     const handleCheckoutModalShow = () => {
-        setSuccesfullMessage('')
-        setShowCheckoutModal(true)
+        setMessages({
+            ...messages,
+            succesfullMessage: '',
+        });
+        setModals({
+            ...modals,
+            showCheckoutModal: true,
+        });
     };
 
     const handleBookingModalClose = () => {
-        setShowBookingModal(false);
-        setErrorMessage('');
-        setSelectedCommission('');
-        setEndDate(null);
+        setModals({
+            ...modals,
+            showBookingModal: false,
+        });
+        setMessages({
+            ...messages,
+            errorMessage: '',
+        });
+        setBooking({
+            ...booking,
+            selectedCommission: '',
+            endDate: null,
+        });
     };
     const handleBookingModalShow = () => {
-        setShowBookingModal(true);
-        setSuccesfullMessage('');
+        setModals({
+            ...modals,
+            showBookingModal: true,
+        });
+        setMessages({
+            ...messages,
+            succesfullMessage: '',
+        });
     };
 
-    const handleCheckinModalClose = () => { setShowCheckinModal(false); setErrorMessage(''); };
+    const handleCheckinModalClose = () => {
+        setModals({
+            ...modals,
+            showCheckinModal: false,
+        });
+        setMessages({
+            ...messages,
+            errorMessage: '',
+        });
+    };
     const handleCheckinModalShow = () => {
-        setSuccesfullMessage('');
-        setShowCheckinModal(true);
+        setMessages({
+            ...messages,
+            succesfullMessage: '',
+        });
+        setModals({
+            ...modals,
+            showCheckinModal: true,
+        });
     };
-
 
     const handleCommissionChange = (selectedOption) => {
-        setSelectedCommission(selectedOption);
-        const dateString = selectedOption == null ? null : commissionList.find(c => c.id === selectedOption.value).endTime.props.children
-        setMaxDate(dateString == null ? null : dateString.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:00"));
-        setEndDate(null)
+        setBooking({
+            ...booking,
+            selectedCommission: selectedOption,
+        });
+        const dateString =
+            selectedOption == null
+                ? null
+                : commissionList.find((c) => c.id === selectedOption.value).endTime.props
+                    .children;
+        setBooking({
+            ...booking,
+            maxDate: dateString == null ? null : dateString.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:00'),
+            endDate: null,
+        });
     };
 
     async function updateDetails() {
@@ -155,9 +220,9 @@ export default function EquipmentDetail({ detailsData }) {
     async function handleBookingFormSubmit(event) {
         event.preventDefault();
         let raw = JSON.stringify({
-            commissionId: selectedCommission.value,
+            commissionId: booking.selectedCommission.value,
             equipmentId: detailsData.id,
-            endTime: endDate ? endDate.toISOString() : null
+            endTime: booking.endDate ? booking.endDate.toISOString() : null
         });
         const response = await fetch(`${apiUrl}/api/bookequipment/`, {
             method: "POST",
@@ -169,7 +234,7 @@ export default function EquipmentDetail({ detailsData }) {
         });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setErrorMessage(errorJson.Message);
+            setMessages(...messages, { errorMessage: errorJson.Message });
         } else if (response.ok) {
             const result = await response.json();
             await setCurrentBooking(result);
@@ -177,9 +242,12 @@ export default function EquipmentDetail({ detailsData }) {
             handleBookingModalClose();
             var updatedLocation = await updateDetails()
             if (updatedLocation.includes("On the way to"))
-                await setSuccesfullMessage(`Succesfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`)
+                await setMessages(...messages, {
+                    succesfullMessage:
+                        `Succesfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`
+                });
         } else {
-            setSuccesfullMessage(`Succesfully created a booking for ${detailsData.serialNumber}`)
+            setMessages(...messages, { succesfullMessage: `Succesfully created a booking for ${detailsData.serialNumber}` });
         }
     }
 
@@ -196,10 +264,10 @@ export default function EquipmentDetail({ detailsData }) {
         });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setErrorMessage(errorJson.Message);
+            setMessages(...messages, { setErrorMessage:errorJson.Message });
         } else if (response.ok) {
             handleCheckoutModalClose();
-            setSuccesfullMessage(`Succesfully checked out equipment from ${location}`)
+            setMessages(...messages, {succesfullMessage:`Succesfully checked out equipment from ${booking.location}`});
             await updateDetails()
             await updateBook()
         }
@@ -217,11 +285,11 @@ export default function EquipmentDetail({ detailsData }) {
         });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setErrorMessage(errorJson.Message);
+            setMessages(...messages, { errorMessage: errorJson.Message });
         } else if (response.ok) {
             handleCheckinModalClose();
             var updatedLocation = await updateDetails()
-            setSuccesfullMessage(`Succesfully checked in equipment at ${updatedLocation}`)
+            setMessages(...messages, {setSuccesfullMessage: `Succesfully checked in equipment at ${updatedLocation}`});
         }
     }
 
@@ -256,21 +324,19 @@ export default function EquipmentDetail({ detailsData }) {
 
     return (
         <div className="details-section">
-            {succesfullMessage && <div className="success-message">{succesfullMessage}</div>}
-            {details === null || isAvailable === undefined || details.available === undefined || currentBooking === undefined ? (
+            {messages.succesfullMessage && <div className="success-message">{messages.succesfullMessage}</div>}
+            {details === null || booking.isAvailable === undefined || details.available === undefined || currentBooking === undefined ? (
                 <p>Loading...</p>
             ) : (
                 <div className="details-grid">
                     <div className="section-left">
                         <h4 className="details-header">Equipment Details</h4>
-                        {/*<p>Equipment name: </p>*/}
                         <p>Serial number: {detailsData.serialNumber}</p>
-                        <p>Location: {location}</p>
+                        <p>Location: {booking.location}</p>
                         <p>Condition:
                             {[...Array(details.condition)].map((e, i) => <span className="star" key={i}>&#9733;</span>)}
                             {[...Array(5 - details.condition)].map((e, i) => <span className="dark-star" key={i}>&#9733;</span>)}
                         </p>
-                        {/*<p>Status: </p>*/}
                         <div className="button-section">
                             <Button className="detail-view-btn">Edit</Button>
                             <Button className="detail-view-btn" onClick={DeleteEquipment}>Remove</Button>
@@ -282,28 +348,31 @@ export default function EquipmentDetail({ detailsData }) {
                     <div className="section-right">
                         <h4 className="details-header">Assigned Commission</h4>
                         <div className="cardsContainer">
-                            {commissionList == null || currentCommission === undefined || commissionList.length === 0 ? <p>Loading...</p> : currentCommission == null ? <>No commission assigned.</> : commissionList.filter(card => card.id === currentCommission.id).map((card, index) => <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard>)}
+                                {commissionList == null || currentCommission === undefined || commissionList.length === 0 ?
+                                    <p>Loading...</p> : currentCommission == null ?
+                                        <>No commission assigned.</> : commissionList.filter(card => card.id === currentCommission.id).map((card, index) =>
+                                            <UniversalCard key={index} data={card} dataType={'commission'}></UniversalCard>)}
                         </div>
 
                         <h4 className="details-header">Equipment Management</h4>
                         <div className="button-section">
                             {(
                                 <>
-                                    {currentBooking === null && !inWarehouse ? (
+                                    {currentBooking === null && !booking.inWarehouse ? (
                                         <>
                                             <Button className="detail-view-btn" onClick={handleBookingModalShow}>Book Equipment</Button>
                                             <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In to Warehouse</Button>
                                         </>
                                     ) : (currentBooking === null || currentBooking === undefined) ? (
                                         <Button className="detail-view-btn" onClick={handleBookingModalShow}>Book Equipment</Button>
-                                    ) : (isAvailable && inWarehouse) || (!isAvailable && inWarehouse) ? (
+                                    ) : (booking.isAvailable && booking.inWarehouse) || (!booking.isAvailable && booking.inWarehouse) ? (
                                         <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
-                                    ) : isAvailable && !inWarehouse ? (
+                                                ) : booking.isAvailable && !booking.inWarehouse ? (
                                         <>
                                             <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout</Button>
                                             <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In to Warehouse</Button>
                                         </>
-                                    ) : !inWarehouse && !location.includes("On the way to") ? (
+                                                    ) : !booking.inWarehouse && !booking.location.includes("On the way to") ? (
                                         <Button className="detail-view-btn" onClick={handleCheckoutModalShow}>Checkout to Warehouse</Button>
                                     ) : (
                                         <Button className="detail-view-btn" onClick={handleCheckinModalShow}>Check In</Button>
@@ -312,17 +381,17 @@ export default function EquipmentDetail({ detailsData }) {
                             )}
                         </div>
                     </div>
-                    <Modal show={showBookingModal} onHide={handleBookingModalClose}>
+                    <Modal show={modals.showBookingModal} onHide={handleBookingModalClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>Equipment booking</Modal.Title>
                         </Modal.Header>
                         <form onSubmit={(event) => handleBookingFormSubmit(event)}>
-                            {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                            {messages.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{messages.errorMessage}</div>}
                             <Modal.Body>
                                 <label htmlFor="selectedCommission">Choose a commission:</label>
                                 <br />
                                 <Select
-                                    value={selectedCommission}
+                                    value={booking.selectedCommission}
                                     onChange={handleCommissionChange}
                                     options={commissionList.map((commission) => ({
                                         value: commission.id,
@@ -335,12 +404,12 @@ export default function EquipmentDetail({ detailsData }) {
                                 <br />
                                 <label htmlFor="endDate">Select an end date:</label>
                                 <br />
-                                    <div>
+                                <div>
                                     <DatePicker
-                                        selected={endDate}
-                                        onChange={item => setEndDate(item)}
+                                        selected={booking.endDate}
+                                            onChange={item => setBooking(...booking, { endDate:item })}
                                         minDate={new Date()}
-                                        maxDate={parseISO(maxDate)}
+                                        maxDate={parseISO(booking.maxDate)}
                                         dateFormat="dd/MM/yyyy"
                                         isClearable={true}
                                     />
@@ -351,12 +420,12 @@ export default function EquipmentDetail({ detailsData }) {
                             </Modal.Footer>
                         </form>
                     </Modal>
-                    <Modal show={showCheckoutModal} onHide={handleCheckoutModalClose}>
+                    <Modal show={modals.showCheckoutModal} onHide={handleCheckoutModalClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>Checkout Equipment</Modal.Title>
                         </Modal.Header>
-                        <form onSubmit={(event) => handleCheckoutFormSubmit(event, !isAvailable && !inWarehouse)}>
-                            {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                        <form onSubmit={(event) => handleCheckoutFormSubmit(event, !booking.isAvailable && !booking.inWarehouse)}>
+                            {messages.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{messages.errorMessage}</div>}
                             <Modal.Body>
                                 Are you sure?
                             </Modal.Body>
@@ -366,12 +435,12 @@ export default function EquipmentDetail({ detailsData }) {
                         </form>
                     </Modal>
 
-                    <Modal show={showCheckinModal} onHide={handleCheckinModalClose}>
+                    <Modal show={modals.showCheckinModal} onHide={handleCheckinModalClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>Check in Equipment</Modal.Title>
                         </Modal.Header>
-                        <form onSubmit={(event) => handleCheckinFormSubmit(event, (isAvailable && !inWarehouse) || (isAvailable && inWarehouse))}>
-                            {errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{errorMessage}</div>}
+                            <form onSubmit={(event) => handleCheckinFormSubmit(event, (booking.isAvailable && !booking.inWarehouse) || (booking.isAvailable && booking.inWarehouse))}>
+                            {messages.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{messages.errorMessage}</div>}
                             <Modal.Body>
                                 Are you sure?
                             </Modal.Body>
@@ -384,4 +453,4 @@ export default function EquipmentDetail({ detailsData }) {
             )}
         </div>
     );
-};
+}
