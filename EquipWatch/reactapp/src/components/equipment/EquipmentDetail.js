@@ -234,7 +234,10 @@ export default function EquipmentDetail({ detailsData }) {
         });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setMessages(...messages, { errorMessage: errorJson.Message });
+            setMessages((prevState) => ({
+                ...prevState,
+                errorMessage: errorJson.Message,
+            }));
         } else if (response.ok) {
             const result = await response.json();
             await setCurrentBooking(result);
@@ -242,12 +245,16 @@ export default function EquipmentDetail({ detailsData }) {
             handleBookingModalClose();
             var updatedLocation = await updateDetails()
             if (updatedLocation.includes("On the way to"))
-                await setMessages(...messages, {
+                await setMessages((prevState) => ({
+                    ...prevState,
                     succesfullMessage:
                         `Succesfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`
-                });
+                }));
         } else {
-            setMessages(...messages, { succesfullMessage: `Succesfully created a booking for ${detailsData.serialNumber}` });
+            setMessages((prevState) => ({
+                ...prevState,
+                succesfullMessage: `Succesfully created a booking for ${detailsData.serialNumber}`
+            }));
         }
     }
 
@@ -264,10 +271,10 @@ export default function EquipmentDetail({ detailsData }) {
         });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setMessages(...messages, { setErrorMessage:errorJson.Message });
+            setMessages((prevState) => ({...prevState, setErrorMessage:errorJson.Message }));
         } else if (response.ok) {
             handleCheckoutModalClose();
-            setMessages(...messages, {succesfullMessage:`Succesfully checked out equipment from ${booking.location}`});
+            setMessages((prevState) => ({...prevState, succesfullMessage:`Succesfully checked out equipment from ${booking.location}`}));
             await updateDetails()
             await updateBook()
         }
@@ -285,11 +292,11 @@ export default function EquipmentDetail({ detailsData }) {
         });
         if (response.status === 400) {
             const errorJson = await response.json();
-            setMessages(...messages, { errorMessage: errorJson.Message });
+            setMessages((prevState) => ({...prevState, errorMessage: errorJson.Message }));
         } else if (response.ok) {
             handleCheckinModalClose();
             var updatedLocation = await updateDetails()
-            setMessages(...messages, {setSuccesfullMessage: `Succesfully checked in equipment at ${updatedLocation}`});
+            setMessages((prevState) => ({...prevState, setSuccesfullMessage: `Succesfully checked in equipment at ${updatedLocation}`}));
         }
     }
 

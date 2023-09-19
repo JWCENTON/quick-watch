@@ -34,34 +34,65 @@ export default function CommissionDetail({ detailsData }) {
     const apiUrl = process.env.REACT_APP_API_URL;
 
     const handleEquipmentClose = () => {
-        setModalState.showEquipmentModal(false);        
-        setModalState.errorMessage('');
-        setEquipmentState.selectedEquipment('');
-        setEquipmentState.endDate(null);
+        setModalState((prevState) => ({
+            ...prevState,
+            showEquipmentModal: false,
+            errorMessage: '',
+        }));
+        setEquipmentState((prevState) => ({
+            ...prevState,
+            selectedEquipment: '',
+            endDate: null,
+        }));
     };
+
     const handleEquipmentShow = () => {
-        setModalState.succesfullMessage('');
-        setModalState.showEquipmentModal(true);
+        setModalState((prevState) => ({
+            ...prevState,
+            succesfullMessage: '',
+            showEquipmentModal: true,
+        }));
+
     };
 
     const handleWorkerClose = () => {
-        setModalState.showWorkerModal(false);
-        setModalState.errorMessage('');
-        setWorkerState.selectedWorker('');
+        setModalState((prevState) => ({
+            ...prevState,
+            showWorkerModal: false,
+            errorMessage: '',
+        }));
+
+        setWorkerState((prevState) => ({
+            ...prevState,
+            selectedWorker: '',
+        }));
     };
+
     const handleWorkerShow = () => {
-        setModalState.succesfullMessage('');
-        setModalState.showWorkerModal(true);
+        setModalState((prevState) => ({
+            ...prevState,
+            succesfullMessage: '',
+        }));
+        setModalState((prevState) => ({
+            ...prevState,
+            showWorkerModal: true,
+        }));
     };
 
     const handleEquipmentChange = (selectedOption) => {
-        setEquipmentState.selectedEquipment(selectedOption);
-        setEquipmentState.endDate(null);
+        setEquipmentState((prevState) => ({
+            ...prevState,
+            selectedEquipment: selectedOption,
+            endDate: null,
+        }));
+
     };
+
     const handleWorkerChange = (selectedOption) => {
-        selectedOption == null ?
-            setWorkerState.selectedWorker('') :
-            setWorkerState.selectedWorker(selectedOption);
+        setWorkerState((prevState) => ({
+            ...prevState,
+            selectedWorker: selectedOption ? selectedOption : '',
+        }));
     };
 
     async function fetchEquipmentData() {
