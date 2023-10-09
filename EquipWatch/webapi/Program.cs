@@ -24,8 +24,8 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // while enabled instead of local config app will use the manually fetched one from Azure KeyVault also using Azure Database
-//var tester = new AzureDatabaseAndKeyVaultTester(configuration);
-//tester.OverrideConfigToTestAzureIntegration();
+//var azureConfig = new AzureDatabaseAndKeyVaultScript(configuration);
+//azureConfig.OverrideConfigToTestAzureIntegration();
 
 var configValidator = new AppConfigValidator();
 

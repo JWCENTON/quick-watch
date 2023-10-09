@@ -4,12 +4,12 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace webapi;
 
-public class AzureDatabaseAndKeyVaultTester
+public class AzureDatabaseAndKeyVaultScript
 {
     private readonly IConfiguration _configuration;
     private readonly SecretClient _secretClient;
 
-    public AzureDatabaseAndKeyVaultTester(IConfiguration configuration)
+    public AzureDatabaseAndKeyVaultScript(IConfiguration configuration)
     {
         _configuration = configuration;
         var secretClientService = new SecretClientService(configuration);
