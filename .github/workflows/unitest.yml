@@ -22,12 +22,12 @@ jobs:
       run: dotnet restore EquipWatch/EquipWatch.sln
       
     - name: Set up environment variables
-          run:|
-            echo "SMTP=${{ secrets.SMTP }}" >> $GITHUB_ENV
-            echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
-            echo "USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
-            echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
-            echo "ADDRESS=${{ secrets.ADDRESS }}" >> $GITHUB_ENV
+      run: |
+        echo "SMTP=${{ secrets.SMTP }}" >> $GITHUB_ENV
+        echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
+        echo "USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
+        echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+        echo "ADDRESS=${{ secrets.ADDRESS }}" >> $GITHUB_ENV
             
     - name: Build and run unit tests
       run: dotnet test EquipWatch/EquipWatch.sln 
