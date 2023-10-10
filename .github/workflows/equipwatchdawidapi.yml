@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App equipwatchdawidapi
 on:
   push:
     branches:
-    - front-refactor
+    - development
 env:
   AZURE_WEBAPP_NAME: equipwatchdawidapi
   AZURE_WEBAPP_PACKAGE_PATH: .\publish
