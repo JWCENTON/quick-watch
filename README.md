@@ -16,6 +16,14 @@ EquipWatch streamlines equipment management with the following key features:
 - **Effortless Reservations**: Reserve equipment with ease for upcoming tasks.
 - **QR Integration**: Speed up the check-in and check-out process with QR code scans.
 
+## Preview
+
+![Login](https://github.com/JWCENTON/equip-watch/assets/76453068/6cb19ba6-9895-4248-b2d7-4432d4b000eb)
+![Equipments](https://github.com/JWCENTON/equip-watch/assets/76453068/a6ca7551-34ca-4114-8650-45939a259107)
+![Equipment](https://github.com/JWCENTON/equip-watch/assets/76453068/91f3ab22-29e7-4e84-a552-e38feb355692)
+
+https://github.com/JWCENTON/equip-watch/assets/76453068/7b96cc46-4002-469a-b93c-a1ef7b975ccf
+
 ## Technologies Used
 
 EquipWatch leverages a robust stack of technologies to deliver a reliable and efficient solution:
