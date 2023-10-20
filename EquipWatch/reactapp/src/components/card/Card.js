@@ -20,7 +20,7 @@ function UniversalCard({ data, dataType, insideCardList }) {
         };
     }, []);
 
-    if (windowWidth <= 768 && !insideCardList) { // Mobile view
+    if (windowWidth <= 768 && !insideCardList) {
         if (dataType !== "commission") {
             numberOfItems = 2;
         } else if (dataType === "commission") {
