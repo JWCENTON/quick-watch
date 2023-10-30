@@ -9,9 +9,8 @@ import EmployeeEdit from '../../components/employee/EmployeeEdit';
 import { useAuth } from '../../components/authProvider/AuthContext';
 
 export default function Edit() {
-    const apiUrl = process.env.REACT_APP_API_URL;
     const { id, dataType } = useParams();
-    const { token } = useAuth();
+    const auth = useAuth();
 
     const [detailsData, setDetailsData] = useState(null);
 
@@ -20,28 +19,23 @@ export default function Edit() {
         equipment: EquipmentEdit,
         commission: CommissionEdit,
         company: CompanyEdit,
-        employee: EmployeeEdit
+        employee: EmployeeEdit,
     };
 
     const ViewComponent = components[dataType];
 
     useEffect(() => {
         const fetchDetailsData = async () => {
-            const response = await fetch(`${apiUrl}/api/${dataType}/${id}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
+            const response = await auth.authAxios.get(`/api/${dataType}/${id}`); 
+            const data = response.data;
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id, token]);
+    }, [id, auth]);
 
     return (
         <Layout>
             <ViewComponent detailsData={detailsData} />
-        </Layout >
+        </Layout>
     );
-};
+}

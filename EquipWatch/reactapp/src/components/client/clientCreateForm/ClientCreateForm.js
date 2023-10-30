@@ -8,7 +8,7 @@ import { useAuth } from '../../authProvider/AuthContext';
 export default function ClientCreateForm() {
     const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
-    const { token } = useAuth();
+    const { authAxios } = useAuth();
 	const [errorMessage, setErrorMessage] = useState('');
 
     async function handleSubmit(event) {
@@ -18,43 +18,30 @@ export default function ClientCreateForm() {
         let formEmail = event.target.email.value;
         let formPhoneNubmer = event.target.phoneNumber.value;
         let formAddress = event.target.address.value;
-		let companyResponse = await fetch(`${apiUrl}/api/company`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
+        let companyResponse = await await authAxios.get('/api/company'); 
+
+        if (companyResponse.status === 200) {
+            const companyData = await companyResponse.data;
+            const companyId = companyData.id;
+
+            const requestData = {
+                firstName: formFirstName,
+                lastName: formLastName,
+                email: formEmail,
+                phoneNumber: formPhoneNubmer,
+                contactAddress: formAddress,
+                companyId: companyId,
+            };
+            const response = await authAxios.post('/api/client', requestData);
+
+            if (response.status === 200) {
+                const clientData = response.data;
+                navigate('/client/' + clientData.id);
+            } else if (response.status === 400) {
+                const errorJson = await response.json();
+                setErrorMessage(errorJson.Message);
             }
-        });
-		if (companyResponse.ok) {
-			const companyData = await companyResponse.json();
-
-			const companyId = companyData.id;
-
-        let raw = JSON.stringify({
-            "firstName": formFirstName,
-            "lastName": formLastName,
-            "email": formEmail,
-            "phoneNumber": formPhoneNubmer,
-            "contactAddress": formAddress,
-            "companyId": companyId
-        });
-
-        const response = await fetch(`${apiUrl}/api/client`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            },
-            body: raw
-        });
-		if (response.status === 400){
-			const errorJson = await response.json();
-			setErrorMessage(errorJson.Message);
-		} else {
-			const clientData = await response.json();
-			navigate('/client/' + clientData.id);
-		}
-		};
+        };
     }
 
     return (
