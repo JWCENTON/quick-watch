@@ -30,8 +30,7 @@ export default function CommissionDetail({ detailsData }) {
         maxDate: null,
     });
 
-    const { token } = useAuth();
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const { authAxios } = useAuth();
 
     const handleEquipmentClose = () => {
         setModalState((prevState) => ({
@@ -96,105 +95,90 @@ export default function CommissionDetail({ detailsData }) {
     };
 
     async function fetchEquipmentData() {
-        const headers = {
-            'Content-Type': 'application/json',
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
+        try {
+            const response = await authAxios.get(`/api/commission/${detailsData.id}/equipment`);
+            const data = response.data;
+            const modifiedData = data.map(item => {
+                return {
+                    ...item,
+                    available: item.available ? <span className="unicode-mark">&#x2705;</span> : <span className="unicode-mark">&#x274C;</span>,
+                    inWarehouse: item.inWarehouse ? <span className="unicode-mark">&#x2705;</span> : <span className="unicode-mark">&#x274C;</span>,
+                    condition: <span className="star">{`★`.repeat(item.condition)}<span className="dark-star">{`★`.repeat(5 - item.condition)}</span></span>
+                };
+            });
+            setEquipmentState((prevState) => ({
+                ...prevState,
+                assignedEquipment: modifiedData,
+            }));
+        } catch (error) {
+            console.error('Error fetching equipment data:', error);
         }
-        let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/equipment`, { method: "GET", headers });
-        let data = await response.json();
-        const modifiedData = await data.map(item => {
-            return {
-                ...item,
-                available: item.available ? <span className="unicode-mark">&#x2705;</span> : <span className="unicode-mark">&#x274C;</span>,
-                inWarehouse: item.inWarehouse ? <span className="unicode-mark">&#x2705;</span> : <span className="unicode-mark">&#x274C;</span>,
-                condition: <span className="star">{`★`.repeat(item.condition)}<span className="dark-star">{`★`.repeat(5 - item.condition)}</span></span>
-
-            };
-        });
-        setEquipmentState((prevState) => ({
-            ...prevState,
-            assignedEquipment: modifiedData,
-        }));        
     }
 
     async function fetchWorkersData() {
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
+        try {
+            const response = await authAxios.get(`/api/commission/${detailsData.id}/employees`);
+            const data = response.data;
+            setWorkerState((prevState) => ({
+                ...prevState,
+                assignedWorkers: data,
+            }));
+        } catch (error) {
+            console.error('Error fetching workers data:', error);
         }
-        let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/employees`, { method: "GET", headers });
-        let data = await response.json();
-        setWorkerState((prevState) => ({
-            ...prevState,
-            assignedWorkers: data,
-        }));
     }
 
     async function GetEquipmentModalData() {
-        const headers = {
-            'Content-Type': 'application/json',
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
+        try {
+            const response = await authAxios.get('/api/equipment/available');
+            const data = response.data;
+            setEquipmentState((prevState) => ({
+                ...prevState,
+                availableEquipment: data,
+            }));
+        } catch (error) {
+            console.error('Error fetching equipment modal data:', error);
         }
-        let response = await fetch(`${apiUrl}/api/equipment/available`, { method: "GET", headers });
-        let data = await response.json();
-        setEquipmentState((prevState) => ({
-            ...prevState,
-            availableEquipment: data,
-        })); 
     }
 
     async function GetEmployeeModalData() {
-        const headers = {
-            'Content-Type': 'application/json',
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
+        try {
+            const response = await authAxios.get(`/api/user/${detailsData.id}/availableEmployees`);
+            const data = response.data;
+            setWorkerState((prevState) => ({
+                ...prevState,
+                availableWorkers: data,
+            }));
+        } catch (error) {
+            console.error('Error fetching employee modal data:', error);
         }
-        let response = await fetch(`${apiUrl}/api/user/${detailsData.id}/availableEmployees`, { method: "GET", headers });
-        let data = await response.json();
-        setWorkerState((prevState) => ({
-            ...prevState,
-            availableWorkers: data,
-        })); 
     }
 
     async function AddEmployee(event) {
         event.preventDefault();
-        const headers = {
-            'Content-Type': 'application/json',
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
         let raw = JSON.stringify({
             "employeeId": workerState.selectedWorker.value
         });
-        let response = await fetch(`${apiUrl}/api/commission/${detailsData.id}/employees`, { method: "POST", headers: headers, body: raw });
-        if (response.status === 400) {
-            const errorJson = await response.json();
-            setModalState((prevState) => ({
-                ...prevState,
-                errorMessage: errorJson.Message,
-            })); 
-        } else if (response.ok) {
-            handleWorkerClose()
-            fetchWorkersData()
-            let worker = workerState.availableWorkers.find(e => e.id === workerState.selectedWorker.value)
-            setModalState((prevState) => ({
-                ...prevState,
-                succesfullMessage: `Succesfully assigned ${worker.userName} to commission`,
-            }));
+
+        try {
+            const response = await authAxios.post(`/api/commission/${detailsData.id}/employees`, raw);
+            if (response.status === 400) {
+                const errorJson = await response.data;
+                setModalState((prevState) => ({
+                    ...prevState,
+                    errorMessage: errorJson.Message,
+                }));
+            } else if (response.ok) {
+                handleWorkerClose();
+                fetchWorkersData();
+                let worker = workerState.availableWorkers.find(e => e.id === workerState.selectedWorker.value);
+                setModalState((prevState) => ({
+                    ...prevState,
+                    succesfullMessage: `Succesfully assigned ${worker.userName} to commission`,
+                }));
+            }
+        } catch (error) {
+            console.error('Error adding employee:', error);
         }
     }
 
@@ -205,30 +189,28 @@ export default function CommissionDetail({ detailsData }) {
             commissionId: detailsData.id,
             endTime: equipmentState.endDate ? equipmentState.endDate.toISOString() : null
         });
-        const response = await fetch(`${apiUrl}/api/bookequipment/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            },
-            body: raw
-        });
-        if (response.status === 400) {
-            const errorJson = await response.json();
-            setModalState((prevState) => ({
-                ...prevState,
-                errorMessage: errorJson.Message,
-            }));
-        } else if (response.ok) {
-            let equipment = equipmentState.availableEquipment.find(e => e.id === equipmentState.selectedEquipment.value)
-            handleEquipmentClose()
-            fetchEquipmentData()
-            setModalState((prevState) => ({
-                ...prevState,
-                succesfullMessage: `Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`,
-            }));
+        try {
+            const response = await authAxios.post('/api/bookequipment/', raw);
+            if (response.status === 400) {
+                const errorJson = await response.data;
+                setModalState((prevState) => ({
+                    ...prevState,
+                    errorMessage: errorJson.Message,
+                }));
+            } else if (response.ok) {
+                let equipment = equipmentState.availableEquipment.find(e => e.id === equipmentState.selectedEquipment.value);
+                handleEquipmentClose();
+                fetchEquipmentData();
+                setModalState((prevState) => ({
+                    ...prevState,
+                    succesfullMessage: `Succesfully created a booking for equipment with SN: ${equipment.serialNumber}`,
+                }));
+            }
+        } catch (error) {
+            console.error('Error creating equipment booking:', error);
         }
     }
+
     useEffect(() => {
         if (detailsData != null && detailsData.available === undefined) {
             fetchEquipmentData();
@@ -242,13 +224,13 @@ export default function CommissionDetail({ detailsData }) {
 
     useEffect(() => {
         if (detailsData != null) {
-            GetEquipmentModalData()
+            GetEquipmentModalData();
         }
     }, [modalState.showEquipmentModal]);
 
     useEffect(() => {
         if (detailsData != null) {
-            GetEmployeeModalData()
+            GetEmployeeModalData();
         }
     }, [modalState.showWorkerModal]);
 

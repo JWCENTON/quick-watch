@@ -8,7 +8,7 @@ import { useAuth } from '../authProvider/AuthContext';
 function CardList() {
     const [cards, setCards] = useState(null);
     const location = useLocation();
-    const { token } = useAuth();
+    const { authAxios } = useAuth();
     const apiUrl = process.env.REACT_APP_API_URL;
     let displayedCategory;
     let itemType;
@@ -65,19 +65,12 @@ function CardList() {
             default:
                 break;
         }
-        GetData(url, token);
-    }, [location, token]);
+        GetData(url, authAxios);
+    }, [location, authAxios]);
 
-    async function GetData(url, token) {
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-        const response = await fetch(url, { headers });
-        let data = await response.json();
+    async function GetData(url, authAxios) {
+        const response = await authAxios.get(url);
+        let data = response.data;
         
         if (location.search) {
             switch (displayedCategory) {

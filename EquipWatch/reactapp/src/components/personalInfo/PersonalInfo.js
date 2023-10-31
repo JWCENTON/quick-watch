@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './PersonalInfo.css';
 import { Button } from 'react-bootstrap';
+import { useAuth } from '../authProvider/AuthContext';
 
 function PersonalInfo() {
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const { authAxios } = useAuth();
     const [userInfo, setUserInfo] = useState({
         firstName: '',
         lastName: '',
@@ -38,14 +39,10 @@ function PersonalInfo() {
 
     const fetchUserInfo = async () => {
         try {
-            const response = await fetch(`${apiUrl}/api/User/getUserInfo`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
+            const response = await authAxios.get('/api/User/getUserInfo');
 
-            if (response.ok) {
-                const data = await response.json();
+            if (response.status === 200) {
+                const data = response.data;
                 setUserInfo(data);
             } else {
                 displayErrorMessage('Failed to fetch user information');
@@ -63,7 +60,7 @@ function PersonalInfo() {
         try {
             const response = await updateUserInfo();
 
-            if (response.ok) {
+            if (response.status === 200) {
                 setEditing(false);
             } else {
                 displayErrorMessage('Failed to update user information');
@@ -74,14 +71,7 @@ function PersonalInfo() {
     };
 
     const updateUserInfo = async () => {
-        return await fetch(`${apiUrl}/api/User/updateUserInfo`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            body: JSON.stringify(userInfo),
-        });
+        return await authAxios.put('/api/User/updateUserInfo', userInfo);
     };
 
     const handlePasswordChange = async (e) => {
@@ -89,7 +79,7 @@ function PersonalInfo() {
         try {
             const response = await changePassword();
 
-            if (response.ok) {
+            if (response.status === 200) {
                 clearPasswordFields();
                 displaySuccessMessage('Password has been changed successfully');
             } else {
@@ -101,14 +91,7 @@ function PersonalInfo() {
     };
 
     const changePassword = async () => {
-        return await fetch(`${apiUrl}/api/User/changePassword`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            body: JSON.stringify(passwordData),
-        });
+        return await authAxios.post('/api/User/changePassword', passwordData);
     };
 
     const clearPasswordFields = () => {

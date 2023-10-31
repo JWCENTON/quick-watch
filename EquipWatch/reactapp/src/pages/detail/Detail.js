@@ -10,9 +10,8 @@ import { useAuth } from '../../components/authProvider/AuthContext';
 import './Detail.css';
 
 export default function Detail() {
-    const apiUrl = process.env.REACT_APP_API_URL;
     const { id, dataType } = useParams();
-    const { token } = useAuth();
+    const auth = useAuth(); 
 
     const [detailsData, setDetailsData] = useState(null);
 
@@ -21,28 +20,23 @@ export default function Detail() {
         equipment: EquipmentDetail,
         commission: CommissionDetail,
         company: CompanyDetail,
-        employee: EmployeeDetail
+        employee: EmployeeDetail,
     };
 
     const ViewComponent = components[dataType];
 
     useEffect(() => {
         const fetchDetailsData = async () => {
-            const response = await fetch(`${apiUrl}/api/${dataType}/${id}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
+            const response = await auth.authAxios.get(`/api/${dataType}/${id}`); 
+            const data = response.data;
             setDetailsData(data);
         };
         fetchDetailsData();
-    }, [id, dataType, token, apiUrl]);
+    }, [id, dataType, auth]);
 
     return (
         <Layout>
             <ViewComponent detailsData={detailsData} />
         </Layout>
     );
-};
+}

@@ -2,7 +2,6 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { SidebarProvider } from './contexts/SidebarContext';
-//import { AuthProvider } from './components/authProvider/AuthContext'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
