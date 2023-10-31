@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const apiUrl = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token');
 
     const authAxios = axios.create({
         baseURL: apiUrl,
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, authAxios }}>
+        <AuthContext.Provider value={{ user, login, logout, token, authAxios }}>
             {children}
         </AuthContext.Provider>
     );
