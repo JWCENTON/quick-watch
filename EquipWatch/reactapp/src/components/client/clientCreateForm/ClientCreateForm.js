@@ -6,7 +6,6 @@ import './clientCreateForm.css';
 import { useAuth } from '../../authProvider/AuthContext';
 
 export default function ClientCreateForm() {
-    const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const { authAxios } = useAuth();
 	const [errorMessage, setErrorMessage] = useState('');
