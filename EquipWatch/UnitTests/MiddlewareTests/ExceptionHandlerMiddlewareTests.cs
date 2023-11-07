@@ -1,10 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+﻿using System.Net;
 using Newtonsoft.Json;
-using NUnit.Framework;
 using webapi.Middleware;
 
 namespace EquipWatch.UnitTests.MiddlewareTests
