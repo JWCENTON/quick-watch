@@ -1,5 +1,4 @@
-﻿using DAL;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using System.Net;
 
 namespace webapi.Services;

@@ -1,10 +1,9 @@
 ﻿using Domain.User.Models;
 
-namespace webapi.Services
+namespace webapi.Services;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        Task SendEmailForConfirmationAsync(User user, string confirmationLink);
-        Task SendPasswordResetLinkAsync(User user, string resetLink);
-    }
+    Task SendEmailForConfirmationAsync(User user, string confirmationLink);
+    Task SendPasswordResetLinkAsync(User user, string resetLink);
 }
