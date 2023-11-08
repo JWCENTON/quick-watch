@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Domain.WorksOn.Models;
 using DTO.UserDTOs;
 
 namespace DTO.Mappers;

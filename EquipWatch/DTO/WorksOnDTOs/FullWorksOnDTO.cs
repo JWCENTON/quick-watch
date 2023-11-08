@@ -1,7 +1,4 @@
-﻿using DTO.CommissionDTOs;
-using DTO.EmployDTOs;
-
-namespace DTO.WorksOnDTOs;
+﻿namespace DTO.WorksOnDTOs;
 
 public record FullWorksOnDTO() : BaseWorksOnDTO
 {
