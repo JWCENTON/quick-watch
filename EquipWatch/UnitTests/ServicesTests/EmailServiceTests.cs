@@ -40,11 +40,11 @@ namespace EquipWatch.UnitTests.TestServices
             };
             var confirmationLink = "https://example.test.com/test_confirmation_email";
 
-            _smtpClientMock.Setup(client => client.SendMailAsync(It.IsAny<MailMessage>()))
+            _smtpClientMock!.Setup(client => client.SendMailAsync(It.IsAny<MailMessage>()))
                 .Returns(Task.CompletedTask);
 
             // Act
-            await _emailService.SendEmailForConfirmationAsync(user, confirmationLink);
+            await _emailService!.SendEmailForConfirmationAsync(user, confirmationLink);
 
             // Assert
             // No need for assertions about the SendMailAsync behavior in this test.
@@ -63,11 +63,11 @@ namespace EquipWatch.UnitTests.TestServices
             };
             var resetLink = "https://example.test.com/test_reset_email";
 
-            _smtpClientMock.Setup(client => client.SendMailAsync(It.IsAny<MailMessage>()))
+            _smtpClientMock!.Setup(client => client.SendMailAsync(It.IsAny<MailMessage>()))
                 .Returns(Task.CompletedTask);
 
             // Act
-            await _emailService.SendPasswordResetLinkAsync(user, resetLink);
+            await _emailService!.SendPasswordResetLinkAsync(user, resetLink);
 
             // Assert
             // No need for assertions about the SendMailAsync behavior in this test.
@@ -93,8 +93,8 @@ namespace EquipWatch.UnitTests.TestServices
                 return new EmailContext
                 {
                     Smtp = Environment.GetEnvironmentVariable("SMTP"),
-                    Port = int.Parse(Environment.GetEnvironmentVariable("PORT")),
-                    Username = Environment.GetEnvironmentVariable("USERNAME"),
+                    Port = int.Parse(Environment.GetEnvironmentVariable("PORT")!),
+                    UserName = Environment.GetEnvironmentVariable("USERNAME"),
                     Password = Environment.GetEnvironmentVariable("PASSWORD"),
                     Address = Environment.GetEnvironmentVariable("ADDRESS")
                 };
@@ -104,8 +104,8 @@ namespace EquipWatch.UnitTests.TestServices
                 return new EmailContext
                 {
                     Smtp = configuration["Email:Smtp"],
-                    Port = int.Parse(configuration["Email:Port"]),
-                    Username = configuration["Email:Username"],
+                    Port = int.Parse(configuration["Email:Port"]!),
+                    UserName = configuration["Email:Username"],
                     Password = configuration["Email:Password"],
                     Address = configuration["Email:Address"]
                 };

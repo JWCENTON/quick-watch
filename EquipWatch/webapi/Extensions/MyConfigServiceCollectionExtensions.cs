@@ -41,9 +41,9 @@ public static class MyConfigServiceCollectionExtensions
         services.AddSingleton<ISmtpClientWrapper>(provider =>
         {
             var emailContext = configuration.GetSection("Email").Get<EmailContext>();
-            return new SmtpClientWrapper(emailContext.Smtp, emailContext.Port, emailContext.Username, emailContext.Password);
+            return new SmtpClientWrapper(emailContext!.Smtp ?? string.Empty , emailContext!.Port, emailContext.UserName ?? string.Empty, emailContext.Password ?? string.Empty);
         });
-
+        
         // Identity
         services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<IdentityContext>()
@@ -58,7 +58,7 @@ public static class MyConfigServiceCollectionExtensions
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"] ?? string.Empty))
                 };
             });
 

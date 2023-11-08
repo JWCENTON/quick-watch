@@ -28,7 +28,6 @@ if (!result.IsValid)
 }
 
 // Set up Serilog logger and configure the logger
-
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
@@ -42,7 +41,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "default", policy =>
     {
-        policy.WithOrigins(configuration["WebApiUrl"], configuration["ReactAppUrl"])
+        policy.WithOrigins(configuration["WebApiUrl"] ?? string.Empty, configuration["ReactAppUrl"] ?? string.Empty)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

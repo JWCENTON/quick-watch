@@ -8,11 +8,11 @@ public class SmtpClientWrapper : ISmtpClientWrapper
 {
     private readonly SmtpClient _smtpClient;
 
-    public SmtpClientWrapper(string smtpServer, int port, string username, string password)
+    public SmtpClientWrapper(string smtpServer, int port, string userName, string password)
     {
         _smtpClient = new SmtpClient(smtpServer, port)
         {
-            Credentials = new NetworkCredential(username, password),
+            Credentials = new NetworkCredential(userName, password),
             EnableSsl = true
         };
     }
