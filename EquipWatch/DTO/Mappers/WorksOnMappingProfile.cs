@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.WorksOn.Models;
-using DTO.CheckInDTOs;
 using DTO.WorksOnDTOs;
 
 namespace DTO.Mappers;

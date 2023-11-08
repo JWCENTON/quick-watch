@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace DAL.Repositories.BookedEquipment;
+﻿namespace DAL.Repositories.BookedEquipment;
 
 public interface IBookedEquipmentRepository : IBaseRepository<Domain.BookedEquipment.Models.BookedEquipment>
 {

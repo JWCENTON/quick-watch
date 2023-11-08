@@ -1,5 +1,4 @@
-﻿using Domain.EquipmentInUse.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.BookedEquipment;
 

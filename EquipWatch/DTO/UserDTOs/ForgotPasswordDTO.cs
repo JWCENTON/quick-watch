@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DTO.UserDTOs
+namespace DTO.UserDTOs;
+
+public class ForgotPasswordDTO
 {
-    public class ForgotPasswordDTO
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-    }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
 }

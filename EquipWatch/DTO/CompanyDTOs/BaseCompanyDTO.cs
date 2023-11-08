@@ -1,6 +1,4 @@
-﻿using DTO.UserDTOs;
-
-namespace DTO.CompanyDTOs;
+﻿namespace DTO.CompanyDTOs;
 
 public record BaseCompanyDTO
 {

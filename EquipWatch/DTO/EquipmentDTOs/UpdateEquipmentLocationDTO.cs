@@ -1,6 +1,4 @@
-﻿using DTO.UserDTOs;
-
-namespace DTO.EquipmentDTOs;
+﻿namespace DTO.EquipmentDTOs;
 
 public record UpdateEquipmentLocationDTO()
 {

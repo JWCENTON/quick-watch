@@ -7,7 +7,6 @@ using webapi.Services;
 using System.Security.Claims;
 using System.Web;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using webapi.uow;
 
 namespace webapi.Controllers;

@@ -1,7 +1,4 @@
-﻿using DTO.CommissionDTOs;
-using DTO.EquipmentDTOs;
-
-namespace DTO.BookedEquipmentDTOs;
+﻿namespace DTO.BookedEquipmentDTOs;
 
 public record UpdateBookedEquipmentDTO()
 {

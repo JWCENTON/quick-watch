@@ -1,7 +1,4 @@
-﻿using DTO.ClientDTOs;
-using DTO.CompanyDTOs;
-
-namespace DTO.CommissionDTOs;
+﻿namespace DTO.CommissionDTOs;
 
 public record BaseCommissionDTO
 {

@@ -10,7 +10,6 @@ using Domain.Invite;
 using Domain.Invite.Models;
 using Domain.Reservation.Models;
 using Domain.WorksOn.Models;
-using System;
 
 namespace DAL;
 
@@ -27,33 +26,8 @@ public class Seed
                 Name = "FogWizards",
                 OwnerId = identityContext.Users.First().Id
             };
-            //var Company2 = new Company
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Name = "someasdasdthing",
-            //    OwnerId = identityContext.Users.First().Id
-            //};
-            context.Company.Add(company1);
-            //context.Company.Add(Company2);
 
-            //var employee1 = new Employee()
-            //{
-            //    Company = Company1,
-            //    CompanyId = Company1.Id,
-            //    UserId = identityContext.Users.First().Id,
-            //    Id = Guid.NewGuid(),
-            //    Role = Role.Engineer
-            //};
-            //var employee2 = new Employee()
-            //{
-            //    Company = Company2,
-            //    CompanyId = Company2.Id,
-            //    UserId = identityContext.Users.First().Id,
-            //    Id = Guid.NewGuid(),
-            //    Role = Role.Engineer
-            //};
-            //context.Employees.Add(employee1);
-            //context.Employees.Add(employee2);
+            context.Company.Add(company1);
 
             var equipment1 = new Equipment
             {
@@ -723,24 +697,6 @@ public class Seed
             context.CheckIns.Add(warehouseCheckIn7);
             warehouseCheckIn7.Equipment.InWarehouse = true;
             warehouseCheckIn7.Equipment.Location = "main warehouse";
-
-
-
-
-            //var reservation2 = new Reservation
-            //{
-            //    UserId = identityContext.Users.First().Id,
-            //    Equipment = equipment2,
-            //    EquipmentId = equipment2.Id,
-            //    Id = Guid.NewGuid(),
-            //    CreationTime = DateTime.Now - TimeSpan.FromDays(29),
-            //    StartDate = DateTime.Now - TimeSpan.FromDays(27),
-            //    EndDate = DateTime.Now - TimeSpan.FromDays(20),
-            //};
-            //context.Reservations.Add(reservation1);
-            //context.Reservations.Add(reservation2);
-
-
 
             var invite1 = new Invite()
             {

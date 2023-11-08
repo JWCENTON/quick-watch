@@ -120,12 +120,6 @@ public class DatabaseContext : DbContext
             .HasForeignKey("CompanyId")
             .OnDelete(DeleteBehavior.Cascade);
 
-        //builder.Entity<Employee>()
-        //    .HasOne(e => e.Company)
-        //    .WithMany()
-        //    .HasForeignKey("CompanyId")
-        //    .OnDelete(DeleteBehavior.Cascade);
-
         base.OnModelCreating(builder);
     }
 }

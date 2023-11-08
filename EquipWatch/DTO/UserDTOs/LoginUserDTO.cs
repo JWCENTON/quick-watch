@@ -1,8 +1,7 @@
-﻿namespace DTO.UserDTOs
+﻿namespace DTO.UserDTOs;
+
+public record LoginUserDTO
 {
-    public record LoginUserDTO
-    {
-        public string Email { get; init; }
-        public string Password { get; init; }
-    }
+    public string Email { get; init; }
+    public string Password { get; init; }
 }

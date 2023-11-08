@@ -1,5 +1,4 @@
-﻿using DAL.Repositories.Reservation;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.EquipmentInUse;
 

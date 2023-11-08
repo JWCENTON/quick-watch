@@ -1,6 +1,4 @@
-﻿using DTO.CompanyDTOs;
-
-namespace DTO.ClientDTOs;
+﻿namespace DTO.ClientDTOs;
 
 public record CreateClientDTO : BaseClientDTO
 {

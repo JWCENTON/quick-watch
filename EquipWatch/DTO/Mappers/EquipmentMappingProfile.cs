@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Domain.Equipment.Models;
 using DTO.EquipmentDTOs;
 namespace DTO.Mappers;
 

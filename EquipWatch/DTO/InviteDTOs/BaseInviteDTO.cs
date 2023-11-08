@@ -1,6 +1,4 @@
 ﻿using Domain.Invite;
-using DTO.CompanyDTOs;
-using DTO.UserDTOs;
 
 namespace DTO.InviteDTOs;
 
