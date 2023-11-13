@@ -9,6 +9,7 @@ using DAL.Repositories.Equipment;
 using DAL.Repositories.EquipmentInUse;
 using DAL.Repositories.Invite;
 using DAL.Repositories.Reservation;
+using DAL.Repositories.User;
 using DAL.Repositories.WorksOn;
 
 namespace webapi.uow;
@@ -27,6 +28,7 @@ public interface IUnitOfWork
     IWorksOnRepository WorksOn { get; }
     IReservationRepository Reservation { get; }
     IEquipmentInUseRepository EquipmentInUse { get; }
+    IUserRepository User { get; }
     // Add other repositories as needed
 
     void SaveChanges();

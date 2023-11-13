@@ -10,9 +10,9 @@ using DAL.Repositories.Company;
 using DAL.Repositories.Employee;
 using DAL.Repositories.Equipment;
 using DAL.Repositories.Invite;
+using DAL.Repositories.User;
 using DAL.Repositories.WorksOn;
 using Domain.User.Models;
-using DTO.Mappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -90,6 +90,7 @@ public static class MyConfigServiceCollectionExtensions
         services.AddTransient<IEquipmentRepository, EquipmentRepository>();
         services.AddTransient<IInviteRepository, InviteRepository>();
         services.AddTransient<IWorksOnRepository, WorksOnRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
         //services.AddTransient<CompanyIdDTOValidator>();
         services.AddValidatorsFromAssembly(Assembly.Load("webapi"));
 

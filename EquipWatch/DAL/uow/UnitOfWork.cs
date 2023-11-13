@@ -10,13 +10,19 @@ using DAL.Repositories.Equipment;
 using DAL.Repositories.EquipmentInUse;
 using DAL.Repositories.Invite;
 using DAL.Repositories.Reservation;
+using DAL.Repositories.User;
 using DAL.Repositories.WorksOn;
+using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace webapi.uow;
 
 public class UnitOfWork : IUnitOfWork
 {
     private readonly DatabaseContext _context;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
+    private readonly IdentityContext _identityContext;
     private IBookedEquipmentRepository _bookedEquipmentRepository;
     private ICheckInRepository _checkInRepository;
     private ICheckOutRepository _checkOutRepository;
@@ -29,12 +35,14 @@ public class UnitOfWork : IUnitOfWork
     private IWorksOnRepository _worksOnRepository;
     private IReservationRepository _reservationRepository;
     private IEquipmentInUseRepository _equipmentInUseRepository;
-    private readonly IdentityContext _identityContext;
+    private IUserRepository _userRepository;
 
-    public UnitOfWork(DatabaseContext context, IdentityContext identityContext)
+    public UnitOfWork(DatabaseContext context, IdentityContext identityContext, UserManager<User> userManager, SignInManager<User> signInManager)
     {
         _context = context;
         _identityContext = identityContext;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     public IBookedEquipmentRepository BookedEquipment => _bookedEquipmentRepository ??= new BookedEquipmentRepository(_context, _identityContext);
@@ -60,6 +68,8 @@ public class UnitOfWork : IUnitOfWork
     public IEquipmentInUseRepository EquipmentInUse => _equipmentInUseRepository ??= new EquipmentInUseRepository(_context, _identityContext);
 
     public IReservationRepository Reservation => _reservationRepository ??= new ReservationRepository(_context, _identityContext);
+
+    public IUserRepository User => _userRepository ??= new UserRepository(_userManager, _signInManager);
 
     public void SaveChanges()
     {

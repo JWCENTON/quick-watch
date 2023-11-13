@@ -16,17 +16,15 @@ namespace webapi.Controllers;
 public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
     private readonly IUserServices _userServices;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager,
+    public UserController(UserManager<User> userManager,
         IEmailService emailService, IUserServices userServices, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _emailService = emailService;
@@ -65,16 +63,16 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
     {
-        var user = await _userManager.FindByEmailAsync(model.Email);
+        var user = await _unitOfWork.User.FindByEmailAsync(model.Email);
         if (user != null)
         {
-            if (!await _userManager.IsEmailConfirmedAsync(user))
+            if (!await _unitOfWork.User.IsEmailConfirmedAsync(user))
             {
                 return Unauthorized(new { title = "EmailNotConfirmed" });
             }
         }
 
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+        var result = await _unitOfWork.User.PasswordSignInAsync(model.Email, model.Password);
         if (result.Succeeded)
         {
             var claims = _userServices.GenerateClaims(user);
