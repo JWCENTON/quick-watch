@@ -31,7 +31,7 @@ function Registration() {
         try {
             const response = await authAxios.post('/api/User/register', formData);
 
-            if (response.data && response.data.success) {
+        if (response.status === 200) {
                 const username = `${formData.firstName} ${formData.lastName}`;
                 navigate('/', { state: { registrationSuccess: true, username } });
             } else {
