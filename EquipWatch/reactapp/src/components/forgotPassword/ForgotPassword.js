@@ -8,7 +8,7 @@ function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-    const authAxios = useAuth();
+    const { authAxios } = useAuth();
 
     const handleForgotPassword = async (e) => {
         e.preventDefault();
@@ -21,6 +21,8 @@ function ForgotPassword() {
                 email,
             });
 
+            console.log('Email:', email);
+
             if (response.status === 200) {
                 setMessage('Password reset link was sent');
             } else {
@@ -29,6 +31,7 @@ function ForgotPassword() {
 
             setLoading(false);
         } catch (error) {
+            console.log('Error:', error);
             setLoading(false);
             setError('An error occurred. Please try again later.');
         }
