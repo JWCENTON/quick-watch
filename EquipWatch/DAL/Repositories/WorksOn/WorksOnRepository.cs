@@ -1,5 +1,4 @@
-﻿using Domain.User.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories.WorksOn;
 
@@ -45,11 +44,11 @@ public class WorksOnRepository : IWorksOnRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<User>> GetCommissionAssignedEmployeesAsync(Guid commissionId)
+    public Task<List<Domain.User.Models.User>> GetCommissionAssignedEmployeesAsync(Guid commissionId)
     {
         var worksOnList = _context.WorksOn.Where(w => w.CommissionId == commissionId && w.EndTime == null);
         var userIds = worksOnList.Select(w => w.UserId);
-        var users = new List<User>();
+        var users = new List<Domain.User.Models.User>();
         foreach (var userId in userIds)
         {
             users.Add(_identityContext.Users.First(user => user.Id == userId));

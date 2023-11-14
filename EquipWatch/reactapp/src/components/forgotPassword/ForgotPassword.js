@@ -8,7 +8,7 @@ function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-    const authAxios = useAuth();
+    const { authAxios } = useAuth();
 
     const handleForgotPassword = async (e) => {
         e.preventDefault();
