@@ -12,4 +12,9 @@ public interface IUserRepository
     Task<Domain.User.Models.User?> FindByIdAsync(string userId);
     Task<IdentityResult> ConfirmEmailAsync(Domain.User.Models.User user, string token);
     Task<string> GeneratePasswordResetTokenAsync(Domain.User.Models.User user);
+    Task<IdentityResult> ResetPasswordAsync(Domain.User.Models.User user, string token, string newPassword);
+    Task<IdentityResult> UpdateAsync(Domain.User.Models.User user);
+    Task<IdentityResult> ChangePasswordAsync(Domain.User.Models.User user, string currentPassword, string newPassword);
+    Task<IQueryable<Domain.User.Models.User>> GetAll();
+    Task<List<Domain.User.Models.User>> GetAvailable(List<string> assignedUserIds);
 }
