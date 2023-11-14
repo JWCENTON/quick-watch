@@ -40,10 +40,10 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Register([FromBody] CreateUserDTO model)
     {
         var user = _userServices.MatchModelToNewUser(model);
-        var userCreationResult = await _userManager.CreateAsync(user, model.Password).ConfigureAwait(true);
+        var userCreationResult = await _unitOfWork.User.CreateAsync(user, model.Password);
         if (userCreationResult.Succeeded)
         {
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var token = await _unitOfWork.User.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action("ConfirmEmail", "User", new { userId = user.Id, token }, Request.Scheme);
 
             await _emailService.SendEmailForConfirmationAsync(user, confirmationLink).ConfigureAwait(true);

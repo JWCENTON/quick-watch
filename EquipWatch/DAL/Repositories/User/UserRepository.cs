@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.User.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace DAL.Repositories.User;
 
@@ -30,5 +31,17 @@ public class UserRepository : IUserRepository
     {
         var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent: false, lockoutOnFailure: false);
         return result;
+    }
+
+    public async Task<IdentityResult> CreateAsync(Domain.User.Models.User user, string password)
+    {
+        var userCreationResult = await _userManager.CreateAsync(user, password);
+        return userCreationResult;
+    }
+
+    public async Task<string> GenerateEmailConfirmationTokenAsync(Domain.User.Models.User user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        return token;
     }
 }
