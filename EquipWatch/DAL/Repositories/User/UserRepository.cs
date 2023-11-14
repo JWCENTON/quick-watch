@@ -44,4 +44,22 @@ public class UserRepository : IUserRepository
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         return token;
     }
+
+    public async Task<Domain.User.Models.User?> FindByIdAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        return user;
+    }
+
+    public async Task<IdentityResult> ConfirmEmailAsync(Domain.User.Models.User user, string token)
+    {
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        return result;
+    }
+
+    public async Task<string> GeneratePasswordResetTokenAsync(Domain.User.Models.User user)
+    {
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        return token;
+    }
 }

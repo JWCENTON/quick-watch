@@ -9,4 +9,7 @@ public interface IUserRepository
     Task<SignInResult> PasswordSignInAsync(string email, string password);
     Task<IdentityResult> CreateAsync(Domain.User.Models.User user, string password);
     Task<string> GenerateEmailConfirmationTokenAsync(Domain.User.Models.User user);
+    Task<Domain.User.Models.User?> FindByIdAsync(string userId);
+    Task<IdentityResult> ConfirmEmailAsync(Domain.User.Models.User user, string token);
+    Task<string> GeneratePasswordResetTokenAsync(Domain.User.Models.User user);
 }

@@ -97,13 +97,13 @@ public class UserController : ControllerBase
             return BadRequest("Invalid user ID or token");
         }
 
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _unitOfWork.User.FindByIdAsync(userId);
         if (user == null)
         {
             return NotFound("User not found");
         }
 
-        var result = await _userManager.ConfirmEmailAsync(user, token);
+        var result = await _unitOfWork.User.ConfirmEmailAsync(user, token);
         if (result.Succeeded)
         {
             return Redirect($"{_userServices.GetReactAppRedirectAddress()}");
@@ -123,13 +123,13 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO model)
     {
-        var user = await _userManager.FindByEmailAsync(model.Email);
+        var user = await _unitOfWork.User.FindByEmailAsync(model.Email);
         if (user == null)
         {
             return NotFound("User not found");
         }
 
-        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var token = await _unitOfWork.User.GeneratePasswordResetTokenAsync(user);
         var resetLink = Url.Action("ResetPassword", "User", new { userId = user.Id, token }, Request.Scheme);
 
         await _emailService.SendPasswordResetLinkAsync(user, resetLink);
