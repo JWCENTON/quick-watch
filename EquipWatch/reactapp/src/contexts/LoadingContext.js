@@ -1,6 +1,9 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
-export const LoadingContext = createContext();
+export const LoadingContext = createContext({
+    loading: false,
+    setLoading: () => { }
+});
 
 export const LoadingProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -11,3 +14,5 @@ export const LoadingProvider = ({ children }) => {
         </LoadingContext.Provider>
     );
 };
+
+export const useLoading = () => useContext(LoadingContext);

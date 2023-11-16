@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 
 export default function ClientDetail({ detailsData }) {
     return (
         <div className="details-section">
-        { detailsData === null ? (
-            <p>Loading...</p>
+            {detailsData === null ? (
+                <div className="spinner-container">
+                    <Spinner animation="border" />
+                </div>
             ) : (
                 <div className="details-grid">
                     <div className="section-left">
@@ -27,9 +29,7 @@ export default function ClientDetail({ detailsData }) {
                         </div>
                     </div>
                 </div>
-
             )}
         </div>
     );
-
-};
+}

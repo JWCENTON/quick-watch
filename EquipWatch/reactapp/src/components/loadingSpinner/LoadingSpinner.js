@@ -1,17 +1,15 @@
 import React, { useContext } from 'react';
 import { Spinner } from 'react-bootstrap';
-import { LoadingContext } from '../contexts/LoadingContext';
+import { useLoading } from '../../contexts/LoadingContext';
 
 const LoadingSpinner = () => {
-    const { loading } = useContext(LoadingContext);
+    const { loading } = useLoading();
 
-    return (
-        loading && (
-            <div className="loading-spinner">
-                <Spinner animation="border" />
-            </div>
-        )
-    );
+    return loading ? (
+        <div className="global-loading-spinner">
+            <Spinner animation="border" />
+        </div>
+    ) : null;
 };
 
 export default LoadingSpinner;
