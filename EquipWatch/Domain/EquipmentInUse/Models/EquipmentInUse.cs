@@ -1,4 +1,5 @@
 ﻿namespace Domain.EquipmentInUse.Models;
+
 public class EquipmentInUse
 {
     public Guid Id { get; set; }
@@ -8,4 +9,3 @@ public class EquipmentInUse
     public DateTime? EndTime { get; set; }
     public Equipment.Models.Equipment Equipment { get; set; }
 }
-

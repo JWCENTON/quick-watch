@@ -28,11 +28,10 @@ export default function EquipmentDetail({ detailsData }) {
         succesfullMessage: '',
     });
     const navigate = useNavigate();
-    const { token } = useAuth();
+    const { authAxios } = useAuth();
     const [commissionList, setCommissionList] = useState([]);
     const [currentBooking, setCurrentBooking] = useState(null);
     const [currentCommission, setCurrentCommission] = useState(null);
-    const apiUrl = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         if (detailsData && detailsData.available !== undefined) {
@@ -46,13 +45,8 @@ export default function EquipmentDetail({ detailsData }) {
                 endDate: null,
             });
             const fetchCommissions = async () => {
-                const response = await fetch(`${apiUrl}/api/commission`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                const data = await response.json();
+                const response = await authAxios.get('/api/commission');             
+                const data = await response.data;
                 const modifiedData = await data.map((item) => {
                     return {
                         ...item,
@@ -73,7 +67,7 @@ export default function EquipmentDetail({ detailsData }) {
                 getCommissionDetails();
             }
         }
-    }, [detailsData, token]);
+    }, [detailsData, authAxios]);
 
     useEffect(() => {
         if (details && details.available !== undefined) {
@@ -172,49 +166,44 @@ export default function EquipmentDetail({ detailsData }) {
     };
 
     async function updateDetails() {
-        const response = await fetch(`${apiUrl}/api/equipment/` + detailsData.id, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+        try {
+            const response = await authAxios.get(`/api/equipment/${detailsData.id}`);
+            if (response.status === 200) {
+                const data = response.data;
+                setDetails(data);
+                return data.location;
             }
-        });
-        if (response.status === 200) {
-            const data = await response.json();
-            setDetails(data);
-            return data.location;
+        } catch (error) {
+            console.error('Error while updating details:', error);
         }
     }
 
     async function updateBook() {
-        const response = await fetch(`${apiUrl}/api/bookequipment/` + detailsData.id + '/CurrentEquipmentBook', {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+        try {
+            const response = await authAxios.get(`/api/bookequipment/${detailsData.id}/CurrentEquipmentBook`);
+            if (response.status === 200) {
+                const data = response.data;
+                await setCurrentBooking(data);
+                await getCommissionDetails(data.commissionId);
+            } else if (response.status === 204) {
+                await setCurrentBooking(null);
+                await setCurrentCommission(null);
             }
-        });
-        if (response.status === 200) {
-            const data = await response.json();
-            await setCurrentBooking(data);
-            await getCommissionDetails(data.commissionId)
-
-        } else if (response.status === 204) {
-            await setCurrentBooking(null)
-            await setCurrentCommission(null)
+        } catch (error) {
+            console.error('Error while updating book:', error);
         }
     }
 
     async function getCommissionDetails(commissionId) {
-        const response = await fetch(`${apiUrl}/api/commission/` + commissionId, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+        try {
+            const response = await authAxios.get(`/api/commission/${commissionId}`);
+            if (response.status === 200) {
+                const data = response.data;
+                await setCurrentCommission(data);
             }
-        });
-        if (response.status === 200) {
-            const data = await response.json();
-            await setCurrentCommission(data);
+        } catch (error) {
+            console.error('Error while fetching commission details:', error);
         }
-
     };
 
     async function handleBookingFormSubmit(event) {
@@ -222,93 +211,73 @@ export default function EquipmentDetail({ detailsData }) {
         let raw = JSON.stringify({
             commissionId: booking.selectedCommission.value,
             equipmentId: detailsData.id,
-            endTime: booking.endDate ? booking.endDate.toISOString() : null
+            endTime: booking.endDate ? booking.endDate.toISOString() : null,
         });
-        const response = await fetch(`${apiUrl}/api/bookequipment/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            },
-            body: raw
-        });
-        if (response.status === 400) {
-            const errorJson = await response.json();
-            setMessages((prevState) => ({
-                ...prevState,
-                errorMessage: errorJson.Message,
-            }));
-        } else if (response.ok) {
-            const result = await response.json();
-            await setCurrentBooking(result);
-            getCommissionDetails(result.commissionId)
-            handleBookingModalClose();
-            var updatedLocation = await updateDetails()
-            if (updatedLocation.includes("On the way to")) {
-                await setMessages((prevState) => ({
-                    ...prevState,
-                    succesfullMessage:
-                        `Succesfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`
-                }));
-            } else {
+        try {
+            const response = await authAxios.post(`/api/bookequipment`, raw);
+            if (response.status === 400) {
+                const errorJson = response.data;
                 setMessages((prevState) => ({
                     ...prevState,
-                    succesfullMessage: `Succesfully created a booking for ${detailsData.serialNumber}`
+                    errorMessage: errorJson.Message,
                 }));
-            } 
+            } else if (response.ok) {
+                const result = response.data;
+                await setCurrentBooking(result);
+                await getCommissionDetails(result.commissionId);
+                handleBookingModalClose();
+                var updatedLocation = await updateDetails();
+                if (updatedLocation.includes('On the way to')) {
+                    await setMessages((prevState) => ({
+                        ...prevState,
+                        succesfullMessage: `Successfully created a booking for equipment with SN: ${detailsData.serialNumber} and redirected equipment to ${updatedLocation.replace('On the way to ', '')}`,
+                    }));
+                } else {
+                    setMessages((prevState) => ({
+                        ...prevState,
+                        succesfullMessage: `Successfully created a booking for ${detailsData.serialNumber}`,
+                    }));
+                }
+            }
+        } catch (error) {
+            console.error('Error while submitting the booking form:', error);
         }
     }
 
     async function handleCheckoutFormSubmit(event, warehouseDelivery) {
         event.preventDefault();
 
-        const response = await fetch(`${apiUrl}/api/equipment/` + detailsData.id + '/checkout', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            },
-            body: warehouseDelivery
-        });
+        const response = await authAxios.post(`/api/equipment/${detailsData.id}/checkout`, warehouseDelivery);
         if (response.status === 400) {
-            const errorJson = await response.json();
-            setMessages((prevState) => ({...prevState, setErrorMessage:errorJson.Message }));
+            const errorJson = response.data;
+            setMessages((prevState) => ({ ...prevState, errorMessage: errorJson.Message }));
         } else if (response.ok) {
             handleCheckoutModalClose();
-            setMessages((prevState) => ({...prevState, succesfullMessage:`Succesfully checked out equipment from ${booking.location}`}));
-            await updateDetails()
-            await updateBook()
+            setMessages((prevState) => ({ ...prevState, succesfullMessage: `Successfully checked out equipment from ${booking.location}` }));
+            await updateDetails();
+            await updateBook();
         }
     }
 
     async function handleCheckinFormSubmit(event, warehouseDelivery) {
         event.preventDefault();
-        const response = await fetch(`${apiUrl}/api/equipment/` + detailsData.id + '/checkin', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            },
-            body: warehouseDelivery
-        });
+        const response = await authAxios.post(`/api/equipment/${detailsData.id}/checkin`, warehouseDelivery);
         if (response.status === 400) {
-            const errorJson = await response.json();
-            setMessages((prevState) => ({...prevState, errorMessage: errorJson.Message }));
+            const errorJson = response.data;
+            setMessages((prevState) => ({ ...prevState, errorMessage: errorJson.Message }));
         } else if (response.ok) {
-            handleCheckinModalClose();
-            var updatedLocation = await updateDetails()
-            setMessages((prevState) => ({...prevState, succesfullMessage: `Succesfully checked in equipment at ${updatedLocation}`}));
+            var updatedLocation = await updateDetails();
+            setMessages((prevState) => ({ ...prevState, succesfullMessage: `Successfully checked in equipment at ${updatedLocation}` }));
         }
     }
 
     async function DeleteEquipment() {
-        await fetch(`${apiUrl}/api/equipment/${detailsData.id}`, {
-            method: "DELETE",
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        navigate("/equipment");
+        try {
+            await authAxios.delete(`/api/equipment/${detailsData.id}`);
+            navigate('/equipment');
+        } catch (error) {
+            console.error('Error while deleting equipment:', error);
+        }
     }
 
     function onImageDownload() {

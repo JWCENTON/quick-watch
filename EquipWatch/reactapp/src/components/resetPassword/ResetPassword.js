@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { useAuth } from '../authProvider/AuthContext';
 
 function ResetPassword() {
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const { authAxios } = useAuth();
     const { userId, token } = useParams();
     const [newPassword, setNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -12,29 +13,21 @@ function ResetPassword() {
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
-        console.log(`token ${token} and userId ${userId}`);
         try {
             setLoading(true);
             setError('');
 
-            const response = await fetch(`${apiUrl}/api/User/resetPassword`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId,
-                    token: encodeURIComponent(token),
-                    newPassword,
-                    PasswordResetToken: encodeURIComponent(token),
-                }),
+            const response = await authAxios.post('/api/User/resetPassword', {
+                userId,
+                token: encodeURIComponent(token),
+                newPassword,
+                PasswordResetToken: encodeURIComponent(token),
             });
 
-            if (response.ok) {
+            if (response.data && response.data.success) {
                 setMessage('Password reset successful');
             } else {
-                const errorData = await response.json();
-                setError(errorData.message || 'An error occurred. Please try again later.');
+                setError('An error occurred. Please try again later.');
             }
 
             setLoading(false);

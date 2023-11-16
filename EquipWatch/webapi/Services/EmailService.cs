@@ -19,13 +19,13 @@ public class EmailService : IEmailService
     {
         using (var client = new SmtpClient(_emailContext.Smtp, _emailContext.Port))
         {
-            client.Credentials = new NetworkCredential(_emailContext.Username, _emailContext.Password);
+            client.Credentials = new NetworkCredential(_emailContext.UserName, _emailContext.Password);
             client.EnableSsl = true;
 
             using (var message = new MailMessage())
             {
-                message.From = new MailAddress(_emailContext.Address);
-                message.To.Add(new MailAddress(user.Email));
+                message.From = new MailAddress(_emailContext.Address!);
+                message.To.Add(new MailAddress(user.Email!));
 
                 message.Subject = "Equip Watch - Registration";
                 message.Body = $"Dear {user.FirstName} {user.LastName}," +
@@ -42,13 +42,13 @@ public class EmailService : IEmailService
     {
         using (var client = new SmtpClient(_emailContext.Smtp, _emailContext.Port))
         {
-            client.Credentials = new NetworkCredential(_emailContext.Username, _emailContext.Password);
+            client.Credentials = new NetworkCredential(_emailContext.UserName, _emailContext.Password);
             client.EnableSsl = true;
 
             using (var message = new MailMessage())
             {
-                message.From = new MailAddress(_emailContext.Address);
-                message.To.Add(new MailAddress(user.Email));
+                message.From = new MailAddress(_emailContext.Address!);
+                message.To.Add(new MailAddress(user.Email!));
 
                 message.Subject = "Equip Watch - Password Reset";
                 message.Body = $"Dear {user.FirstName} {user.LastName}," +

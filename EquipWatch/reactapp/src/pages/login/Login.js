@@ -1,15 +1,15 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import './Login.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import placeholderImage from '../../images/placeholder.png';
-import { AuthContext } from '../../components/authProvider/AuthContext'
+import { AuthContext } from '../../components/authProvider/AuthContext';
 
 function Login() {
     const location = useLocation();
     const registrationSuccess = location.state?.registrationSuccess;
     const username = location.state?.username;
-    const { login } = useContext(AuthContext);
+    const auth = useContext(AuthContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,7 +19,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            await login(email, password);
+            await auth.login(email, password); 
             navigate('/commissions');
         } catch (error) {
             if (error.message === 'EmailNotConfirmed') {
@@ -42,9 +42,15 @@ function Login() {
                 <form onSubmit={handleLogin}>
                     <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <Button type="submit" variant="outline-primary">Login</Button>
-                    <Button as={Link} to="/register" variant="outline-primary">Register</Button>
-                    <Button as={Link} to="/forgotpassword" variant="outline-primary">Forgot Password</Button>
+                    <Button type="submit" variant="outline-primary">
+                        Login
+                    </Button>
+                    <Button as={Link} to="/register" variant="outline-primary">
+                        Register
+                    </Button>
+                    <Button as={Link} to="/forgotpassword" variant="outline-primary">
+                        Forgot Password
+                    </Button>
                 </form>
             </div>
         </div>

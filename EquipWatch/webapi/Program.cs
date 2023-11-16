@@ -1,15 +1,6 @@
-using DAL;
-using Domain.User.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using System.Text;
-using webapi;
 using webapi.Extensions;
 using webapi.Middleware;
-using webapi.Services;
 using webapi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,82 +18,43 @@ var configuration = new ConfigurationBuilder()
 //var azureConfig = new AzureDatabaseAndKeyVaultScript(configuration);
 //azureConfig.OverrideConfigToTestAzureIntegration();
 
+// Validate configuration
 var configValidator = new AppConfigValidator();
-
 var result = configValidator.Validate(configuration);
+
 if (!result.IsValid)
 {
     throw new KeyNotFoundException(result.Errors.First().ErrorMessage);
 }
 
-var connectionStringService = new ConnectionStringService(configuration, "SQL:LoginData");
-
-var mySqlConnectionString = connectionStringService.GetConnectionString("MySqlContextConnectionString");
-var mySqlIdentityConnectionString = connectionStringService.GetConnectionString("MySqlIdentityContextConnectionString");
-connectionStringService.UpdateSerilogConnectionString("MySqlSerilogConnectionString");
-
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
-builder.Services.AddDbContext<IdentityContext>(options => options.UseMySql(mySqlIdentityConnectionString, ServerVersion.AutoDetect(mySqlIdentityConnectionString)));
-
-builder.Services.Configure<EmailContext>(configuration.GetSection("Email"));
-
-// required to test Email Services
-builder.Services.AddSingleton<ISmtpClientWrapper>(provider =>
-{
-    var emailContext = configuration.GetSection("Email").Get<EmailContext>();
-    return new SmtpClientWrapper(emailContext.Smtp, emailContext.Port, emailContext.Username, emailContext.Password);
-});
-
-// Set up Serilog logger and update serilog connection string with username and password
-
+// Set up Serilog logger and configure the logger
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
 
-// Configure logging
+// Clear the default logging providers and add Serilog
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 
+// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "default", policy =>
     {
-        policy.WithOrigins(configuration["WebApiUrl"], configuration["ReactAppUrl"])
+        policy.WithOrigins(configuration["WebApiUrl"] ?? string.Empty, configuration["ReactAppUrl"] ?? string.Empty)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[key: "JwtSettings:SecretKey"])),
-        };
-    });
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Service Collection
-builder.Services.AddMyDependencyGroup();
+// Add services using extension method
+builder.Services.AddMyServices(configuration);
 
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
 
-// Configure the HTTP request pipeline.
-
+// Configure the Swagger UI.
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -114,12 +66,11 @@ app.UseSwaggerUI(c =>
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseCors("default");
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Mao the controllers
 app.MapControllers();
 
 try

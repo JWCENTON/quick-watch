@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import './UserRegistration.css';
+import { useAuth } from '../authProvider/AuthContext';
 
 function Registration() {
     const navigate = useNavigate();
+    const { authAxios } = useAuth();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -13,7 +15,6 @@ function Registration() {
     });
     const [errorMessage, setErrorMessage] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const apiUrl = process.env.REACT_APP_API_URL;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,29 +24,18 @@ function Registration() {
         });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        navigate('/');
-    };
-
     const handleRegister = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        const response = await fetch(`${apiUrl}/api/User/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
+        try {
+            const response = await authAxios.post('/api/User/register', formData);
 
-        if (response.ok) {
-            const username = `${formData.firstName} ${formData.lastName}`;
-            navigate('/', { state: { registrationSuccess: true, username } });
-        } else {
-            try {
-                const errorData = await response.json();
+        if (response.status === 200) {
+                const username = `${formData.firstName} ${formData.lastName}`;
+                navigate('/', { state: { registrationSuccess: true, username } });
+            } else {
+                const errorData = response.data || { message: 'An error occurred.' };
                 if (Array.isArray(errorData)) {
                     const errorMessages = errorData.map((error) => `${error.code}: ${error.description}`);
                     setErrorMessage(['Registration failed:', ...errorMessages]);
@@ -54,9 +44,9 @@ function Registration() {
                 } else {
                     setErrorMessage(['Registration failed: An error occurred.']);
                 }
-            } catch (error) {
-                setErrorMessage(['Registration failed: An error occurred.']);
             }
+        } catch (error) {
+            setErrorMessage(['Registration failed: An error occurred.']);
         }
 
         setLoading(false);
@@ -75,7 +65,7 @@ function Registration() {
                     </ul>
                 </div>
             )}
-            <form onSubmit={handleSubmit}>
+            <form>
                 <input
                     type="text"
                     placeholder="First Name"
@@ -104,7 +94,7 @@ function Registration() {
                     value={formData.password}
                     onChange={handleChange}
                 />
-                <Button onClick={handleRegister} type="submit" variant="outline-primary" disabled={isLoading}>
+                <Button onClick={handleRegister} variant="outline-primary" disabled={isLoading}>
                     Register
                 </Button>
             </form>

@@ -1,8 +1,4 @@
-﻿using DTO.EmployDTOs;
-using DTO.EquipmentDTOs;
-using DTO.UserDTOs;
-
-namespace DTO.CheckInDTOs;
+﻿namespace DTO.CheckInDTOs;
 
 public record UpdateCheckInDTO
 {

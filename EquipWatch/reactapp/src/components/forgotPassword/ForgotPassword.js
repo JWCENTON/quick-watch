@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { useAuth } from '../authProvider/AuthContext';
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const { authAxios } = useAuth();
 
     const handleForgotPassword = async (e) => {
         e.preventDefault();
@@ -16,21 +17,14 @@ function ForgotPassword() {
             setLoading(true);
             setError('');
 
-            const response = await fetch(`${apiUrl}/api/User/forgotPassword`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                }),
+            const response = await authAxios.post(`/api/User/forgotPassword`, {
+                email,
             });
 
-            if (response.ok) {
+            if (response.status === 200) {
                 setMessage('Password reset link was sent');
             } else {
-                const errorData = await response.json();
-                setError(errorData.Message || 'An error occurred. Please try again later.');
+                setError(response.data.Message || 'An error occurred. Please try again later.');
             }
 
             setLoading(false);

@@ -9,10 +9,9 @@ import { DateRangePicker } from 'react-date-range';
 import { useAuth } from '../../authProvider/AuthContext';
 
 export default function CommissionCreateForm() {
-    const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const [options, setOptions] = useState(null);
-    const { token } = useAuth(); 
+    const { authAxios } = useAuth(); 
     const [dateRange, setDateRange] = useState([
         {
             startDate: null,
@@ -29,19 +28,13 @@ export default function CommissionCreateForm() {
         let formDescription = event.target.description.value;
         let formScope = event.target.scope.value;
 		
-		let companyResponse = await fetch(`${apiUrl}/api/company`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
-            }
-        });
-		if (companyResponse.ok) {
-			const companyData = await companyResponse.json();
-
+        const companyResponse = await authAxios.get('/api/company');
+    
+		if (companyResponse === 200) {
+			const companyData = await companyResponse.data;
 			const companyId = companyData.id;
 
-        let raw = JSON.stringify({
+        const requestData = {
             "clientId": formClient,
             "location": formLocation,
             "description": formDescription,
@@ -49,24 +42,20 @@ export default function CommissionCreateForm() {
             "companyId": companyId, 
             "startTime": dateRange[0].startDate,
             "endTime": dateRange[0].endDate
-        });
+        };
 		
-        const response = await fetch(`${apiUrl}/api/commission`, {
-            method: "POST", 
-            headers: { "Content-Type": "application/json",
-			'Authorization': `Bearer ${token}`},
-            body: raw
-        });
+        const response = await authAxios.post('/api/commission', requestData);
 
-		if (response.status === 400){
-			const errorJson = await response.json();
-			setErrorMessage(errorJson.Message);
-		} else {
-			const commissionData = await response.json();
-			navigate("/commission/" + commissionData.id);
-		}
+		if (response.status === 200){
+            const commissionData = response.data;
+            navigate("/commission/" + commissionData.id);
+		} else if (response.status === 400) {
+            const errorJson = await response.data;
+            setErrorMessage(errorJson.Message);
+		    }
 		};
     }
+
     async function GetData(token) {
         const headers = {
             'Content-Type': 'application/json',
@@ -75,14 +64,14 @@ export default function CommissionCreateForm() {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
         }
-        const response = await fetch(`${apiUrl}/api/client`, 
-			{ headers: {'Authorization': `Bearer ${token}`}
-			});
-        const data = await response.json();
+        const response = await authAxios.get('/api/client', { headers }); 
+        const data = response.data;
         setOptions(data);
     }
 
-    useEffect(() => { GetData(token) }, [])
+    useEffect(() => {
+        GetData(authAxios.defaults.headers.authorization);
+    }, []);
 
     return (
         <div >

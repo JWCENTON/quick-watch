@@ -1,6 +1,4 @@
-﻿using DTO.CompanyDTOs;
-
-namespace DTO.EquipmentDTOs;
+﻿namespace DTO.EquipmentDTOs;
 
 public record UpdateEquipmentDTO
 {

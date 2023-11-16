@@ -1,32 +1,41 @@
 import React, { createContext, useState, useContext } from 'react';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('token') || null);
     const apiUrl = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token');
+
+    const authAxios = axios.create({
+        baseURL: apiUrl,
+        headers: {
+            'Content-Type':'application/json',
+        }
+    });
+
+    authAxios.interceptors.request.use((config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config
+    },
+    error => {
+        Promise.reject(error.response || error.message);
+        }
+    );
 
     const login = async (email, password) => {
-        const response = await fetch(`${apiUrl}/api/User/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        });
-
-        if (response.ok) {
-            const { token } = await response.json();
+        try {
+            const response = await authAxios.post('/api/User/login', { email, password });
+            const { token } = response.data;
             localStorage.setItem('token', token);
-            setToken(token);
-            setUser({ email });
-        } else {
-            const errorData = await response.json();
-            throw new Error(errorData.title);
+            setUser({email});
+        }
+        catch (error) {
+            throw new Error(error.response.data.title);
         }
     };
 
@@ -36,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, token, authAxios }}>
             {children}
         </AuthContext.Provider>
     );
