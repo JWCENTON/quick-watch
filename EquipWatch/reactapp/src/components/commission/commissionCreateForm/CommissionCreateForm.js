@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
@@ -11,6 +11,7 @@ import { useAuth } from '../../authProvider/AuthContext';
 export default function CommissionCreateForm() {
     const navigate = useNavigate();
     const [options, setOptions] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); 
     const { authAxios } = useAuth(); 
     const [dateRange, setDateRange] = useState([
         {
@@ -70,7 +71,8 @@ export default function CommissionCreateForm() {
     }
 
     useEffect(() => {
-        GetData(authAxios.defaults.headers.authorization);
+        setIsLoading(true);
+        GetData(authAxios.defaults.headers.authorization).finally(() => setIsLoading(false));
     }, []);
 
     return (
@@ -79,9 +81,20 @@ export default function CommissionCreateForm() {
             <Form onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label for="client">Client: </Form.Label>
-                    <Form.Select id="client" aria-label="Select Client">
-                        {options == null ? <option disabled>Loading...</option> : options.map((client, index) => (<option key={index} value={client.id}>{client.firstName} {client.lastName}</option>))}
-                    </Form.Select>
+                    <Form.Group>
+                        <Form.Label htmlFor="client">Client: </Form.Label>
+                        {isLoading ? (
+                            <div className="text-center">
+                                <Spinner animation="border" />
+                            </div>
+                        ) : (
+                            <Form.Select id="client" aria-label="Select Client">
+                                {options && options.map((client, index) => (
+                                    <option key={index} value={client.id}>{client.firstName} {client.lastName}</option>
+                                ))}
+                            </Form.Select>
+                        )}
+                    </Form.Group>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label for="location">Location: </Form.Label>

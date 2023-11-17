@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import UniversalCard from '../card/Card';
 import { useAuth } from '../authProvider/AuthContext';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -238,7 +238,9 @@ export default function CommissionDetail({ detailsData }) {
         <div className="details-section">
             {modalState.succesfullMessage && <div className="success-message">{modalState.succesfullMessage}</div>}
             {detailsData === null || equipmentState.assignedEquipment == null ? (
-                <p>Loading...</p>
+                <div className="spinner-container">
+                    <Spinner animation="border" />
+                </div>
             ) : (
 
                 <div>
@@ -319,7 +321,10 @@ export default function CommissionDetail({ detailsData }) {
                                     <Modal.Title>Add Worker</Modal.Title>
                                 </Modal.Header>
                                     {modalState.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{modalState.errorMessage}</div>}
-                                    {workerState.availableWorkers === null ? <>loading...</> :
+                                    {workerState.availableWorkers === null ? 
+                                        <div className="spinner-container">
+                                            <Spinner animation="border" />
+                                        </div> : 
                                     <form onSubmit={(event) => AddEmployee(event)}>
                                         <Modal.Body>
                                             <label htmlFor="selectedWorker">Choose worker:</label>

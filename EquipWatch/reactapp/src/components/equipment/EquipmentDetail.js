@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Spinner } from 'react-bootstrap';
 import { useAuth } from '../authProvider/AuthContext';
 import UniversalCard from '../card/Card';
 import DatePicker from 'react-datepicker';
@@ -10,6 +10,7 @@ import QRCode from 'react-qr-code';
 
 export default function EquipmentDetail({ detailsData }) {
     const [details, setDetails] = useState(detailsData);
+    const [isLoading, setIsLoading] = useState(false);
     const [modals, setModals] = useState({
         showCheckoutModal: false,
         showCheckinModal: false,
@@ -34,6 +35,7 @@ export default function EquipmentDetail({ detailsData }) {
     const [currentCommission, setCurrentCommission] = useState(null);
 
     useEffect(() => {
+        setIsLoading(true);
         if (detailsData && detailsData.available !== undefined) {
             setDetails(detailsData);
             setBooking({
@@ -67,6 +69,7 @@ export default function EquipmentDetail({ detailsData }) {
                 getCommissionDetails();
             }
         }
+        setIsLoading(false);
     }, [detailsData, authAxios]);
 
     useEffect(() => {
@@ -299,11 +302,21 @@ export default function EquipmentDetail({ detailsData }) {
         img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
     };
 
+    if (isLoading) {
+        return (
+            <div className="spinner-container">
+                <Spinner animation="border" />
+            </div>
+        );
+    }
+
     return (
         <div className="details-section">
             {messages.succesfullMessage && <div className="success-message">{messages.succesfullMessage}</div>}
             {details === null || booking.isAvailable === undefined || details.available === undefined || currentBooking === undefined ? (
-                <p>Loading...</p>
+                <div className="spinner-container">
+                    <Spinner animation="border" />
+                </div>
             ) : (
                 <div className="details-grid">
                     <div className="section-left">
