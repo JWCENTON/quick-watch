@@ -4,15 +4,21 @@ using DTO.UserDTOs;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using AutoMapper;
+using webapi.uow;
 
 namespace webapi.Services;
 public class UserServices : IUserServices
 {
     private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UserServices(IConfiguration configuration)
+    public UserServices(IConfiguration configuration, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _configuration = configuration;
+        _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     public User MatchModelToNewUser(CreateUserDTO model)
@@ -40,9 +46,10 @@ public class UserServices : IUserServices
 
     public void MatchModelToExistingUser(User user, UpdateUserCredentialsDTO model)
     {
-        user.FirstName = model.FirstName;
-        user.LastName = model.LastName;
-        user.Email = model.Email;
+        //user.FirstName = model.FirstName;
+        //user.LastName = model.LastName;
+        //user.Email = model.Email;
+        _mapper.Map<UpdateUserCredentialsDTO>(user);
     }
 
     public string GenerateJwtToken(IEnumerable<Claim> claims)
@@ -68,5 +75,23 @@ public class UserServices : IUserServices
     public string GetWebAppRedirectAddress()
     {
         return _configuration["WebApiUrl"];
+    }
+
+    public async Task<List<PartialUserDTO>> GetAllPartialUserDTOAsync()
+    {
+        var data = await _unitOfWork.User.GetAll();
+        var allPartialUsersDTO = data.Select(user => _mapper.Map<PartialUserDTO>(user)).ToList();
+        return allPartialUsersDTO;
+    }
+
+    public async Task<List<PartialUserDTO>> GetAvailableEmployeesAsync(Guid commissionId)
+    {
+        var worksOnList = await _unitOfWork.WorksOn.GeCurrentWorksOnByCommissionIdAsync(commissionId);
+
+        var assignedUserIds = worksOnList.Select(work => work.UserId).ToList();
+
+        var availableUsers = await _unitOfWork.User.GetAvailable(assignedUserIds);
+
+        return availableUsers.Select(user => _mapper.Map<PartialUserDTO>(user)).ToList();
     }
 }

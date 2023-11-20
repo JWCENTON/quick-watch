@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Services;
 using System.Security.Claims;
 using System.Web;
-using AutoMapper;
 using webapi.uow;
 
 namespace webapi.Controllers;
@@ -13,14 +12,13 @@ namespace webapi.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IMapper _mapper;
+    //private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
     private readonly IUserServices _userServices;
 
-    public UserController(IEmailService emailService, IUserServices userServices, IMapper mapper, IUnitOfWork unitOfWork)
+    public UserController(IEmailService emailService, IUserServices userServices, IUnitOfWork unitOfWork)
     {
-        _mapper = mapper;
         _unitOfWork = unitOfWork;
         _emailService = emailService;
         _userServices = userServices;
@@ -251,12 +249,11 @@ public class UserController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<List<PartialUserDTO>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var data = await _unitOfWork.User.GetAll();
-        return data.Select(user => _mapper.Map<PartialUserDTO>(user)).ToList();
+        var allPartialUsersDTO = await _userServices.GetAllPartialUserDTOAsync();
+        return Ok(allPartialUsersDTO);
     }
 
     [Authorize]
@@ -265,14 +262,13 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<List<PartialUserDTO>> GetAvailableEmployees(Guid commissionId)
+    public async Task<IActionResult> GetAvailableEmployees(Guid commissionId)
     {
-        var worksOnList = await _unitOfWork.WorksOn.GeCurrentWorksOnByCommissionIdAsync(commissionId);
-
-        var assignedUserIds = worksOnList.Select(work => work.UserId).ToList();
-
-        var availableUsers = await _unitOfWork.User.GetAvailable(assignedUserIds);
-
-        return availableUsers.Select(user => _mapper.Map<PartialUserDTO>(user)).ToList();
+        var availableUsers = await _userServices.GetAvailableEmployeesAsync(commissionId);
+        if (availableUsers == null)
+        {
+            return NotFound("There are no available users for this commission");
+        }
+        return Ok(availableUsers);
     }
 }
