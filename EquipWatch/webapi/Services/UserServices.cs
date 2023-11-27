@@ -46,10 +46,9 @@ public class UserServices : IUserServices
 
     public void MatchModelToExistingUser(User user, UpdateUserCredentialsDTO model)
     {
-        //user.FirstName = model.FirstName;
-        //user.LastName = model.LastName;
-        //user.Email = model.Email;
-        _mapper.Map<UpdateUserCredentialsDTO>(user);
+        user.FirstName = model.FirstName;
+        user.LastName = model.LastName;
+        user.Email = model.Email;
     }
 
     public string GenerateJwtToken(IEnumerable<Claim> claims)

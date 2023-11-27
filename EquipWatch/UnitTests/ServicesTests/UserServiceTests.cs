@@ -4,6 +4,8 @@ using Moq;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using webapi.Services;
+using AutoMapper;
+using webapi.uow;
 
 namespace EquipWatch.UnitTests.ServicesTests;
 
@@ -12,6 +14,8 @@ public class UserServiceTests
 {
     private Mock<IConfiguration> _configurationMock;
     private UserServices _userServices;
+    private IMapper _mapper;
+    private IUnitOfWork _unitOfWork;
     private IConfiguration _configuration;
 
     [SetUp]
@@ -19,8 +23,7 @@ public class UserServiceTests
     {
         _configurationMock = new Mock<IConfiguration>();
         _configurationMock.Setup(c => c["JwtSettings:SecretKey"]).Returns("fakeSecretKeyForTesting");
-
-        _userServices = new UserServices(_configurationMock.Object);
+        _userServices = new UserServices(_configurationMock.Object, _mapper, _unitOfWork);
 
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
