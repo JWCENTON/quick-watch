@@ -12,7 +12,6 @@ namespace webapi.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    //private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailService _emailService;
     private readonly IUserServices _userServices;
