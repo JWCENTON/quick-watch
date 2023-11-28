@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Services;
 using System.Security.Claims;
 using System.Web;
+using Domain.User.Models;
 using webapi.uow;
+using Microsoft.AspNetCore.Identity;
+using NuGet.Common;
 
 namespace webapi.Controllers;
 
@@ -158,7 +161,7 @@ public class UserController : ControllerBase
             return NotFound("User not found");
         }
 
-        var result = await _unitOfWork.User.ResetPasswordAsync(user, HttpUtility.UrlDecode(model.Token), model.NewPassword);
+        var result = await _unitOfWork.User.ResetPasswordAsync(user, model.Token, model.NewPassword);
         if (result.Succeeded)
         {
             return Ok(new { message = "Password reset successful" });

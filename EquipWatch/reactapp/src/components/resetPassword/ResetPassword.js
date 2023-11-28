@@ -24,7 +24,7 @@ function ResetPassword() {
                 PasswordResetToken: encodeURIComponent(token),
             });
 
-            if (response.data && response.data.success) {
+            if (response.status === 200) {
                 setMessage('Password reset successful');
             } else {
                 setError('An error occurred. Please try again later.');
