@@ -25,7 +25,7 @@ namespace EquipWatch.UnitTests.TestServices
             _emailContextMock.Setup(x => x.Value).Returns(emailContextValue);
 
             _smtpClientMock = new Mock<ISmtpClientWrapper>();
-            _emailService = new EmailService(_emailContextMock.Object);
+            _emailService = new EmailService(_emailContextMock.Object, _smtpClientMock.Object);
         }
 
         [Test]

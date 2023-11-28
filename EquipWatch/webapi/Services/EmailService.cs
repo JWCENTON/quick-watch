@@ -9,10 +9,12 @@ namespace webapi.Services;
 public class EmailService : IEmailService
 {
     private readonly EmailContext _emailContext;
+    private readonly ISmtpClientWrapper _smtpClient;
 
-    public EmailService(IOptions<EmailContext> emailContext)
+    public EmailService(IOptions<EmailContext> emailContext, ISmtpClientWrapper smtpClient)
     {
         _emailContext = emailContext.Value;
+        _smtpClient = smtpClient;
     }
 
     public async Task SendEmailForConfirmationAsync(User user, string confirmationLink)
