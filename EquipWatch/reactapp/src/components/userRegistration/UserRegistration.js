@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import './UserRegistration.css';
-import { useAuth } from '../authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 
 function Registration() {
     const navigate = useNavigate();
@@ -95,7 +95,7 @@ function Registration() {
                     onChange={handleChange}
                 />
                 <Button onClick={handleRegister} variant="outline-primary" disabled={isLoading}>
-                    Register
+                    {isLoading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Register"}
                 </Button>
             </form>
             <Link to="/">Back to Login</Link>

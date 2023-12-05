@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { useAuth } from '../authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');

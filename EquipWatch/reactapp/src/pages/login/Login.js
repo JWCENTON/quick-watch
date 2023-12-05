@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import './Login.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import placeholderImage from '../../images/placeholder.png';
-import { AuthContext } from '../../components/authProvider/AuthContext';
+import { AuthContext } from '../../contexts/authProvider/AuthContext';
 
 function Login() {
     const location = useLocation();
@@ -14,12 +14,14 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
-            await auth.login(email, password); 
+            await auth.login(email, password);
             navigate('/commissions');
         } catch (error) {
             if (error.message === 'EmailNotConfirmed') {
@@ -27,6 +29,8 @@ function Login() {
             } else {
                 setErrorMessage('Invalid email or password');
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -40,10 +44,10 @@ function Login() {
                 {registrationSuccess && <p className="success-message">User: {username} has been successfully registered</p>}
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <form onSubmit={handleLogin}>
-                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <Button type="submit" variant="outline-primary">
-                        Login
+                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading} />
+                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
+                    <Button type="submit" variant="outline-primary" disabled={isLoading}>
+                        {isLoading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Login"}
                     </Button>
                     <Button as={Link} to="/register" variant="outline-primary">
                         Register

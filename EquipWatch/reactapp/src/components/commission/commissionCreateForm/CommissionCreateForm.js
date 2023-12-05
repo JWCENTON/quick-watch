@@ -6,7 +6,7 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import './commissionCreateForm.css';
 import { DateRangePicker } from 'react-date-range';
-import { useAuth } from '../../authProvider/AuthContext';
+import { useAuth } from '../../../contexts/authProvider/AuthContext';
 
 export default function CommissionCreateForm() {
     const navigate = useNavigate();

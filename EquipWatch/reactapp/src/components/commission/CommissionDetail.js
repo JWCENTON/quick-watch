@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Modal, Spinner } from 'react-bootstrap';
 import UniversalCard from '../card/Card';
-import { useAuth } from '../authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 import 'react-datepicker/dist/react-datepicker.css';
 import { parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';

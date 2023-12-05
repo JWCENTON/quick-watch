@@ -6,7 +6,7 @@ import EquipmentEdit from '../../components/equipment/EquipmentEdit';
 import CommissionEdit from '../../components/commission/CommissionEdit';
 import CompanyEdit from '../../components/company/CompanyEdit';
 import EmployeeEdit from '../../components/employee/EmployeeEdit';
-import { useAuth } from '../../components/authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 
 export default function Edit() {
     const { id, dataType } = useParams();

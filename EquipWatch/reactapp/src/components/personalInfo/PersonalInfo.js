@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PersonalInfo.css';
 import { Button } from 'react-bootstrap';
-import { useAuth } from '../authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 
 function PersonalInfo() {
     const { authAxios } = useAuth();
