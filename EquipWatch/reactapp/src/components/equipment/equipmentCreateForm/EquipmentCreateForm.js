@@ -1,7 +1,6 @@
-import React from 'react';
-import { Rating } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { Rating } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import './equipmentCreateForm.css';
 import { useAuth } from '../../../contexts/authProvider/AuthContext';
@@ -14,9 +13,9 @@ export default function EquipmentCreateForm() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        let formSerialNumber = event.target.serialNumber.value;
-        let formCategory = event.target.category.value;
-        let formLocation = event.target.location.value;
+        const formSerialNumber = event.target.serialNumber.value;
+        const formCategory = event.target.category.value;
+        const formLocation = event.target.location.value;
         const companyResponse = await authAxios.get('/api/company');
         if (companyResponse.status === 200) {
             const companyData = companyResponse.data;
@@ -30,7 +29,11 @@ export default function EquipmentCreateForm() {
                 "companyId": companyId
             });
 
-            const response = await authAxios.post('/api/equipment', raw);
+            const response = await authAxios.post('/api/equipment', raw, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
             if (response.status === 200) {
                 const equipmentData = response.data;
@@ -40,37 +43,37 @@ export default function EquipmentCreateForm() {
                 setErrorMessage(errorJson.Message);
             }
         }
-
-        return (
-            <div >
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
-                <form onSubmit={handleSubmit}>
-                    <label for="category">Category: </label>
-                    <br />
-                    <input type="text" id="category" name="category" />
-                    <br />
-                    <label for="location">Location: </label>
-                    <br />
-                    <input type="text" id="location" name="location" />
-                    <br />
-                    <label for="serialNumber">Serial Number: </label>
-                    <br />
-                    <input type="text" id="serialNumber" name="serialNumber" />
-                    <br />
-                    <label for="rating">Condition: </label>
-                    <br />
-                    <Rating
-                        id="rating"
-                        name="rating"
-                        value={rating}
-                        onChange={(event, newValue) => {
-                            setRating(newValue);
-                        }}
-                    />
-                    <br />
-                    <Button type="submit">Submit</Button>
-                </form>
-            </div>
-        );
     }
-};
+
+    return (
+        <div>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="category">Category: </label>
+                <br />
+                <input type="text" id="category" name="category" />
+                <br />
+                <label htmlFor="location">Location: </label>
+                <br />
+                <input type="text" id="location" name="location" />
+                <br />
+                <label htmlFor="serialNumber">Serial Number: </label>
+                <br />
+                <input type="text" id="serialNumber" name="serialNumber" />
+                <br />
+                <label htmlFor="rating">Condition: </label>
+                <br />
+                <Rating
+                    id="rating"
+                    name="rating"
+                    value={rating}
+                    onChange={(event, newValue) => {
+                        setRating(newValue);
+                    }}
+                />
+                <br />
+                <Button type="submit">Submit</Button>
+            </form>
+        </div>
+    );
+}
