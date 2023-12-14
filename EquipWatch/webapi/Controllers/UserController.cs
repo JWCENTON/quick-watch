@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Services;
 using System.Security.Claims;
 using System.Web;
-using Domain.User.Models;
 using webapi.uow;
-using Microsoft.AspNetCore.Identity;
-using NuGet.Common;
 
 namespace webapi.Controllers;
 
