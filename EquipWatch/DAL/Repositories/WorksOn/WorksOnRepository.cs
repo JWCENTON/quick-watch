@@ -44,17 +44,22 @@ public class WorksOnRepository : IWorksOnRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Domain.User.Models.User>> GetCommissionAssignedEmployeesAsync(Guid commissionId)
+    public async Task<List<Domain.User.Models.User>> GetCommissionAssignedEmployeesAsync(Guid commissionId)
     {
         var worksOnList = _context.WorksOn.Where(w => w.CommissionId == commissionId && w.EndTime == null);
         var userIds = worksOnList.Select(w => w.UserId);
         var users = new List<Domain.User.Models.User>();
         foreach (var userId in userIds)
         {
-            users.Add(_identityContext.Users.First(user => user.Id == userId));
+            var user = await _identityContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                users.Add(user);
+            }
         }
-        return Task.FromResult(users);
+        return users;
     }
+
     public async Task<List<Domain.WorksOn.Models.WorksOn>> GeCurrentWorksOnByCommissionIdAsync(Guid commissionId)
     {
         var worksOnList = await _context.WorksOn.Where(w => w.CommissionId == commissionId && w.EndTime == null).ToListAsync();
