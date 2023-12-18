@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { parseISO } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import Select from "react-select";
+import EmployeeDetail from '../employee/EmployeeDetail';
 
 export default function CommissionDetail({ detailsData }) {
 
@@ -19,7 +20,7 @@ export default function CommissionDetail({ detailsData }) {
     const [workerState, setWorkerState] = useState({
         assignedWorkers: null,
         availableWorkers: null,
-        selectedWorker: '',
+        selectedWorker: null,
     });
 
     const [modalState, setModalState] = useState({
@@ -91,6 +92,13 @@ export default function CommissionDetail({ detailsData }) {
         setWorkerState((prevState) => ({
             ...prevState,
             selectedWorker: selectedOption ? selectedOption : '',
+        }));
+    };
+
+    const handleWorkerClick = (selectedWorker) => {
+        setWorkerState((prevState) => ({
+            ...prevState,
+            selectedWorker,
         }));
     };
 
@@ -255,9 +263,13 @@ export default function CommissionDetail({ detailsData }) {
                         <div className="section-left">
                             <h4 className="details-header">Workers</h4>
                             <div className="cardsContainer">
-                                    {workerState.assignedWorkers == null ?
-                                        <p>Loading Workers...</p> : workerState.assignedWorkers.length === 0 ?
-                                            <p>No Workers Assigned</p> : workerState.assignedWorkers.map((worker, index) => (<UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>))}
+                                {workerState.assignedWorkers == null ?
+                                    <p>Loading Workers...</p> : workerState.assignedWorkers.length === 0 ?
+                                        <p>No Workers Assigned</p> : workerState.assignedWorkers.map((worker, index) => (
+                                            <div key={index} onClick={() => handleWorkerClick(worker)}>
+                                                <UniversalCard key={index} data={worker} dataType='employee'></UniversalCard>
+                                            </div>
+                                        ))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleWorkerShow}>Add Worker</Button>
@@ -266,27 +278,27 @@ export default function CommissionDetail({ detailsData }) {
                         <div className="section-right">
                             <h4 className="details-header">Equipment</h4>
                             <div className="cardsContainer">
-                                    {equipmentState.assignedEquipment == null ?
-                                        <p>Loading Equipment...</p> : equipmentState.assignedEquipment.length === 0 ?
-                                            <p>No Equipment Assigned</p> : equipmentState.assignedEquipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
+                                {equipmentState.assignedEquipment == null ?
+                                    <p>Loading Equipment...</p> : equipmentState.assignedEquipment.length === 0 ?
+                                        <p>No Equipment Assigned</p> : equipmentState.assignedEquipment.map((equipment, index) => (<UniversalCard key={index} data={equipment} dataType='equipment'></UniversalCard>))}
                             </div>
                             <div className="button-section">
                                 <Button className="detail-view-btn" onClick={handleEquipmentShow}>Add Equipment</Button>
                             </div>
-                                <Modal show={modalState.showEquipmentModal} onHide={handleEquipmentClose}>
+                            <Modal show={modalState.showEquipmentModal} onHide={handleEquipmentClose}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Equipment booking</Modal.Title>
                                 </Modal.Header>
-                                    {modalState.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{modalState.errorMessage}</div>}
-                                    {equipmentState.availableEquipment === null ? <>loading...</> :
+                                {modalState.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{modalState.errorMessage}</div>}
+                                {equipmentState.availableEquipment === null ? <>loading...</> :
                                     <form onSubmit={(event) => handleBookingFormSubmit(event)}>
                                         <Modal.Body>
                                             <label htmlFor="selectedEquipment">Choose an available Equipment:</label>
                                             <br />
                                             <Select
-                                                    value={equipmentState.selectedEquipment}
+                                                value={equipmentState.selectedEquipment}
                                                 onChange={handleEquipmentChange}
-                                                    options={equipmentState.availableEquipment.map((equipment) => ({
+                                                options={equipmentState.availableEquipment.map((equipment) => ({
                                                     value: equipment.id,
                                                     label: <>SN: {equipment.serialNumber}<br /> Category: {equipment.category}<br />
                                                         Location: {equipment.location}</>,
@@ -299,13 +311,13 @@ export default function CommissionDetail({ detailsData }) {
                                             <label htmlFor="endDate">Select an end date:</label>
                                             <br />
                                             <DatePicker
-                                                    selected={equipmentState.endDate}
-                                                    onChange={item => setEquipmentState((prevState) => ({
-                                                        ...prevState,
-                                                        endDate: item,
-                                                    }))}
+                                                selected={equipmentState.endDate}
+                                                onChange={item => setEquipmentState((prevState) => ({
+                                                    ...prevState,
+                                                    endDate: item,
+                                                }))}
                                                 minDate={new Date()}
-                                                    maxDate={parseISO(modalState.maxDate)}
+                                                maxDate={parseISO(modalState.maxDate)}
                                                 dateFormat="dd/MM/yyyy"
                                                 isClearable={true}
                                             />
@@ -316,23 +328,23 @@ export default function CommissionDetail({ detailsData }) {
                                     </form>
                                 }
                             </Modal>
-                                <Modal show={modalState.showWorkerModal} onHide={handleWorkerClose}>
+                            <Modal show={modalState.showWorkerModal} onHide={handleWorkerClose}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Add Worker</Modal.Title>
                                 </Modal.Header>
-                                    {modalState.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{modalState.errorMessage}</div>}
-                                    {workerState.availableWorkers === null ? 
-                                        <div className="spinner-container">
-                                            <Spinner animation="border" />
-                                        </div> : 
+                                {modalState.errorMessage && <div style={{ textAlign: "center", margin: "0 auto" }} className="error-message">{modalState.errorMessage}</div>}
+                                {workerState.availableWorkers === null ?
+                                    <div className="spinner-container">
+                                        <Spinner animation="border" />
+                                    </div> :
                                     <form onSubmit={(event) => AddEmployee(event)}>
                                         <Modal.Body>
                                             <label htmlFor="selectedWorker">Choose worker:</label>
                                             <br />
                                             <Select
-                                                    value={workerState.selectedWorker}
+                                                value={workerState.selectedWorker}
                                                 onChange={handleWorkerChange}
-                                                    options={workerState.availableWorkers.map((worker) => ({
+                                                options={workerState.availableWorkers.map((worker) => ({
                                                     value: worker.id,
                                                     label: <>{worker.userName}</>
                                                 }))}
@@ -352,6 +364,9 @@ export default function CommissionDetail({ detailsData }) {
                     </div>
                 </div>
             )}
+            {workerState.selectedWorker && (
+                <EmployeeDetail detailsData={workerState.selectedWorker} />
+            )}
         </div>
-    )
+    );
 }
