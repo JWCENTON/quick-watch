@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Spinner } from 'react-bootstrap';
-import { useAuth } from '../authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 import UniversalCard from '../card/Card';
 import DatePicker from 'react-datepicker';
 import { parseISO } from 'date-fns';

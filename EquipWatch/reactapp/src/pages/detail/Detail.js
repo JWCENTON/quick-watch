@@ -6,7 +6,7 @@ import EquipmentDetail from '../../components/equipment/EquipmentDetail';
 import CompanyDetail from '../../components/company/CompanyDetail';
 import EmployeeDetail from '../../components/employee/EmployeeDetail';
 import CommissionDetail from '../../components/commission/CommissionDetail';
-import { useAuth } from '../../components/authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 import './Detail.css';
 
 export default function Detail() {

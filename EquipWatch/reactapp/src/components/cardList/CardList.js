@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import UniversalCard from '../card/Card';
-import { useAuth } from '../authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 
 function CardList() {
     const [cards, setCards] = useState(null);

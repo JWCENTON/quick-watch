@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import './clientCreateForm.css';
-import { useAuth } from '../../authProvider/AuthContext';
+import { useAuth } from '../../../contexts/authProvider/AuthContext';
 
 export default function ClientCreateForm() {
     const navigate = useNavigate();
