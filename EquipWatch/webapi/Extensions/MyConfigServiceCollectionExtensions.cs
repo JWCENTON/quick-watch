@@ -96,6 +96,7 @@ public static class MyConfigServiceCollectionExtensions
 
         services.AddTransient<IEmailService, EmailService>();
         services.AddScoped<IUserServices, UserServices>();
+        services.AddScoped<IEmployeeServices, EmployeeServices>();
 
         services.AddAutoMapper(Assembly.Load("DTO"));
 
