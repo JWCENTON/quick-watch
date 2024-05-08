@@ -36,7 +36,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Spinner } from 'react-bootstrap';
-import { useAuth } from '../authProvider/AuthContext';
+import { useAuth } from '../../contexts/authProvider/AuthContext';
 
 export default function EmployeeDetail({ detailsData }) {
     const [employeeState, setEmployeeState] = useState({
